@@ -6,9 +6,10 @@ class Player:
         self.first_name = first_name
         self.last_name = last_name
         self.birthday = birthday
-        self.chess_id = chess_id
+        self.chess_id = self.validate_chess_is(chess_id)
 
-    def validate_chess_is(chess_id : str) -> str:
+    @staticmethod
+    def validate_chess_is( chess_id : str) -> str:
         characters = [*chess_id]
 
         if len(characters) != 7:
@@ -26,5 +27,6 @@ class Player:
 
         upper_characters = [character.upper() for character in first_two_characters]
         valide_chess_id = ''.join((upper_characters + five_last_characters))
+
         return valide_chess_id
 
