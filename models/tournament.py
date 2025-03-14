@@ -1,9 +1,9 @@
 import datetime
-
+from models.player import Player
 
 class Tournament:
 
-    def __init__(self, name: str, location: str, description: str, players: list[Player]):
+    def __init__(self, name: str, location: str, description: str, players: list[Player]) -> None:
         self.name = name
         self.location = location
         self.description = description
