@@ -38,7 +38,8 @@ class Tournament:
             print(player.first_name)
 
         # --- create matches ---
-        # create pairs of players to create Match, [::2] select element with even index, [1::2] select element with odd index
+        # create pairs of players to create Match,
+        # [::2] select element with even index, [1::2] select element with odd index
         # reminder: [start:stop:step] => https://stackoverflow.com/questions/509211/how-slicing-in-python-works
         matches = []
 

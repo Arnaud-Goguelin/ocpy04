@@ -1,14 +1,13 @@
-
 class Player:
 
-    def __init__(self, first_name: str, last_name: str, birthday: str, chess_id: str ) -> None:
+    def __init__(self, first_name: str, last_name: str, birthday: str, chess_id: str) -> None:
         self.first_name = first_name
         self.last_name = last_name
         self.birthday = birthday
         self.chess_id = self.validate_chess_is(chess_id)
 
     @staticmethod
-    def validate_chess_is( chess_id : str) -> str:
+    def validate_chess_is(chess_id: str) -> str:
         # reminder: a chess id must be 7 characters long, with 2 capital letters and 5 digits
         characters = [*chess_id]
 
@@ -26,8 +25,9 @@ class Player:
             raise ValueError("Chess ID must end with 5 digits.")
 
         upper_characters = [character.upper() for character in first_two_characters]
-        valide_chess_id = ''.join((upper_characters + five_last_characters))
+        valide_chess_id = "".join((upper_characters + five_last_characters))
 
         return valide_chess_id
 
- # create a method to reset player's score?
+
+# create a method to reset player's score?
