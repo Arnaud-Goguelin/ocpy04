@@ -11,8 +11,6 @@ class Tournament:
     def __init__(self, name: str, location: str, description: str, players: list[Player]) -> None:
         if len(players) % 2 != 0:
             raise ValueError("Tournament must have an even number of players")
-        if len(players) > 16:
-            raise ValueError("Tournament has too many players, maximum of 16 players is allow.")
 
         self.name = name
         self.location = location
@@ -48,7 +46,7 @@ class Tournament:
         for player1, player2 in zip(self.players[::2], self.players[1::2]):
             print(player1.first_name, player2.first_name)
             match = Match(player1, player2)
-            print(match)
+            print(match.__dict__)
             matches.append(match)
 
         # --- create round ---
@@ -57,7 +55,14 @@ class Tournament:
         round1.start()  # ?? start round here?
         self.rounds.append(round1)
 
+    # create method next round
+
+    # create a method to iterate in rounds and interates in match to get score by player
+
+    # create a method to avoid a match already done in 2 players
+
     # a property allow us to call a method as an attribute and not as a function
+    # cache_property also exist to store value in a cache in instance
     @property
     def rounds_count(self):
         """
