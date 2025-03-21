@@ -1,0 +1,155 @@
+========================================
+Welcome to the Chess Tournament Manager
+========================================
+
+1. Manage Players
+2. Manage Tournaments
+3. View Reports (included in tournaments)
+4. Exit
+
+Please select an option:
+
+========================================
+Player Management
+========================================
+
+1. Add New Player
+2. View Player List
+3. Return to Main Menu
+
+Please select an option:
+
+========================================
+Add New Player
+========================================
+
+Please enter the player's information:
+
+Last Name:
+First Name:
+Date of Birth (DD/MM/YYYY):
+National Chess ID (AB12345):
+
+1. Save
+2. Cancel
+
+Please select an option:
+
+========================================
+Player List
+========================================
+
+1. Dupont, Jean (01/01/2000, AB12345)
+2. Martin, Marie (15/05/1995, CD67890)
+...
+
+Press Enter to return to the previous menu.
+
+========================================
+Tournament Management
+========================================
+
+1. Create New Tournament
+2. View Tournament List
+3. View / Continue Tournament => which tournament? (display list and choose or display list on this menu)
+4. Return to Main Menu
+
+Please select an option:
+
+========================================
+Create New Tournament
+========================================
+
+Please enter the tournament information:
+
+Tournament Name:
+Location:
+Start Date (DD/MM/YYYY): to create automatically
+End Date (DD/MM/YYYY): to create automatically when all rounds are finished
+Number of Rounds: 4 (no choice possible)
+Description:
+
+Add 8 players: not randomly, needed to create a tournament instance or not?
+
+1. Save
+2. Cancel
+
+Please select an option:
+
+========================================
+Tournament List - to display in tournament menu???
+========================================
+
+1. Spring Tournament (01/04/2023 - 05/04/2023)
+2. Summer Tournament (15/07/2023 - 20/07/2023)
+...
+
+Press Enter to return to the previous menu.
+
+========================================
+View Reports
+========================================
+
+1. List of All Players in Alphabetical Order => view players list
+2. List of All Tournaments => view tournaments list to move to main menu
+3. Tournament Details
+4. Return to Main Menu
+
+Please select an option:
+
+========================================
+Tournament Details: Spring Tournament (result of view tournament)
+========================================
+
+Location: Town Hall
+Start Date: ---
+End Date: ---
+Number of Rounds: 4
+
+Player List:
+1. Dupont, Jean
+2. Martin, Marie
+...
+
+Start tournament ? Y / N
+
+If Y :
+display tournament details
++ start date (datetime.now())
+end date: ---
+players list + scores
+
+Round List:
+- Round 1
+  - Match 1: player1 vs player2
+  - Match 2: player3 vs player4
+  - Match 3: player5 vs player6
+  - Match 4: player7 vs player8
+
+Round 1 results:
+1. Enter match 1 result
+2. Enter match 2 result
+...
+========================================
+========================================
+Match X wich players wins?
+1. players 1
+2. players 2
+3. Drow
+========================================
+========================================
+Return on Tournament details
+tournaments details...
+Round List:
+- Round 1
+  - Match 1: player1 vs player2 => player1 wins
+  - Match 2: player3 vs player4 ...
+  - Match 3: player5 vs player6 ...
+  - Match 4: player7 vs player8 ...
+
+ Launch round 2 automatically or not?
+
+ - Round 2
+  - Match 1: player1 vs playerX
+  ...
+
