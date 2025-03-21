@@ -1,4 +1,3 @@
-import datetime
 
 class Player:
 
@@ -10,6 +9,7 @@ class Player:
 
     @staticmethod
     def validate_chess_is( chess_id : str) -> str:
+        # reminder: a chess id must be 7 characters long, with 2 capital letters and 5 digits
         characters = [*chess_id]
 
         if len(characters) != 7:
@@ -30,3 +30,4 @@ class Player:
 
         return valide_chess_id
 
+ # create a method to reset player's score?
