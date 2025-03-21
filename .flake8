@@ -9,5 +9,6 @@ exclude =
     build,
     dist,
     .venv,
-    __ini__.py,
+    __init__.py,
+    **/__init__.py,
     *.pyc,
