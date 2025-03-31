@@ -12,3 +12,5 @@ class Round:
 
     def start(self):
         self.start_date = datetime.datetime.now()
+        for match in self.matches:
+            match.start()
