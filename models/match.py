@@ -1,3 +1,5 @@
+import random
+
 from models.player import Player
 
 
@@ -20,5 +22,6 @@ class Match:
         self.score_player1 += 0.5
         self.score_player2 += 0.5
 
-    def get_scores(self):
-        return self.score_player1, self.score_player2
+    # TODO: score has to be registered manually
+    def start(self):
+        random.choice([self.player1_wins, self.player2_wins, self.drown])()
