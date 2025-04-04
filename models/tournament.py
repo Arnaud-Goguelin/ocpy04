@@ -66,7 +66,8 @@ class Tournament:
         matches = []
         players_for_pairing = []
         if not self.rounds:
-            # as we work with instance attribute, no need to shuffle a copy, it will only modify this instance attribute
+            # as we work with instance attribute, no need to shuffle a copy,
+            # it will only modify this instance attribute
             random.shuffle(self.players)
             players_for_pairing = self.players
         else:
@@ -78,8 +79,9 @@ class Tournament:
         paires_to_dispatch = [zip(players_for_pairing[::2], players_for_pairing[1::2])]
 
         for odd_player, even_player in paires_to_dispatch:
-            # instead of storing players paires in have_played attributes, we could simply iterate rounds and then matches
-            # to know wich players have already played together and store the paires un a list.
+            # instead of storing players paires in have_played attributes,
+            # we could simply iterate rounds and then matches
+            # to know which players have already played together and store the paires un a list.
             # Yet this would be an algorithm with linear complexity
             # Nevertheless, have_played attributes do not respect DB standardization
             have_played = self.have_played(odd_player, even_player)
