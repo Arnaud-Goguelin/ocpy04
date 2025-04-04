@@ -78,6 +78,10 @@ class Tournament:
         paires_to_dispatch = [zip(players_for_pairing[::2], players_for_pairing[1::2])]
 
         for odd_player, even_player in paires_to_dispatch:
+            # instead of storing players paires in have_played attributes, we could simply iterate rounds and then matches
+            # to know wich players have already played together and store the paires un a list.
+            # Yet this would be an algorithm with linear complexity
+            # Nevertheless, have_played attributes do not respect DB standardization
             have_played = self.have_played(odd_player, even_player)
             if not have_played:
                 match = Match(odd_player, even_player)
@@ -130,14 +134,3 @@ class Tournament:
         for i in range(0, MAX_NUMBER_OF_ROUNDS):
             matches = self.create_matches()
             self.create_round(matches)
-    # TODO: create method next round -> in progress
-    # sort players by score: -> OK
-    # associate players by paire (be sure paire are not like last round/match) -> OK
-    # be sure that a paire didnt play already a match
-    # create matches -> OK
-    # create round -> OK
-    # give a round name according to round list in tournament (and index) -> OK
-
-    # TODO : create a method to iterate in rounds and interates in match to get score by player -> OK!
-
-    # TODO: create a method to avoid a match already done in 2 players -> TODO
