@@ -31,7 +31,6 @@ class Tournament:
         Calculate and return the total scores for each player across all rounds and matches in current tournament.
         """
         player_scores = {player: 0 for player in self.players}
-
         # when tournament start, no player has a score
         if not self.rounds:
             return player_scores
@@ -51,55 +50,50 @@ class Tournament:
         return sorted_players
 
     def have_played(self, player1: Player, player2: Player):
+        return (player1, player2) in self.past_players_paires or (player2, player1) in self.past_players_paires
         # for round in self.rounds:
         #     for match in round.matches:
         #         if (player1 == match.player1 and player2 == match.player2) or (
         #                 player1 == match.player2 and player2 == match.player1):
         #             return True
         # return False
-        return (player1, player2) in self.past_players_paires or (player2, player1) in self.past_players_paires
 
     def create_matches(self):
         """
         Create matches by generating pairs of players from the list of players of current tournament.
         """
         matches = []
-        players_for_pairing = []
+        available_players = []
         if not self.rounds:
             # as we work with instance attribute, no need to shuffle a copy,
             # it will only modify this instance attribute
             random.shuffle(self.players)
-            players_for_pairing = self.players
+            # /!\ yet store a copy in available_players as after we will remove player from it,
+            # just use available_players as a reference would remove players from self.players
+            # and bugs will happen in round 2
+            available_players = self.players.copy()
         else:
-            players_for_pairing = self.rank_players()
+            available_players = self.rank_players()
 
-        # create pairs of players to create Match,
-        # [::2] select element with even index, [1::2] select element with odd index
-        # reminder: [start:stop:step] => https://stackoverflow.com/questions/509211/how-slicing-in-python-works
-        paires_to_dispatch = [zip(players_for_pairing[::2], players_for_pairing[1::2])]
-
-        for odd_player, even_player in paires_to_dispatch:
-            # instead of storing players paires in have_played attributes,
-            # we could simply iterate rounds and then matches
-            # to know which players have already played together and store the paires un a list.
-            # Yet this would be an algorithm with linear complexity
-            # Nevertheless, have_played attributes do not respect DB standardization
-            have_played = self.have_played(odd_player, even_player)
-            if not have_played:
-                match = Match(odd_player, even_player)
-                matches.append(match)
-                self.past_players_paires.add((odd_player, even_player))
-                paires_to_dispatch.pop(0)
+        while available_players:
+            current_player = available_players.pop(0)
+            for possible_opponent in available_players:
+                if not self.have_played(current_player, possible_opponent):
+                    match = Match(current_player, possible_opponent)
+                    matches.append(match)
+                    self.past_players_paires.add((current_player, possible_opponent))
+                    available_players.remove(possible_opponent)
+                    break
             else:
-                # identify first and second paires, first one is an invalid one which didn't pass previous test
-                invalid_first_paire = paires_to_dispatch[0]
-                second_paire = paires_to_dispatch[1]
-                # delete them
-                paires_to_dispatch.pop(0)
-                paires_to_dispatch.pop(1)
-                # insert at the same place different paires of players
-                paires_to_dispatch.insert(0, (invalid_first_paire[0], second_paire[0]))
-                paires_to_dispatch.insert(1, (invalid_first_paire[1], second_paire[1]))
+                # if instruction 'for' end without breaking,
+                # that mean current_player have already played with every other
+                # yet we still need a match, thus we create a match with current_player
+                # (already out of the list of available_players)
+                # with first next player thus available_players[0] which we also remove from the list thanks to pop()
+                possible_opponent = available_players.pop(0)
+                match = Match(current_player, possible_opponent)
+                matches.append(match)
+                self.past_players_paires.add((current_player, possible_opponent))
 
         return matches
 
@@ -111,6 +105,17 @@ class Tournament:
         Return rounds attribute length, thus the current round number in current tournament.
         """
         return len(self.rounds)
+
+    @property
+    def rounds_matches_count(self):
+        """
+        Return rounds attribute length, thus the current round number in current tournament.
+        """
+        matches_count = 0
+        for round in self.rounds:
+            matches_count += len(round.matches)
+
+        return print(f"rounds = {len(self.rounds)}, matches = {matches_count}")
 
     def create_round(self, matches: list[Match]):
         """
@@ -135,4 +140,7 @@ class Tournament:
         # range stop at MAX_NUMBER_OF_ROUNDS -1, so we begin at 0 to have 4 iteration anyway
         for i in range(0, MAX_NUMBER_OF_ROUNDS):
             matches = self.create_matches()
-            self.create_round(matches)
+            if matches:
+                self.create_round(matches)
+            else:
+                break
