@@ -54,7 +54,7 @@ Please select an option:
 Player List                             => player view
 ========================================
 
-1. Dupont, Jean (01/01/2000, AB12345)
+1. Dupont, Jean (AB12345)
 2. Martin, Marie (15/05/1995, CD67890)
 ...
 

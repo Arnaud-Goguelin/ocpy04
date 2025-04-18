@@ -5,7 +5,7 @@ if TYPE_CHECKING:
 
 from utils import countdown
 from models.player import Player
-from views import PlayerMenuView, CreatePlayerView
+from views import PlayerMenuView, CreatePlayerView, PlayerListView
 
 
 class PlayerController:
@@ -32,7 +32,7 @@ class PlayerController:
 
                     print(
                         f"\n\u2657 \u265D \u2657 "
-                        f"New player {first_name} {last_name} created with success ! "
+                        f"New player {first_name} {last_name.upper()} created with success ! "
                         f"\u265D \u2657 \u265D .")
 
                 except ValueError as error:
@@ -42,7 +42,7 @@ class PlayerController:
                     self.view.display()
 
             elif choice == "2":
-                pass
+                PlayerListView.display_player_list(self.data.players)
 
             elif choice == "3":
                 # go back to main menu and main controller
