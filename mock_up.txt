@@ -1,3 +1,19 @@
+--- Black pieces ---
+King: \u2654
+Queen: \u2655
+Tower: \u2656
+Bishop: \u2657
+Knight: \u2658
+Pawn: \u2659
+
+--- White pieces ---
+King: \u265A
+Queen: \u265B
+Tower: \u265C
+Bishop: \u265D
+Knight: \u265E
+Pawn: \u265F
+
 ========================================
 Welcome to the Chess Tournament Manager     => landing view
 ========================================
