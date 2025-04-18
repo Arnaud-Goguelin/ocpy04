@@ -8,6 +8,6 @@ class CreatePlayerView:
 
         first_name = input("First name : ")
         last_name = input("Last Name : ")
-        birthday = input("Birthday (DD-MM-YYYY) : ")
+        birthday = input("Birthdate (DD-MM-YYYY) : ")
         chess_id = input("Chess ID (2 letters + 5 digits) : ")
         return first_name, last_name, birthday, chess_id
