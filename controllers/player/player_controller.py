@@ -34,7 +34,7 @@ class PlayerController:
                         f"\n\u2657 \u265D \u2657 "
                         f"New player {first_name} {last_name} created with success ! "
                         f"\u265D \u2657 \u265D .")
-                    
+
                 except ValueError as error:
                     print("\nAn error occurred : ")
                     print(error)
