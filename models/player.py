@@ -8,7 +8,10 @@ class Player:
 
     @staticmethod
     def validate_chess_is(chess_id: str) -> str:
-        # reminder: a chess id must be 7 characters long, with 2 capital letters and 5 digits
+        """
+        Validates and formats a chess ID.
+        Ensure it has 7 characters long, begins with 2 capital letters, and ends with 5 digits.
+        """
         characters = [*chess_id]
 
         if len(characters) != 7:
@@ -28,6 +31,3 @@ class Player:
         valide_chess_id = "".join((upper_characters + five_last_characters))
 
         return valide_chess_id
-
-
-# create a method to reset player's score?
