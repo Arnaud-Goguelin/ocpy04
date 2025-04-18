@@ -9,7 +9,7 @@ from views import PlayerMenuView, CreatePlayerView, PlayerListView
 
 
 class PlayerController:
-    def __init__(self, data: 'Data'):
+    def __init__(self, data: "Data"):
         self.data = data
         self.view = PlayerMenuView()
 
@@ -31,9 +31,10 @@ class PlayerController:
                     self.data.players.append(new_player)
 
                     print(
-                        f"\n\u2657 \u265D \u2657 "
+                        f"\n\u2657 \u265d \u2657 "
                         f"New player {first_name} {last_name.upper()} created with success ! "
-                        f"\u265D \u2657 \u265D .")
+                        f"\u265d \u2657 \u265d ."
+                    )
 
                 except ValueError as error:
                     print("\nAn error occurred : ")
@@ -42,7 +43,18 @@ class PlayerController:
                     self.view.display()
 
             elif choice == "2":
-                PlayerListView.display_player_list(self.data.players)
+                try:
+                    sort_alphabetically_player_list = sorted(
+                        self.data.players.copy(),
+                        key=lambda player: player.last_name,
+                    )
+                    PlayerListView.display_player_list(sort_alphabetically_player_list)
+
+                except (TypeError, IndexError) as error:
+                    print("\nAn error occurred : ")
+                    print(error)
+                    countdown(menu_name="player")
+                    self.view.display()
 
             elif choice == "3":
                 # go back to main menu and main controller

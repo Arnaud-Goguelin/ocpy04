@@ -6,11 +6,12 @@ if TYPE_CHECKING:
 
 class PlayerListView:
     @staticmethod
-    def display_player_list(players_list: list['Player']):
+    def display_player_list(players_list: list["Player"]):
         print("""
 ==================================================
-\u265D Player List \u2657 :
-==================================================""")
+\u265d Player List \u2657 :
+==================================================
+""")
         for player in players_list:
             print(
                 f"{players_list.index(player) + 1}. {player.last_name} {player.first_name}, "
