@@ -4,11 +4,12 @@ class MainMenuView:
     def display():
         print("""
 ==================================================
-\u265A  Welcome to the Chess Tournament Manager \u2654 :
-==================================================""")
+\u265a  Welcome to the Chess Tournament Manager \u2654 :
+==================================================
+""")
 
         print("""
-1. Manage Players \u265F.
-2. Manage Tournaments \u265B.
+1. Manage Players \u265f.
+2. Manage Tournaments \u265b.
 3. Exit
 """)

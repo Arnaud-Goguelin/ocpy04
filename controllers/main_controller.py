@@ -10,7 +10,7 @@ from views import MainMenuView
 
 
 class MainController:
-    def __init__(self, data: 'Data'):
+    def __init__(self, data: "Data"):
         self.data = data
         self.view = MainMenuView()
 
