@@ -19,7 +19,9 @@ class PlayerController:
                     chess_id=chess_id,
                 )
                 print(
-                    f"\n\u2657 \u265D \u2657 New player {first_name} {last_name} created with success ! \u265D \u2657 \u265D .")
+                    f"\n\u2657 \u265D \u2657 "
+                    f"New player {first_name} {last_name} created with success ! "
+                    f"\u265D \u2657 \u265D .")
 
             elif choice == "2":
                 pass

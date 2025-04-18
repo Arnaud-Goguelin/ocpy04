@@ -4,7 +4,7 @@ class MainMenuView:
     def display():
         print("""
 ==================================================
-\u265A  Welcome to the Chess Tournament Manager \u2654 :   
+\u265A  Welcome to the Chess Tournament Manager \u2654 :
 ==================================================""")
 
         print("""

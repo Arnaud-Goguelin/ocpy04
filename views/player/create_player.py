@@ -3,7 +3,7 @@ class CreatePlayerView:
     def display_add_player_form():
         print("""
 ==================================================
-\u265D  Add New Player   \u2657 :   
+\u265D  Add New Player   \u2657 :
 ==================================================""")
 
         first_name = input("First name : ")

@@ -4,7 +4,7 @@ class PlayerMenuView:
     def display():
         print("""
 ==================================================
-\u265D  Add New Player \u2657 :   
+\u265D  Add New Player \u2657 :
 ==================================================""")
 
         print("""
