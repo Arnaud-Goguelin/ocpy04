@@ -8,11 +8,13 @@ class TournamentMenuView:
         print(
             """
 ==================================================
-\u265E  Tournament Menu \u2658 :
+\u265e  Tournament Menu \u2658 :
 =================================================="""
         )
 
-        print(f"1. Create new tournament \u265b."
-              f"\n2. View tournament details \u265C."
-              f"\n3. Continue tournament \u265E."
-              f"\n\u265F\u2659 Press '{CANCELLED_INPUT}' to return to Main menu \u2659\u265F.")
+        print(
+            f"1. Create new tournament \u265b."
+            f"\n2. View tournament details \u265c."
+            f"\n3. Continue tournament \u265e."
+            f"\n\u265f\u2659 Press '{CANCELLED_INPUT}' to return to Main menu \u2659\u265f."
+        )

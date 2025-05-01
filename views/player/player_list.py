@@ -73,20 +73,20 @@ class PlayerListView:
             )
 
             if choice.lower() == CANCELLED_INPUT:
-                print("\n/!\ A tournament need players, cancel new Tournament creation.")
+                print("\nA tournament need players, cancel new Tournament creation.")
                 return None
 
             elif choice == "":
 
                 if not selected_players:
-                    print("\n/!\ No player selected, cancel new Tournament creation.")
+                    print("\nNo player selected, cancel new Tournament creation.")
                     return None
 
                 return selected_players
 
             elif not choice.isdigit():
                 print(
-                    "\n/!\ Invalid index. Please enter a valid player's index or press 'Enter' or 'Esc' to exit the menu."
+                    "\nInvalid index. Please enter a valid player's index or press 'Enter' or 'Esc' to exit the menu."
                 )
 
             else:
@@ -94,7 +94,8 @@ class PlayerListView:
 
                 if not 0 <= player_index < len(players):
                     print(
-                        "\n/!\ Invalid index. Please enter a valid player's index or press 'Enter' or 'Esc' to exit the menu."
+                        "\nInvalid index. Please enter a valid player's index "
+                        "or press 'Enter' or 'Esc' to exit the menu."
                     )
 
                 else:

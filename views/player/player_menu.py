@@ -15,5 +15,5 @@ class PlayerMenuView:
         print(
             f"1. Add New Player \u265d."
             f"\n2. View Player List \u265c. "
-            f"\n\u265F\u2659 Press '{CANCELLED_INPUT}' to return to Main menu \u2659\u265F."
+            f"\n\u265f\u2659 Press '{CANCELLED_INPUT}' to return to Main menu \u2659\u265f."
         )

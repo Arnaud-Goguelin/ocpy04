@@ -63,7 +63,8 @@ class Tournament:
         return (player1, player2) in self.past_players_paires or (player2, player1) in self.past_players_paires
         # for round in self.rounds:
         #     for match in round.matches:
-        #         if (player1 == match.player1 and player2 == match.player2) or (player1 == match.player2 and player2 == match.player1):
+        #         if (player1 == match.player1 and player2 == match.player2)
+        #         or (player1 == match.player2 and player2 == match.player1):
         #             return True
         # return False
 
@@ -97,7 +98,8 @@ class Tournament:
                 # that mean current_player have already played with every other,
                 # yet we still need a match, thus we create a match with current_player
                 # (already out of the list of available_players)
-                # with the first next player thus available_players[0] which we also remove from the list thanks to pop()
+                # with the first next player thus available_players[0]
+                # which we also remove from the list thanks to pop()
                 possible_opponent = available_players.pop(0)
                 match = Match(current_player, possible_opponent)
                 matches.append(match)
