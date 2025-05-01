@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from main import Data
 
-from utils import countdown
-from models.player import Player
+gfrom utils import countdown, GenericMessages, CANCELLED_INPUT
+from models import Player
 from views import PlayerMenuView, CreatePlayerView, PlayerListView
 
 
@@ -39,26 +39,27 @@ class PlayerController:
                 except ValueError as error:
                     print("\nAn error occurred : ")
                     print(error)
-                    countdown(menu_name="player")
+                    countdown(GenericMessages.PLAYER_MENU_RETURN.value)
                     self.view.display()
 
             elif choice == "2":
                 try:
-                    sort_alphabetically_player_list = sorted(
+                    sorted_alphabetically_player_list = sorted(
+                        # use a copy to alter original data
                         self.data.players.copy(),
                         key=lambda player: player.last_name,
                     )
-                    PlayerListView.display_player_list(sort_alphabetically_player_list)
+                    PlayerListView.handle_players_list(sorted_alphabetically_player_list, False)
 
-                except (TypeError, IndexError) as error:
+                except (ValueError, TypeError, IndexError) as error:
                     print("\nAn error occurred : ")
                     print(error)
-                    countdown(menu_name="player")
+                    countdown(GenericMessages.PLAYER_MENU_RETURN.value)
                     self.view.display()
 
-            elif choice == "3":
+            elif choice == CANCELLED_INPUT:
                 # go back to main menu and main controller
                 return None
 
             else:
-                print("Invalid option, please choose between 1,2 or 3.")
+                print("Invalid option, please choose between 1, 2 or 3.")
