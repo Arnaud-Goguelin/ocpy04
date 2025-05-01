@@ -1,3 +1,6 @@
+from utils import CANCELLED_INPUT
+
+
 class PlayerMenuView:
 
     @staticmethod
@@ -5,14 +8,12 @@ class PlayerMenuView:
         print(
             """
 ==================================================
-\u265d  Add New Player \u2657 :
+\u265d  Player Menu \u2657 :
 =================================================="""
         )
 
         print(
-            """
-1. Add New Player \u265d.
-2. View Player List \u265c.
-3. Return to Main Menu
-"""
+            f"1. Add New Player \u265d."
+            f"\n2. View Player List \u265c. "
+            f"\n\u265F\u2659 Press '{CANCELLED_INPUT}' to return to Main menu \u2659\u265F."
         )

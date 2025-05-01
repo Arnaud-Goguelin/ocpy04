@@ -1,11 +1,13 @@
 class CreatePlayerView:
     @staticmethod
     def display_add_player_form():
-        print("""
+        print(
+            """
 ==================================================
 \u265d  Add New Player   \u2657 :
 ==================================================
-""")
+"""
+        )
 
         first_name = input("First name : ")
         last_name = input("Last Name : ")
