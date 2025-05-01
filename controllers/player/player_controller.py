@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from main import Data
 
-gfrom utils import countdown, GenericMessages, CANCELLED_INPUT
+from utils import countdown, GenericMessages, CANCELLED_INPUT
 from models import Player
 from views import PlayerMenuView, CreatePlayerView, PlayerListView
 
