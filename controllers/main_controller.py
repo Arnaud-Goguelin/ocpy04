@@ -8,7 +8,7 @@ from .tournament.tournament_controller import TournamentController
 
 if TYPE_CHECKING:
     from main import Data
-from utils import GenericMessages, CANCELLED_INPUT
+from utils import GenericMessages, CANCELLED_INPUT, print_invalid_option, print_error
 from views import MainMenuView
 
 
@@ -16,19 +16,45 @@ class MainController:
     def __init__(self, data: "Data"):
         self.data = data
         self.view = MainMenuView()
+        self.menu_actions = {
+            "1": self.handle_player_menu,
+            "2": self.handle_tournament_menu,
+            CANCELLED_INPUT: self.exit_app,
+        }
 
     def handle_main_menu(self):
-        self.view.display()
-        choice = input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Style.RESET_ALL}")
-        if choice == "1":
+        while True:
+            self.view.display()
+            choice = input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Style.RESET_ALL}")
+
+            if choice not in self.menu_actions.keys():
+                # no error raising here to stay in this menu and avoid redirection to main menu
+                print_invalid_option([key for key in self.menu_actions.keys()])
+
+            action = self.menu_actions.get(choice)
+            try:
+                # action() return True to stay in this menu
+                # exit choice exit app in this controller
+                return action()
+            except Exception as error:
+                print_error(error, GenericMessages.MAIN_MENU_RETURN)
+
+    def handle_player_menu(self) -> True:
+        try:
             player_controller = PlayerController(self.data)
             player_controller.handle_player_main_menu()
-        elif choice == "2":
+        except Exception:
+            # no error handling here as it is done in handle_main_menu in order to handle errors coming from other controllers too
+            pass
+
+    def handle_tournament_menu(self) -> True:
+        try:
             tournament_controller = TournamentController(self.data)
             tournament_controller.handle_tournament_main_menu()
-        elif choice == CANCELLED_INPUT:
-            print(GenericMessages.EXIT_MESSAGE.value)
-            exit(0)
-        else:
-            # no error raising here to avoid countdown and be redirected to main menu
-            print(f"{Fore.RED}Invalid option, please choose between 1, 2 or 'q'.{Fore.RESET}")
+        except Exception:
+            # no error handling here as it is done in handle_main_menu in order to handle errors coming from other controllers too
+            pass
+
+    def exit_app(self) -> None:
+        print(GenericMessages.EXIT_MESSAGE.value)
+        exit(0)

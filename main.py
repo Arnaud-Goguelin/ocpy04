@@ -1,6 +1,5 @@
 from controllers import MainController
 from models import Player, Tournament
-from utils import GenericMessages, print_error
 
 
 class Data:
@@ -39,10 +38,7 @@ class Application:
 
     def run(self):
         while True:
-            try:
-                self.controller.handle_main_menu()
-            except Exception as error:
-                print_error(error, GenericMessages.MAIN_MENU_RETURN)
+            self.controller.handle_main_menu()
 
 
 if __name__ == "__main__":
