@@ -1,4 +1,5 @@
 import datetime
+import random
 
 from models.match import Match
 from models.player import Player
@@ -72,13 +73,13 @@ class Tournament:
         """
         matches = []
         if not self.rounds:
-            # TODO : try with 100 print, order is not guaranteed and it may be the same for each tournament
-            # no need to shuffle players as we use a set, it is not ordered by nature
 
-            # /!\ yet store a copy in available_players as after we remove players from it,
-            # use available_players as a reference would remove players from self.players,
-            # and bugs will happen in round 2
-            available_players = self.players.copy()
+            players_list = list(self.players)
+            random.shuffle(players_list)
+            # as we convert the set() to a list, we do not need to store a copy in available_players variable
+            # later in code we might remove player from list, but it won't alter set in players attributes
+            available_players = players_list
+
         else:
             available_players = self.rank_players()
 
