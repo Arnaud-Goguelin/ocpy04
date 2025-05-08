@@ -25,17 +25,12 @@ class TournamentController:
         while True:
             self.view.display()
             choice = input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Style.RESET_ALL}")
-
             action = self.menu_actions.get(choice)
             if action:
-                try:
-                    # action() return True to stay in this menu or None to got back to main menu
-                    should_we_stay_in_this_menu = action()
-                    if not should_we_stay_in_this_menu:
-                        return None
-                except (ValueError, TypeError, IndexError) as error:
-                    print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
-                    self.view.display()
+                # action() return True to stay in this menu or False to got back to main menu
+                should_we_stay_in_this_menu = action()
+                if not should_we_stay_in_this_menu:
+                    return None
             else:
                 # no error raising here to stay in this menu and avoid redirection to main menu
                 print_invalid_option([key for key in self.menu_actions.keys()])
@@ -69,12 +64,12 @@ class TournamentController:
                     f"\u265b \u2655 \u265b .{Fore.RESET}"
                 )
 
-            # return True to stay in this menu
-            return True
-
         except (ValueError, TypeError) as error:
             print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
-            self.view.display()
+
+        # always return True to stay in this menu
+        finally:
+            return True
 
     def display_tournament_details(self) -> True:
         try:
@@ -84,12 +79,13 @@ class TournamentController:
                 key=lambda tournament: tournament.name,
             )
             TournamentListView.display_tournaments_list(sorted_alphabetically_tournament_list)
-            # return True to stay in this menu
-            return True
 
         except (TypeError, IndexError) as error:
             print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
-            self.view.display()
+
+        # always return True to stay in this menu
+        finally:
+            return True
 
     def continue_tournament(self) -> True:
         try:
