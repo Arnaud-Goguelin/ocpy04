@@ -117,8 +117,8 @@ End Date: ---
 Number of Rounds: 4
 
 Player List:
-1. Dupont, Jean
-2. Martin, Marie
+1. Dupont, Jean + score
+2. Martin, Marie + score
 ...
 
 Start tournament ? Y / N
