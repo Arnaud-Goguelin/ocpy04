@@ -1,19 +1,15 @@
-from utils import CANCELLED_INPUT
+from utils import CANCELLED_INPUT, print_title
+from colorama import Fore
 
 
 class PlayerMenuView:
 
     @staticmethod
     def display():
-        print(
-            """
-==================================================
-\u265d  Player Menu \u2657 :
-=================================================="""
-        )
+        print_title("\u265d  Player Menu \u2657 :")
 
+        print(f"{Fore.LIGHTYELLOW_EX}1.{Fore.RESET} Add New Player \u265d.")
+        print(f"{Fore.LIGHTYELLOW_EX}2.{Fore.RESET} View Player List \u265c. ")
         print(
-            f"1. Add New Player \u265d."
-            f"\n2. View Player List \u265c. "
-            f"\n\u265f\u2659 Press '{CANCELLED_INPUT}' to return to Main menu \u2659\u265f."
+            f"\u265f\u2659 Press '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to return to Main menu \u2659\u265f."
         )

@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 
-from utils import CANCELLED_INPUT
+from colorama import Fore
+
+from utils import CANCELLED_INPUT, print_title
 
 if TYPE_CHECKING:
     from models.player import Player
@@ -12,7 +14,7 @@ class PlayerListView:
     def display_players_list(players: list["Player"]):
         for player in players:
             print(
-                f"{players.index(player) + 1}. {player.last_name} {player.first_name}, "
+                f"{Fore.LIGHTYELLOW_EX}{players.index(player) + 1}{Fore.RESET}. {player.last_name} {player.first_name}, "
                 f"{player.birthdate} - {player.chess_id}"
             )
 
@@ -35,20 +37,15 @@ class PlayerListView:
         :param is_used_for_selecting_players: Determines the mode of operation.
         :return: A set of selected "Player" objects if `is_used_for_selecting_players` is True; otherwise None.
         """
-        print(
-            """
-==================================================
-\u265d Players List \u2657 :
-==================================================
-"""
-        )
+        print_title("\u265d  Players List \u2657 :")
+
         if not players:
             raise ValueError("No players to display.")
 
         # --- List used to display player details ---
         if not is_used_for_selecting_players:
             cls.display_players_list(players)
-            input("\nPress 'Enter' to go back to Player Menu")
+            input(f"\nPress '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' to go back to Player Menu")
             return None
 
         # --- List used to select players for a new tournament ---
@@ -66,10 +63,10 @@ class PlayerListView:
                 return selected_players
 
             choice = input(
-                "\nWhat would you like to do? "
-                "\nSelect a player: copy index / "
-                "Save and validate choices, press 'Enter' / "
-                "Go back to Tournament Menu without saving, press 'q'\n:"
+                f"\n{Fore.LIGHTYELLOW_EX}What would you like to do?{Fore.RESET}"
+                f"\nSelect a player: {Fore.LIGHTYELLOW_EX}copy index{Fore.RESET} / "
+                f"Save and validate choices, press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' / "
+                f"Go back to Tournament Menu without saving, press '{Fore.LIGHTYELLOW_EX}q{Fore.RESET}'\n:"
             )
 
             if choice.lower() == CANCELLED_INPUT:

@@ -1,20 +1,16 @@
-from utils import CANCELLED_INPUT
+from colorama import Fore
+
+from utils import CANCELLED_INPUT, print_title
 
 
 class MainMenuView:
 
     @staticmethod
     def display():
-        print(
-            """
-==================================================
-\u265a  Welcome to the Chess Tournament Manager \u2654 :
-==================================================
-"""
-        )
+        print_title("\u265a  Welcome to the Chess Tournament Manager \u2654 :")
 
+        print(f"{Fore.LIGHTYELLOW_EX}1. {Fore.RESET}Manage Players \u265d.")
+        print(f"{Fore.LIGHTYELLOW_EX}2. {Fore.RESET}Manage Tournaments \u265e.")
         print(
-            f"1. Manage Players \u265d."
-            f"\n2. Manage Tournaments \u265e."
-            f"\n\u265f\u2659 Press '{CANCELLED_INPUT}' to exit and close application \u2659\u265f."
+            f"\u265f\u2659 Press '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to exit and close application \u2659\u265f."
         )

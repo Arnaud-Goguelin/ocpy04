@@ -1,5 +1,9 @@
 from typing import TYPE_CHECKING
 
+from colorama import Fore
+
+from utils import print_title
+
 if TYPE_CHECKING:
     from models.tournament import Tournament
 
@@ -7,19 +11,14 @@ if TYPE_CHECKING:
 class TournamentListView:
     @staticmethod
     def display_tournaments_list(tournaments: list["Tournament"]):
-        print(
-            """
-==================================================
-\u265b Tournaments List \u2655 :
-==================================================
-"""
-        )
+        print_title("\u265b Tournaments List \u2655 :")
+
         for tournament in tournaments:
             print(
-                f"{tournaments.index(tournament) + 1}. {tournament.name} in {tournament.location}, "
+                f"{Fore.LIGHTYELLOW_EX}{tournaments.index(tournament) + 1}{Fore.RESET}. {tournament.name} in {tournament.location}, "
                 f"{tournament.start_date if tournament.start_date else "To begin"} - "
                 f"{tournament.end_date if tournament.end_date else "Not finished"}."
             )
 
-        input("\nPress 'Enter' to go back to Player Menu")
+        input(f"\nPress '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' to go back to Player Menu")
         return None
