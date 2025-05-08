@@ -1,6 +1,6 @@
 from controllers import MainController
 from models import Player, Tournament
-from utils import countdown, GenericMessages
+from utils import GenericMessages, print_error
 
 
 class Data:
@@ -42,9 +42,7 @@ class Application:
             try:
                 self.controller.handle_main_menu()
             except Exception as error:
-                print("\nAn error occurred : ")
-                print(error)
-                countdown(GenericMessages.MAIN_MENU_RETURN.value)
+                print_error(error, GenericMessages.MAIN_MENU_RETURN)
 
 
 if __name__ == "__main__":
