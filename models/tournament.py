@@ -74,7 +74,7 @@ class Tournament:
         """
         matches = []
         if not self.rounds:
-
+            # TODO : try with 100 print, order is not guaranteed and it may be the same for each tournament
             # no need to shuffle players as we use a set, it is not ordered by nature
 
             # /!\ yet store a copy in available_players as after we remove players from it,
