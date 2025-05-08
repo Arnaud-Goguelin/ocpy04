@@ -9,8 +9,6 @@ from utils import MAX_NUMBER_OF_ROUNDS
 class Tournament:
 
     def __init__(self, name: str, location: str, description: str, players: set[Player]) -> None:
-        self._validate_players(players)
-
         self.name = name
         self.location = location
         self.description = description
@@ -25,7 +23,7 @@ class Tournament:
         # current round number can be returned with a method, no need to store it
 
     @staticmethod
-    def _validate_players(players: set[Player]) -> None:
+    def validate_players(players: set[Player]) -> None:
 
         if len(players) % 2 != 0:
             raise ValueError("Tournament must have an even number of players")
