@@ -44,7 +44,8 @@ class MainController:
             player_controller = PlayerController(self.data)
             player_controller.handle_player_main_menu()
         except Exception:
-            # no error handling here as it is done in handle_main_menu in order to handle errors coming from other controllers too
+            # no error handling here as it is done in handle_main_menu
+            # in order to handle errors coming from other controllers too
             pass
 
     def handle_tournament_menu(self) -> True:
@@ -52,7 +53,8 @@ class MainController:
             tournament_controller = TournamentController(self.data)
             tournament_controller.handle_tournament_main_menu()
         except Exception:
-            # no error handling here as it is done in handle_main_menu in order to handle errors coming from other controllers too
+            # no error handling here as it is done in handle_main_menu
+            # in order to handle errors coming from other controllers too
             pass
 
     def exit_app(self) -> None:

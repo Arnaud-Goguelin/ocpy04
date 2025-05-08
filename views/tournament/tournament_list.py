@@ -15,7 +15,8 @@ class TournamentListView:
 
         for tournament in tournaments:
             print(
-                f"{Fore.LIGHTYELLOW_EX}{tournaments.index(tournament) + 1}{Fore.RESET}. {tournament.name} in {tournament.location}, "
+                f"{Fore.LIGHTYELLOW_EX}{tournaments.index(tournament) + 1}{Fore.RESET}. "
+                f"{tournament.name} in {tournament.location}, "
                 f"{tournament.start_date if tournament.start_date else "To begin"} - "
                 f"{tournament.end_date if tournament.end_date else "Not finished"}."
             )

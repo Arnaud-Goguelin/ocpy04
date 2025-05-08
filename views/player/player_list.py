@@ -14,7 +14,8 @@ class PlayerListView:
     def display_players_list(players: list["Player"]):
         for player in players:
             print(
-                f"{Fore.LIGHTYELLOW_EX}{players.index(player) + 1}{Fore.RESET}. {player.last_name} {player.first_name}, "
+                f"{Fore.LIGHTYELLOW_EX}{players.index(player) + 1}{Fore.RESET}. "
+                f"{player.last_name} {player.first_name}, "
                 f"{player.birthdate} - {player.chess_id}"
             )
 

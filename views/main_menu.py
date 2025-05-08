@@ -12,5 +12,7 @@ class MainMenuView:
         print(f"{Fore.LIGHTYELLOW_EX}1. {Fore.RESET}Manage Players \u265d.")
         print(f"{Fore.LIGHTYELLOW_EX}2. {Fore.RESET}Manage Tournaments \u265e.")
         print(
-            f"\u265f\u2659 Press '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to exit and close application \u2659\u265f."
+            f"\u265f\u2659 "
+            f"Press '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to exit and close application "
+            f"\u2659\u265f."
         )

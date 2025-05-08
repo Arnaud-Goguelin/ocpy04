@@ -13,5 +13,7 @@ class TournamentMenuView:
         print(f"{Fore.LIGHTYELLOW_EX}2{Fore.RESET}. View tournament details \u265c.")
         print(f"{Fore.LIGHTYELLOW_EX}3{Fore.RESET}. Continue tournament \u265e.")
         print(
-            f"\u265f\u2659 Press '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to return to Main menu \u2659\u265f."
+            f"\u265f\u2659 Press "
+            f"'{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to return to Main menu "
+            f"\u2659\u265f."
         )

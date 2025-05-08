@@ -1,4 +1,4 @@
-from colorama import Fore, Style
+from colorama import Fore
 
 
 def print_title(title: str):
