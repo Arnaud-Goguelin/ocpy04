@@ -6,7 +6,7 @@ from .tournament.tournament_controller import TournamentController
 
 if TYPE_CHECKING:
     from main import Data
-from utils import GenericMessages, CANCELLED_INPUT, print_invalid_option, print_error
+from utils import GenericMessages, CANCELLED_INPUT, print_invalid_option
 from views import MainMenuView
 
 
@@ -22,25 +22,24 @@ class MainController:
 
     def handle_main_menu(self):
         while True:
-            choice = self.view.display()
 
-            if choice not in self.menu_actions.keys():
+            choice = self.view.display()
+            action = self.menu_actions.get(choice)
+            if action:
+                # action() return True to stay in this menu or False to got back to main menu
+                should_we_stay_in_this_menu = action()
+                if not should_we_stay_in_this_menu:
+                    return None
+            else:
                 # no error raising here to stay in this menu and avoid redirection to main menu
                 print_invalid_option([key for key in self.menu_actions.keys()])
-
-            action = self.menu_actions.get(choice)
-            try:
-                # action() return True to stay in this menu
-                # exit choice exit app in this controller
-                return action()
-            except Exception as error:
-                print_error(error, GenericMessages.MAIN_MENU_RETURN)
 
     def handle_player_menu(self) -> True:
         try:
             # TODO: why not use class method or static method?
             player_controller = PlayerController(self.data)
             player_controller.handle_player_main_menu()
+            return True
         except Exception:
             # no error handling here as it is done in handle_main_menu
             # in order to handle errors coming from other controllers too
