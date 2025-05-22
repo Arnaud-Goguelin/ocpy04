@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from colorama import Fore, Style
+from colorama import Fore
 
 if TYPE_CHECKING:
     from main import Data
@@ -22,8 +22,7 @@ class PlayerController:
 
     def handle_player_main_menu(self):
         while True:
-            self.view.display()
-            choice = input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Style.RESET_ALL}")
+            choice = self.view.display()
             action = self.menu_actions.get(choice)
             if action:
                 # action() return True to stay in this menu or False to got back to main menu

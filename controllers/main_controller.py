@@ -1,8 +1,6 @@
 # need to import others controllers with an absolut path to avoid the circular import issue.
 from typing import TYPE_CHECKING
 
-from colorama import Fore, Style
-
 from .player.player_controller import PlayerController
 from .tournament.tournament_controller import TournamentController
 
@@ -24,8 +22,7 @@ class MainController:
 
     def handle_main_menu(self):
         while True:
-            self.view.display()
-            choice = input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Style.RESET_ALL}")
+            choice = self.view.display()
 
             if choice not in self.menu_actions.keys():
                 # no error raising here to stay in this menu and avoid redirection to main menu
@@ -41,6 +38,7 @@ class MainController:
 
     def handle_player_menu(self) -> True:
         try:
+            # TODO: why not use class method or static method?
             player_controller = PlayerController(self.data)
             player_controller.handle_player_main_menu()
         except Exception:

@@ -16,3 +16,5 @@ class PlayerMenuView:
             f"Press '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to return to Main menu "
             f"\u2659\u265f."
         )
+
+        input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Fore.RESET_ALL}")
