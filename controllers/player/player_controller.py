@@ -16,7 +16,7 @@ class PlayerController:
         self.view = PlayerMenuView()
         self.menu_actions = {
             "1": self.create_player,
-            "2": self.display_players_details,
+            "2": self.display_players_list,
             CANCELLED_INPUT: self.exit_player_controller,
         }
 
@@ -58,7 +58,7 @@ class PlayerController:
         finally:
             return True
 
-    def display_players_details(self) -> True:
+    def display_players_list(self) -> True:
         try:
             sorted_alphabetically_player_list = sorted(
                 # use a copy to alter original data

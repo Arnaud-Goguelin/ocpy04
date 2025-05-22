@@ -55,3 +55,5 @@ class TournamentDetailsView:
             print("Reminder: winner are in green, looser in white, draw in yellow")
             for tournament_round in tournament.rounds:
                 cls.display_round_details(tournament_round)
+
+        return input(f"\nPress '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' to go back to Tournament Menu")

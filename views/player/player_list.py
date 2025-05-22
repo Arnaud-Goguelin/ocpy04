@@ -50,12 +50,11 @@ class PlayerListView:
         # --- List used to display player details ---
         if not is_used_for_selecting_players:
             cls.display_players_list(players)
-            input(f"\nPress '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' to go back to Player Menu")
-            return None
+            return input(f"\nPress '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' to go back to Player Menu")
 
         # --- List used to select players for a new tournament ---
-        print("To create a new tournament, you need to select players.")
-
+        print(f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} To create a new tournament, you need to select players. {Fore.LIGHTYELLOW_EX}---{Fore.RESET}")
+        print()
         # countdown(GenericMessages.PLAYER_LIST.value)
 
         # use a set() to avoid duplicate
@@ -74,8 +73,8 @@ class PlayerListView:
                 f"Go back to Tournament Menu without saving, press '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}'\n:"
             )
 
-            if choice.upper() == CANCELLED_INPUT:
-                print("\nA tournament need players, cancel new Tournament creation.")
+            if isinstance(choice, str) and choice.upper() == CANCELLED_INPUT:
+                print("\nCancel new Tournament creation.")
                 return None
 
             elif choice == "":
@@ -88,7 +87,7 @@ class PlayerListView:
 
             elif not choice.isdigit():
                 print(
-                    f"\n{Fore.RED}Invalid index. Please enter a valid player's index or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to exit the menu.{Fore.RESET}"
+                    f"\n{Fore.RED}Invalid index. Please enter a {Fore.LIGHTYELLOW_EX}valid player's index{Fore.RED} or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RED}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RED}' to exit the menu.{Fore.RESET}"
                 )
 
             else:
@@ -96,10 +95,8 @@ class PlayerListView:
 
                 if not 0 <= player_index < len(players):
                     print(
-                        "\nInvalid index. Please enter a valid player's index "
-                        "or press 'Enter' or 'Esc' to exit the menu."
-                    )
-
+                        f"\n{Fore.RED}Invalid index. Please enter a {Fore.LIGHTYELLOW_EX}valid player's index{Fore.RED} or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RED}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RED}' to exit the menu.{Fore.RESET}"
+                        )
                 else:
                     selected_player = players[player_index]
                     selected_players.add(selected_player)

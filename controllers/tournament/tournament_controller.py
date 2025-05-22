@@ -19,7 +19,7 @@ class TournamentController:
         self.view = TournamentMenuView()
         self.menu_actions = {
             "1": self.create_tournament,
-            "2": self.select_tournament_to_display,
+            "2": self.display_tournament_details,
             "3": self.start_or_continue_tournament,
             CANCELLED_INPUT: self.exit_tournament_controller,
         }
@@ -44,11 +44,10 @@ class TournamentController:
             players = PlayerListView.handle_players_list(self.data.players.copy(), True)
             # validate players here before display next form to avoid too many inputs
             # and then raise an error concerning the first input
-            Tournament.validate_players(players)
-
             if not players:
                 countdown(GenericMessages.TOURNAMENT_MENU_RETURN.value)
             else:
+                Tournament.validate_players(players)
                 name, location, description = CreateTournamentView.display_add_tournament_form()
 
                 new_tournament = Tournament(
@@ -73,7 +72,7 @@ class TournamentController:
         finally:
             return True
 
-    def select_tournament_to_display(self) -> True:
+    def display_tournament_details(self) -> True:
         try:
             sorted_alphabetically_tournament_list = sorted(
                 # use a copy to not alter original data
@@ -81,8 +80,11 @@ class TournamentController:
                 key=lambda tournament: tournament.name,
             )
             tournament = TournamentListView.handle_tournaments_list(sorted_alphabetically_tournament_list)
+            if not tournament:
+                countdown(GenericMessages.TOURNAMENT_MENU_RETURN.value)
+                return True
             TournamentDetailsView.display_tournament_details(tournament)
-            # TODO: allow to select a tournament to display details
+
         except (TypeError, IndexError) as error:
             print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
 
