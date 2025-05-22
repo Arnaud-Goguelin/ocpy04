@@ -17,4 +17,7 @@ class PlayerMenuView:
             f"\u2659\u265f."
         )
 
-        return input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Fore.RESET_ALL}")
+        choice =  input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Fore.RESET}")
+        if isinstance(choice, str) :
+            choice = choice.upper()
+        return choice

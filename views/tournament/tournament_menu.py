@@ -18,4 +18,7 @@ class TournamentMenuView:
             f"\u2659\u265f."
         )
 
-        return input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Fore.RESET}")
+        choice =  input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Fore.RESET}")
+        if isinstance(choice, str) :
+            choice = choice.upper()
+        return choice
