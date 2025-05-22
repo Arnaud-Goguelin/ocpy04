@@ -18,4 +18,4 @@ class TournamentMenuView:
             f"\u2659\u265f."
         )
 
-        input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Fore.RESET}")
+        return input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Fore.RESET}")
