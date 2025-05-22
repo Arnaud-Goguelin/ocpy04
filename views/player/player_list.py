@@ -2,12 +2,16 @@ from typing import TYPE_CHECKING
 
 from colorama import Fore
 
-from utils import CANCELLED_INPUT, print_title
+from utils import (
+    CANCELLED_INPUT,
+    print_title,
+    )
 
 if TYPE_CHECKING:
     from models.player import Player
 
 
+# TODO: should a view handle inputs???
 class PlayerListView:
 
     @staticmethod
@@ -67,10 +71,10 @@ class PlayerListView:
                 f"\n{Fore.LIGHTYELLOW_EX}What would you like to do?{Fore.RESET}"
                 f"\nSelect a player: {Fore.LIGHTYELLOW_EX}copy index{Fore.RESET} / "
                 f"Save and validate choices, press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' / "
-                f"Go back to Tournament Menu without saving, press '{Fore.LIGHTYELLOW_EX}q{Fore.RESET}'\n:"
+                f"Go back to Tournament Menu without saving, press '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}'\n:"
             )
 
-            if choice.lower() == CANCELLED_INPUT:
+            if choice.upper() == CANCELLED_INPUT:
                 print("\nA tournament need players, cancel new Tournament creation.")
                 return None
 
@@ -84,7 +88,7 @@ class PlayerListView:
 
             elif not choice.isdigit():
                 print(
-                    "\nInvalid index. Please enter a valid player's index or press 'Enter' or 'Esc' to exit the menu."
+                    f"\n{Fore.RED}Invalid index. Please enter a valid player's index or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to exit the menu.{Fore.RESET}"
                 )
 
             else:

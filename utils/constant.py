@@ -1,7 +1,9 @@
 from enum import Enum
 
 MAX_NUMBER_OF_ROUNDS = 4
-CANCELLED_INPUT = "q"
+CANCELLED_INPUT = "Q"
+VALIDATION_INPUT = "Y"
+INVALIDATION_INPUT = "N"
 
 
 class GenericMessages(str, Enum):

@@ -1,13 +1,16 @@
 from typing import TYPE_CHECKING
 
-from colorama import Fore, Style
+from colorama import (
+    Fore,
+    )
 
 if TYPE_CHECKING:
     from main import Data
 
-from utils import countdown, GenericMessages, CANCELLED_INPUT, print_error, print_invalid_option
+from utils import countdown, GenericMessages, CANCELLED_INPUT, \
+    print_error, print_invalid_option
 from models import Tournament
-from views import TournamentMenuView, CreateTournamentView, TournamentListView, PlayerListView
+from views import TournamentMenuView, CreateTournamentView, TournamentListView, PlayerListView, TournamentDetailsView, MatchDetailsView
 
 
 class TournamentController:
@@ -16,15 +19,14 @@ class TournamentController:
         self.view = TournamentMenuView()
         self.menu_actions = {
             "1": self.create_tournament,
-            "2": self.display_tournament_details,
-            "3": self.continue_tournament,
+            "2": self.select_tournament_to_display,
+            "3": self.start_or_continue_tournament,
             CANCELLED_INPUT: self.exit_tournament_controller,
         }
 
     def handle_tournament_main_menu(self):
         while True:
-            self.view.display()
-            choice = input(f"{Fore.LIGHTYELLOW_EX}Choose an option : {Style.RESET_ALL}")
+            choice = self.view.display()
             action = self.menu_actions.get(choice)
             if action:
                 # action() return True to stay in this menu or False to got back to main menu
@@ -71,15 +73,16 @@ class TournamentController:
         finally:
             return True
 
-    def display_tournament_details(self) -> True:
+    def select_tournament_to_display(self) -> True:
         try:
             sorted_alphabetically_tournament_list = sorted(
                 # use a copy to not alter original data
                 self.data.tournaments.copy(),
                 key=lambda tournament: tournament.name,
             )
-            TournamentListView.display_tournaments_list(sorted_alphabetically_tournament_list)
-
+            tournament = TournamentListView.handle_tournaments_list(sorted_alphabetically_tournament_list)
+            TournamentDetailsView.display_tournament_details(tournament)
+            # TODO: allow to select a tournament to display details
         except (TypeError, IndexError) as error:
             print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
 
@@ -87,11 +90,51 @@ class TournamentController:
         finally:
             return True
 
-    def continue_tournament(self) -> True:
+    @staticmethod
+    def solve_matches(tournament: Tournament) -> None:
+        for match in tournament.rounds[-1].matches:
+            match_choice = MatchDetailsView.display_match_details(match)
+
+            if match_choice.upper() == CANCELLED_INPUT:
+                return None
+
+            elif not match_choice.isdigit():
+                print(
+                    f"\n{Fore.RED}Invalid index. Please enter a valid player's index or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to exit the menu.{Fore.RESET}"
+                    )
+            else:
+                index = int(match_choice) - 1
+                winner = match.participating_players[index] if index < len(match.participating_players) else None
+                match.set_match_score(winner)
+        return None
+
+    def start_or_continue_tournament(self) -> True:
         try:
+            concerned_tournament = [
+                tournament
+                for tournament in self.data.tournaments
+                if tournament.start_date is None or tournament.end_date is None
+            ]
+            sorted_alphabetically_tournament_list = sorted(
+                # use a copy to not alter original data
+                concerned_tournament,
+                key=lambda tournament: tournament.name,
+            )
+            tournament = TournamentListView.handle_tournaments_list(sorted_alphabetically_tournament_list)
+            TournamentDetailsView.display_tournament_details(tournament)
+
+            if tournament.rounds_count == 0:
+                tournament.start()
+            else:
+                tournament.continue_tournament()
+
+            are_all_matches_rounds_finished = False
+            while not are_all_matches_rounds_finished:
+                self.solve_matches(tournament)
+                are_all_matches_rounds_finished = all(round.is_finished for round in tournament.rounds)
+
             # return True to stay in this menu
             return True
-            # TODO: continue or begin tournament + rename option in menu
         except (TypeError, IndexError) as error:
             print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
             self.view.display()

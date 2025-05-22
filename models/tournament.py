@@ -34,6 +34,26 @@ class Tournament:
                 raise ValueError(f"{player} must be registered as a Player before participating in a tournament")
         return None
 
+    # a property allows us to call a method as an attribute and not as a function
+    # cache_property also exist to store value in a cache in instance
+    @property
+    def rounds_count(self):
+        """
+        Return rounds attribute length, thus the current round number in the current tournament.
+        """
+        return len(self.rounds)
+
+    @property
+    def rounds_matches_count(self):
+        """
+        Return rounds attribute length, thus the current round number in the current tournament.
+        """
+        matches_count = 0
+        for tournament_round in self.rounds:
+            matches_count += len(tournament_round.matches)
+
+        return print(f"rounds = {len(self.rounds)}, matches = {matches_count}")
+
     def get_player_scores(self):
         """
         Calculate and return the total scores for each player across all rounds and matches in the current tournament.
@@ -106,26 +126,6 @@ class Tournament:
 
         return matches
 
-    # a property allows us to call a method as an attribute and not as a function
-    # cache_property also exist to store value in a cache in instance
-    @property
-    def rounds_count(self):
-        """
-        Return rounds attribute length, thus the current round number in the current tournament.
-        """
-        return len(self.rounds)
-
-    @property
-    def rounds_matches_count(self):
-        """
-        Return rounds attribute length, thus the current round number in the current tournament.
-        """
-        matches_count = 0
-        for tournament_round in self.rounds:
-            matches_count += len(tournament_round.matches)
-
-        return print(f"rounds = {len(self.rounds)}, matches = {matches_count}")
-
     def create_round(self, matches: list[Match]):
         """
         Creates a new tournament round, initializes it, and appends it to the list of
@@ -141,15 +141,19 @@ class Tournament:
 
     def start(self):
         """
-        Starts the process by initializing the start date, shuffling players, and creating rounds.
+        Starts the process by initializing the start date, shuffling players, and creating the first round.
         """
         self.start_date = datetime.datetime.now()
+        matches = self.create_matches()
+        if matches:
+            self.create_round(matches)
+        return None
 
-        # --- create and start rounds ---
-        # range stops at MAX_NUMBER_OF_ROUNDS -1, so we begin at 0 to have 4 iterations anyway
-        for i in range(0, MAX_NUMBER_OF_ROUNDS):
+    def continue_tournament(self):
+
+        if self.rounds_count <= MAX_NUMBER_OF_ROUNDS:
             matches = self.create_matches()
             if matches:
                 self.create_round(matches)
-            else:
-                break
+
+        return None
