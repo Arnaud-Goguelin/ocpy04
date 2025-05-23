@@ -13,33 +13,19 @@ class Match:
         self.score_player2 += 0
         return None
 
-    def player2_wins(self) -> None:
+    def player2_wins(self) -> Player:
         self.score_player1 += 0
         self.score_player2 += 1
         return None
 
-    def drown(self)-> None:
+    def draw(self)-> None:
         self.score_player1 += 0.5
         self.score_player2 += 0.5
         return None
 
-    def set_match_score(self, winner: Player | None = None) -> None:
-
-        if winner != self.player1 and winner != self.player2:
-            raise ValueError(f"Player {winner.last_name} did not play this match.")
-
-        result_actions = {
-            self.player1: self.player1_wins,
-            self.player2: self.player2_wins,
-            }
-
-        action = result_actions.get(winner, self.drown)
-        action()
-        return None
-
     @property
     def is_match_finished(self) -> bool:
-        return self.score_player1 != 0 and self.score_player2 != 0
+        return self.score_player1 != 0 or self.score_player2 != 0
 
     @property
     def participating_players(self) -> list[Player]:

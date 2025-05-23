@@ -39,19 +39,4 @@ class TournamentListView:
             f"Go back to Tournament Menu without saving, press '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}'\n:"
         )
 
-        if isinstance(choice, str) and choice.upper() == CANCELLED_INPUT:
-            return None
-
-        elif not choice.isdigit():
-            print(
-                f"\n{Fore.RED}Invalid index. Please enter a {Fore.LIGHTYELLOW_EX}valid tournament's index{Fore.RED} or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RED}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RED}' to exit the menu.{Fore.RESET}"
-                )
-        else:
-            tournament_index = int(choice) - 1
-
-            if not 0 <= tournament_index < len(tournaments):
-                print(
-                    f"\n{Fore.RED}Invalid index. Please enter a {Fore.LIGHTYELLOW_EX}valid tournament's index{Fore.RED} or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RED}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RED}' to exit the menu.{Fore.RESET}"
-                )
-            else:
-                return tournaments[tournament_index]
+        return choice

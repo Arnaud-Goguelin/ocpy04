@@ -27,7 +27,7 @@ class TournamentDetailsView:
                 )
 
     @classmethod
-    def display_tournament_details(cls, tournament: "Tournament"):
+    def display_tournament_details(cls, tournament: "Tournament", used_for_details_report: bool = False) -> None:
         print_title("\u265c Tournament Details \u2656 :")
         print()
         print(f"Name: {tournament.name}")
@@ -52,8 +52,12 @@ class TournamentDetailsView:
 
         if tournament.start_date:
             print("Rounds:")
-            print("Reminder: winner are in green, looser in white, draw in yellow")
+            print(f"Reminder: winner are in {Fore.GREEN}green{Fore.RESET}, looser in white, {Fore.YELLOW}draw{Fore.RESET} in yellow")
             for tournament_round in tournament.rounds:
                 cls.display_round_details(tournament_round)
 
-        return input(f"\nPress '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' to go back to Tournament Menu")
+        if used_for_details_report:
+            input(f"\nPress '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' to go back to Tournament Menu")
+            return None
+
+        return None

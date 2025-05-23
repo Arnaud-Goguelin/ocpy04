@@ -72,6 +72,32 @@ class TournamentController:
         finally:
             return True
 
+    @staticmethod
+    def select_tournament_in_list(tournaments: list[Tournament], choice: int | None) -> Tournament | None:
+
+        if isinstance(choice, str) and choice.upper() == CANCELLED_INPUT:
+            return None
+
+        if not choice.isdigit():
+            print(
+                f"\n{Fore.RED}Invalid index. Please enter a {Fore.LIGHTYELLOW_EX}valid tournament's index{Fore.RED} or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RED}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RED}' to exit the menu.{Fore.RESET}"
+                )
+
+        tournament = None
+        tournament_index = int(choice) - 1
+
+        if not 0 <= tournament_index < len(tournaments):
+            print(
+                f"\n{Fore.RED}Invalid index. Please enter a {Fore.LIGHTYELLOW_EX}valid tournament's index{Fore.RED} or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RED}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RED}' to exit the menu.{Fore.RESET}"
+                )
+        else:
+            tournament = tournaments[tournament_index]
+
+        if not tournament:
+            countdown(GenericMessages.TOURNAMENT_MENU_RETURN.value)
+
+        return tournament
+
     def display_tournament_details(self) -> True:
         try:
             sorted_alphabetically_tournament_list = sorted(
@@ -79,11 +105,11 @@ class TournamentController:
                 self.data.tournaments.copy(),
                 key=lambda tournament: tournament.name,
             )
-            tournament = TournamentListView.handle_tournaments_list(sorted_alphabetically_tournament_list)
-            if not tournament:
-                countdown(GenericMessages.TOURNAMENT_MENU_RETURN.value)
-                return True
-            TournamentDetailsView.display_tournament_details(tournament)
+            choice = TournamentListView.handle_tournaments_list(sorted_alphabetically_tournament_list)
+
+            tournament = self.select_tournament_in_list(sorted_alphabetically_tournament_list, choice)
+
+            TournamentDetailsView.display_tournament_details(tournament, True)
 
         except (TypeError, IndexError) as error:
             print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
@@ -94,24 +120,35 @@ class TournamentController:
 
     @staticmethod
     def solve_matches(tournament: Tournament) -> None:
-        for match in tournament.rounds[-1].matches:
-            match_choice = MatchDetailsView.display_match_details(match)
+        print("="*10, "nb of match to solve = ", tournament.rounds[-1].match_count, "="*10,)
+        last_round = tournament.rounds[-1]
+        for match in last_round.matches:
+            # TODO: print round name and current match
+            print(f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} {last_round.name} {Fore.LIGHTYELLOW_EX}---{Fore.RESET}")
+            choice = MatchDetailsView.display_match_details(match)
 
-            if match_choice.upper() == CANCELLED_INPUT:
-                return None
-
-            elif not match_choice.isdigit():
+            if not choice.isdigit() and choice.upper() != CANCELLED_INPUT:
                 print(
-                    f"\n{Fore.RED}Invalid index. Please enter a valid player's index or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to exit the menu.{Fore.RESET}"
+                    f"\n{Fore.RED}Invalid index. Please enter a {Fore.LIGHTYELLOW_EX}valid option{Fore.RESET} or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to exit the menu.{Fore.RESET}"
                     )
-            else:
-                index = int(match_choice) - 1
-                winner = match.participating_players[index] if index < len(match.participating_players) else None
-                match.set_match_score(winner)
-        return None
+
+            if choice.upper() == CANCELLED_INPUT:
+                countdown(GenericMessages.TOURNAMENT_MENU_RETURN.value)
+
+            match_result = {
+                "1": match.player1_wins,
+                "2": match.player2_wins,
+                "3": match.draw,
+                }
+
+            match_result.get(choice, lambda: print_invalid_option([key for key in match_result.keys()]))()
+            MatchDetailsView.display_winner(match)
+
+        return last_round.is_round_finished
 
     def start_or_continue_tournament(self) -> True:
         try:
+            # filter tournaments to find those to be start or continue
             concerned_tournament = [
                 tournament
                 for tournament in self.data.tournaments
@@ -122,19 +159,28 @@ class TournamentController:
                 concerned_tournament,
                 key=lambda tournament: tournament.name,
             )
-            tournament = TournamentListView.handle_tournaments_list(sorted_alphabetically_tournament_list)
-            TournamentDetailsView.display_tournament_details(tournament)
+
+            choice = TournamentListView.handle_tournaments_list(sorted_alphabetically_tournament_list)
+
+            tournament = self.select_tournament_in_list(sorted_alphabetically_tournament_list, choice)
+
+            TournamentDetailsView.display_tournament_details(tournament, False)
 
             if tournament.rounds_count == 0:
                 tournament.start()
             else:
                 tournament.continue_tournament()
 
-            are_all_matches_rounds_finished = False
-            while not are_all_matches_rounds_finished:
-                self.solve_matches(tournament)
-                are_all_matches_rounds_finished = all(round.is_finished for round in tournament.rounds)
+            are_all_rounds_finished = False
+            while not are_all_rounds_finished:
+                is_current_round_finished = False
+                while not is_current_round_finished:
+                    is_current_round_finished = self.solve_matches(tournament)
+                tournament.continue_tournament()
+                are_all_rounds_finished = all(round.is_round_finished for round in tournament.rounds)
 
+            tournament.end()
+            print(f"{Fore.GREEN} Tournament with {len(tournament.players)} players, ends after {tournament.rounds_count} rounds and {sum(round.match_count for round in tournament.rounds)} matches.")
             # return True to stay in this menu
             return True
         except (TypeError, IndexError) as error:

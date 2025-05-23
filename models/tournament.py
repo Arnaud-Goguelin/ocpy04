@@ -43,17 +43,6 @@ class Tournament:
         """
         return len(self.rounds)
 
-    @property
-    def rounds_matches_count(self):
-        """
-        Return rounds attribute length, thus the current round number in the current tournament.
-        """
-        matches_count = 0
-        for tournament_round in self.rounds:
-            matches_count += len(tournament_round.matches)
-
-        return print(f"rounds = {len(self.rounds)}, matches = {matches_count}")
-
     def get_player_scores(self):
         """
         Calculate and return the total scores for each player across all rounds and matches in the current tournament.
@@ -151,9 +140,14 @@ class Tournament:
 
     def continue_tournament(self):
 
-        if self.rounds_count <= MAX_NUMBER_OF_ROUNDS:
+        max_possible_rounds = (len(self.players) * (len(self.players) - 1)) /2
+
+        if self.rounds_count < min(MAX_NUMBER_OF_ROUNDS, max_possible_rounds):
             matches = self.create_matches()
             if matches:
                 self.create_round(matches)
 
         return None
+
+    def end(self):
+        self.end_date = datetime.datetime.now()
