@@ -128,10 +128,12 @@ class TournamentController:
             choice = MatchDetailsView.display_match_details(match)
 
             if not choice.isdigit() and choice.upper() != CANCELLED_INPUT:
+                # TODO: create a view to display error
                 print(
                     f"\n{Fore.RED}Invalid index. Please enter a {Fore.LIGHTYELLOW_EX}valid option{Fore.RESET} or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to exit the menu.{Fore.RESET}"
                     )
 
+            # TODO: this logic does not allow to quit tournament solving
             if choice.upper() == CANCELLED_INPUT:
                 countdown(GenericMessages.TOURNAMENT_MENU_RETURN.value)
 

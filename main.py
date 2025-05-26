@@ -26,10 +26,10 @@ class Data:
     def save(self):
         pass
 
+
     def load(self):
         pass
-
-    # TODO from a JSON file complete attributes of Data class
+        # depuis le ficheir json, créer une isntance de chaque modèle pour chaque dict dans le fichier
 
 
 class Application:
