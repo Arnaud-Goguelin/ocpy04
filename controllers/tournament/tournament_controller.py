@@ -7,10 +7,16 @@ from colorama import (
 if TYPE_CHECKING:
     from main import Data
 
-from utils import countdown, GenericMessages, CANCELLED_INPUT, \
-    print_error, print_invalid_option
+from utils import countdown, GenericMessages, CANCELLED_INPUT, print_error, print_invalid_option, print_creation_success
 from models import Tournament
-from views import TournamentMenuView, CreateTournamentView, TournamentListView, PlayerListView, TournamentDetailsView, MatchDetailsView
+from views import (
+    TournamentMenuView,
+    CreateTournamentView,
+    TournamentListView,
+    PlayerListView,
+    TournamentDetailsView,
+    MatchDetailsView,
+)
 
 
 class TournamentController:
@@ -39,31 +45,62 @@ class TournamentController:
 
     def create_tournament(self) -> True:
         try:
+
             # use a copy of data.players as some players will be removed from the list,
             # we shouldn't alter original data
-            players = PlayerListView.handle_players_list(self.data.players.copy(), True)
+            players = self.data.players.copy()
+            # use a set() to avoid duplicate
+            selected_players = set()
+            selected_player = None
+
+            while players:
+                choice = PlayerListView.handle_players_list(
+                    players=players,
+                    used_for_selecting_players=True,
+                    last_selected_player=selected_player,
+                )
+
+                if choice.upper() == CANCELLED_INPUT:
+                    countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
+                    break
+
+                if choice == "":
+                    break
+
+                if not choice.isdigit() and choice.upper() != CANCELLED_INPUT:
+                    print_invalid_option(menus_keys=[str(i + 1) for i in range(len(players))], optional_choices=True)
+
+                if choice.isdigit() and not 0 < int(choice) <= len(players):
+                    print_invalid_option(menus_keys=[str(i + 1) for i in range(len(players))], optional_choices=True)
+
+                if choice.isdigit():
+                    player_index = int(choice) - 1
+
+                    selected_player = players[player_index]
+                    selected_players.add(selected_player)
+                    players.remove(selected_player)
+
+            if not players:
+                PlayerListView.handle_players_list(players=players, used_for_selecting_players=True, last_selected_player=selected_player)
+
             # validate players here before display next form to avoid too many inputs
             # and then raise an error concerning the first input
-            if not players:
-                countdown(GenericMessages.TOURNAMENT_MENU_RETURN.value)
+            if not selected_players:
+                countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
             else:
-                Tournament.validate_players(players)
+                Tournament.validate_players(selected_players)
                 name, location, description = CreateTournamentView.display_add_tournament_form()
 
                 new_tournament = Tournament(
                     name=name,
                     location=location,
                     description=description,
-                    players=players,
+                    players=selected_players,
                 )
 
                 self.data.tournaments.append(new_tournament)
 
-                print(
-                    f"{Fore.GREEN}\n\u2655 \u265b \u2655 "
-                    f"New tournament {name} created with success ! "
-                    f"\u265b \u2655 \u265b .{Fore.RESET}"
-                )
+                print_creation_success(new_tournament)
 
         except (ValueError, TypeError) as error:
             print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
@@ -81,7 +118,7 @@ class TournamentController:
         if not choice.isdigit():
             print(
                 f"\n{Fore.RED}Invalid index. Please enter a {Fore.LIGHTYELLOW_EX}valid tournament's index{Fore.RED} or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RED}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RED}' to exit the menu.{Fore.RESET}"
-                )
+            )
 
         tournament = None
         tournament_index = int(choice) - 1
@@ -89,12 +126,12 @@ class TournamentController:
         if not 0 <= tournament_index < len(tournaments):
             print(
                 f"\n{Fore.RED}Invalid index. Please enter a {Fore.LIGHTYELLOW_EX}valid tournament's index{Fore.RED} or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RED}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RED}' to exit the menu.{Fore.RESET}"
-                )
+            )
         else:
             tournament = tournaments[tournament_index]
 
         if not tournament:
-            countdown(GenericMessages.TOURNAMENT_MENU_RETURN.value)
+            countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
 
         return tournament
 
@@ -120,28 +157,25 @@ class TournamentController:
 
     @staticmethod
     def solve_matches(tournament: Tournament) -> None:
-        print("="*10, "nb of match to solve = ", tournament.rounds[-1].match_count, "="*10,)
+        print(
+            "=" * 10,
+            "nb of match to solve = ",
+            tournament.rounds[-1].match_count,
+            "=" * 10,
+        )
         last_round = tournament.rounds[-1]
         for match in last_round.matches:
-            # TODO: print round name and current match
-            print(f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} {last_round.name} {Fore.LIGHTYELLOW_EX}---{Fore.RESET}")
-            choice = MatchDetailsView.display_match_details(match)
-
-            if not choice.isdigit() and choice.upper() != CANCELLED_INPUT:
-                # TODO: create a view to display error
-                print(
-                    f"\n{Fore.RED}Invalid index. Please enter a {Fore.LIGHTYELLOW_EX}valid option{Fore.RESET} or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RESET}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}' to exit the menu.{Fore.RESET}"
-                    )
+            choice = MatchDetailsView.display_match_details(last_round, match)
 
             # TODO: this logic does not allow to quit tournament solving
-            if choice.upper() == CANCELLED_INPUT:
-                countdown(GenericMessages.TOURNAMENT_MENU_RETURN.value)
+            # if choice.upper() == CANCELLED_INPUT:
+            #     countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
 
             match_result = {
                 "1": match.player1_wins,
                 "2": match.player2_wins,
                 "3": match.draw,
-                }
+            }
 
             match_result.get(choice, lambda: print_invalid_option([key for key in match_result.keys()]))()
             MatchDetailsView.display_winner(match)
@@ -182,7 +216,9 @@ class TournamentController:
                 are_all_rounds_finished = all(round.is_round_finished for round in tournament.rounds)
 
             tournament.end()
-            print(f"{Fore.GREEN} Tournament with {len(tournament.players)} players, ends after {tournament.rounds_count} rounds and {sum(round.match_count for round in tournament.rounds)} matches.")
+            print(
+                f"{Fore.GREEN} Tournament with {len(tournament.players)} players, ends after {tournament.rounds_count} rounds and {sum(round.match_count for round in tournament.rounds)} matches."
+            )
             # return True to stay in this menu
             return True
         except (TypeError, IndexError) as error:

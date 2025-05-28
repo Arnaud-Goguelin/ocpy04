@@ -1,11 +1,9 @@
 from typing import TYPE_CHECKING
 
-from colorama import Fore
-
 if TYPE_CHECKING:
     from main import Data
 
-from utils import GenericMessages, CANCELLED_INPUT, print_error, print_invalid_option
+from utils import GenericMessages, CANCELLED_INPUT, print_error, print_invalid_option, print_creation_success
 from models import Player
 from views import PlayerMenuView, CreatePlayerView, PlayerListView
 
@@ -45,11 +43,7 @@ class PlayerController:
 
             self.data.players.append(new_player)
 
-            print(
-                f"{Fore.GREEN}\n\u2657 \u265d \u2657 "
-                f"New player {first_name} {last_name.upper()} created with success ! "
-                f"\u265d \u2657 \u265d .{Fore.RESET}"
-            )
+            print_creation_success(new_player)
 
         except ValueError as error:
             print_error(error, GenericMessages.PLAYER_MENU_RETURN)

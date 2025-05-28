@@ -1,6 +1,6 @@
 from colorama import Fore
 
-from .constant import GenericMessages
+from .constant import CANCELLED_INPUT, GenericMessages
 from .countdown import countdown
 
 
@@ -13,5 +13,10 @@ def print_error(
     countdown(generic_messages.value)
 
 
-def print_invalid_option(menus_actions_keys: list[str]):
-    print(f"{Fore.RED}Invalid option, please choose between {", ".join(menus_actions_keys)}.{Fore.RESET}")
+def print_invalid_option(menus_keys: list[str], optional_choices: bool = False):
+    print(
+        f"{Fore.RED}Invalid option, please choose between :"
+        f"{Fore.LIGHTYELLOW_EX}{", ".join(menus_keys)}{Fore.RED}"
+        f"{f", or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RED}' or '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RED}' to exit" 
+        if optional_choices else ""}.{Fore.RESET}"
+    )
