@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class TournamentDetailsView:
 
-    #TODO: we have a match details view, with not a round details?
+    # TODO: we have a match details view, with not a round details?
     @staticmethod
     def display_round_details(tournament_round: "Round"):
         print(f"{tournament_round.name}:")
@@ -52,7 +52,9 @@ class TournamentDetailsView:
 
         if tournament.start_date:
             print("Rounds:")
-            print(f"Reminder: winner are in {Fore.GREEN}green{Fore.RESET}, looser in white, {Fore.YELLOW}draw{Fore.RESET} in yellow")
+            print(
+                f"Reminder: winner are in {Fore.GREEN}green{Fore.RESET}, looser in white, {Fore.YELLOW}draw{Fore.RESET} in yellow"
+            )
             for tournament_round in tournament.rounds:
                 cls.display_round_details(tournament_round)
 

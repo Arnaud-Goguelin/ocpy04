@@ -69,12 +69,6 @@ class Tournament:
 
     def have_played(self, player1: Player, player2: Player):
         return (player1, player2) in self.past_players_paires or (player2, player1) in self.past_players_paires
-        # for round in self.rounds:
-        #     for match in round.matches:
-        #         if (player1 == match.player1 and player2 == match.player2)
-        #         or (player1 == match.player2 and player2 == match.player1):
-        #             return True
-        # return False
 
     def create_matches(self):
         """
@@ -140,7 +134,7 @@ class Tournament:
 
     def continue_tournament(self):
 
-        max_possible_rounds = (len(self.players) * (len(self.players) - 1)) /2
+        max_possible_rounds = (len(self.players) * (len(self.players) - 1)) / 2
 
         if self.rounds_count < min(MAX_NUMBER_OF_ROUNDS, max_possible_rounds):
             matches = self.create_matches()

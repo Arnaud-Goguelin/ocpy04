@@ -12,7 +12,7 @@ class Data:
             Player(first_name="Jane", last_name="Janedotter", birthdate="05-05-1975", chess_id="AB12345"),
             Player(first_name="Jill", last_name="Jilldotter", birthdate="06-06-1976", chess_id="MN34567"),
             Player(first_name="Peter", last_name="Peterson", birthdate="07-07-1977", chess_id="IJ34567"),
-            Player(first_name="Sarah", last_name="Sarahdotter", birthdate="08-08-1978", chess_id="KL89012")
+            Player(first_name="Sarah", last_name="Sarahdotter", birthdate="08-08-1978", chess_id="KL89012"),
         ]
         self.tournaments = [
             Tournament(
@@ -25,7 +25,6 @@ class Data:
 
     def save(self):
         pass
-
 
     def load(self):
         pass

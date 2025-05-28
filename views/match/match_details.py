@@ -6,14 +6,18 @@ from utils import CANCELLED_INPUT
 
 if TYPE_CHECKING:
     from models.match import Match
+    from models.round import Round
 
 
 class MatchDetailsView:
 
     @staticmethod
-    def display_match_details(match: "Match"):
+    def display_match_details(last_round: "Round", match: "Match"):
         print()
-        print(f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} {match.player1.last_name} vs {match.player2.last_name} {Fore.LIGHTYELLOW_EX}---{Fore.RESET}")
+        print(f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} {last_round.name} {Fore.LIGHTYELLOW_EX}---{Fore.RESET}")
+        print(
+            f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} {match.player1.last_name} vs {match.player2.last_name} {Fore.LIGHTYELLOW_EX}---{Fore.RESET}"
+        )
         print("Who wins this match?")
         print(f"{Fore.LIGHTYELLOW_EX}1.{Fore.RESET} {match.player1.last_name}")
         print(f"{Fore.LIGHTYELLOW_EX}2.{Fore.RESET} {match.player2.last_name}")

@@ -6,6 +6,7 @@ from models.match import Match
 if TYPE_CHECKING:
     pass
 
+
 class Round:
 
     def __init__(self, name: str, matches: list[Match]):

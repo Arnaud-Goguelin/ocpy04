@@ -5,13 +5,12 @@ from colorama import Fore
 from utils import (
     CANCELLED_INPUT,
     print_title,
-    )
+)
 
 if TYPE_CHECKING:
     from models.tournament import Tournament
 
 
-# TODO: should a view handle inputs???
 class TournamentListView:
     @staticmethod
     def display_tournaments_list(tournaments: list["Tournament"]):

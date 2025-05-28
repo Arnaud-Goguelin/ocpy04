@@ -18,7 +18,7 @@ class Match:
         self.score_player2 += 1
         return None
 
-    def draw(self)-> None:
+    def draw(self) -> None:
         self.score_player1 += 0.5
         self.score_player2 += 0.5
         return None
@@ -30,5 +30,3 @@ class Match:
     @property
     def participating_players(self) -> list[Player]:
         return [self.player1, self.player2]
-
-
