@@ -154,7 +154,7 @@ class Tournament:
         for key, value in self.__dict__.items():
             if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
                 if key == "players":
-                    tournament_dict[key] = [player.id for player in value]
+                    tournament_dict[key] = [player.chess_id for player in value]
                 else:
                     tournament_dict[key] = value
 

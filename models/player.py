@@ -1,12 +1,9 @@
 from datetime import datetime
 
-from utils import create_id
-
 
 class Player:
 
     def __init__(self, first_name: str, last_name: str, birthdate: str, chess_id: str) -> None:
-        self.id = create_id()
         self.first_name = first_name
         self.last_name = last_name.upper()
         self.birthdate = self.validate_birth_date(birthdate)
