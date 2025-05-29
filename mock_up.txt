@@ -1,16 +1,31 @@
+--- Black pieces ---
+King: \u2654
+Queen: \u2655
+Tower: \u2656
+Bishop: \u2657
+Knight: \u2658
+Pawn: \u2659
+
+--- White pieces ---
+King: \u265A
+Queen: \u265B
+Tower: \u265C
+Bishop: \u265D
+Knight: \u265E
+Pawn: \u265F
+
 ========================================
-Welcome to the Chess Tournament Manager
+Welcome to the Chess Tournament Manager     => landing view
 ========================================
 
 1. Manage Players
 2. Manage Tournaments
-3. View Reports (included in tournaments)
-4. Exit
+3. Exit
 
 Please select an option:
 
 ========================================
-Player Management
+Player Management                           => player view
 ========================================
 
 1. Add New Player
@@ -20,7 +35,7 @@ Player Management
 Please select an option:
 
 ========================================
-Add New Player
+Add New Player                          => player view
 ========================================
 
 Please enter the player's information:
@@ -36,28 +51,33 @@ National Chess ID (AB12345):
 Please select an option:
 
 ========================================
-Player List
+Player List                             => player view
 ========================================
 
-1. Dupont, Jean (01/01/2000, AB12345)
+1. Dupont, Jean (AB12345)
 2. Martin, Marie (15/05/1995, CD67890)
 ...
 
 Press Enter to return to the previous menu.
 
 ========================================
-Tournament Management
+Tournament Management                   => tournament view
 ========================================
 
 1. Create New Tournament
-2. View Tournament List
-3. View / Continue Tournament => which tournament? (display list and choose or display list on this menu)
-4. Return to Main Menu
+2. View Tournaments:
+    => Tournament List:
+        1. Tournament 1
+            1. View
+                => name and date of one specific tournament, list of players of this tournament, list of all round, list of all matches in a round
+            2. continue
+                =>
+3. Return to Main Menu
 
 Please select an option:
 
 ========================================
-Create New Tournament
+Create New Tournament                   => tournament view
 ========================================
 
 Please enter the tournament information:
@@ -77,7 +97,7 @@ Add 8 players: not randomly, needed to create a tournament instance or not?
 Please select an option:
 
 ========================================
-Tournament List - to display in tournament menu???
+Tournament List                          => tournament view
 ========================================
 
 1. Spring Tournament (01/04/2023 - 05/04/2023)
@@ -86,19 +106,9 @@ Tournament List - to display in tournament menu???
 
 Press Enter to return to the previous menu.
 
-========================================
-View Reports
-========================================
-
-1. List of All Players in Alphabetical Order => view players list
-2. List of All Tournaments => view tournaments list to move to main menu
-3. Tournament Details
-4. Return to Main Menu
-
-Please select an option:
 
 ========================================
-Tournament Details: Spring Tournament (result of view tournament)
+Tournament Details: Spring Tournament (result of view tournament) => tournament view
 ========================================
 
 Location: Town Hall
@@ -107,8 +117,8 @@ End Date: ---
 Number of Rounds: 4
 
 Player List:
-1. Dupont, Jean
-2. Martin, Marie
+1. Dupont, Jean + score
+2. Martin, Marie + score
 ...
 
 Start tournament ? Y / N
@@ -132,10 +142,10 @@ Round 1 results:
 ...
 ========================================
 ========================================
-Match X wich players wins?
+Match X which players wins?
 1. players 1
 2. players 2
-3. Drow
+3. Draw
 ========================================
 ========================================
 Return on Tournament details
@@ -153,3 +163,14 @@ Round List:
   - Match 1: player1 vs playerX
   ...
 
+
+========================================
+View Reports
+========================================
+
+1. List of All Players in Alphabetical Order => view players list
+2. List of All Tournaments => view tournaments list to move to main menu
+3. Tournament Details
+4. Return to Main Menu
+
+Please select an option:

@@ -1,5 +1,3 @@
-import random
-
 from models.player import Player
 
 
@@ -10,18 +8,25 @@ class Match:
         self.score_player1 = score_player1
         self.score_player2 = score_player2
 
-    def player1_wins(self):
+    def player1_wins(self) -> None:
         self.score_player1 += 1
         self.score_player2 += 0
+        return None
 
-    def player2_wins(self):
+    def player2_wins(self) -> Player:
         self.score_player1 += 0
         self.score_player2 += 1
+        return None
 
-    def drown(self):
+    def draw(self) -> None:
         self.score_player1 += 0.5
         self.score_player2 += 0.5
+        return None
 
-    # TODO: score has to be registered manually
-    def start(self):
-        random.choice([self.player1_wins, self.player2_wins, self.drown])()
+    @property
+    def is_match_finished(self) -> bool:
+        return self.score_player1 != 0 or self.score_player2 != 0
+
+    @property
+    def participating_players(self) -> list[Player]:
+        return [self.player1, self.player2]

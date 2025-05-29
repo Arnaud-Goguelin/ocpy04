@@ -1,6 +1,10 @@
 import datetime
+from typing import TYPE_CHECKING
 
 from models.match import Match
+
+if TYPE_CHECKING:
+    pass
 
 
 class Round:
@@ -12,5 +16,11 @@ class Round:
 
     def start(self):
         self.start_date = datetime.datetime.now()
-        for match in self.matches:
-            match.start()
+
+    @property
+    def match_count(self) -> int:
+        return len(self.matches)
+
+    @property
+    def is_round_finished(self) -> bool:
+        return all(match.is_match_finished for match in self.matches)
