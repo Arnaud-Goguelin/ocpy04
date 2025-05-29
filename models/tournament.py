@@ -4,12 +4,13 @@ import random
 from models.match import Match
 from models.player import Player
 from models.round import Round
-from utils import MAX_NUMBER_OF_ROUNDS
+from utils import MAX_NUMBER_OF_ROUNDS, create_id
 
 
 class Tournament:
 
     def __init__(self, name: str, location: str, description: str, players: set[Player]) -> None:
+        self.id = create_id()
         self.name = name
         self.location = location
         self.description = description
@@ -145,3 +146,16 @@ class Tournament:
 
     def end(self):
         self.end_date = datetime.datetime.now()
+
+    def to_dict(self):
+
+        tournament_dict = {}
+
+        for key, value in self.__dict__.items():
+            if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
+                if key == "players":
+                    tournament_dict[key] = [player.id for player in value]
+                else:
+                    tournament_dict[key] = value
+
+        return tournament_dict

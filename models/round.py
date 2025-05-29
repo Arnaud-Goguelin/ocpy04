@@ -2,6 +2,7 @@ import datetime
 from typing import TYPE_CHECKING
 
 from models.match import Match
+from utils import create_id
 
 if TYPE_CHECKING:
     pass
@@ -10,6 +11,7 @@ if TYPE_CHECKING:
 class Round:
 
     def __init__(self, name: str, matches: list[Match]):
+        self.id = create_id()
         self.name = name
         self.matches = matches
         self.start_date = None

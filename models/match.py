@@ -1,8 +1,10 @@
 from models.player import Player
+from utils import create_id
 
 
 class Match:
     def __init__(self, player1: Player, player2: Player, score_player1: float = 0, score_player2: float = 0):
+        self.id = create_id()
         self.player1 = player1
         self.player2 = player2
         self.score_player1 = score_player1

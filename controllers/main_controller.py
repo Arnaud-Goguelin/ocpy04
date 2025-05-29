@@ -5,7 +5,7 @@ from .player.player_controller import PlayerController
 from .tournament.tournament_controller import TournamentController
 
 if TYPE_CHECKING:
-    from main import Data
+    from models import Data
 from utils import GenericMessages, CANCELLED_INPUT, print_invalid_option
 from views import MainMenuView
 

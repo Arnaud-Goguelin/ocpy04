@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main import Data
+    from models import Data
 
 from utils import (
     countdown,
