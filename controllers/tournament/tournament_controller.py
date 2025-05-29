@@ -157,38 +157,48 @@ class TournamentController:
     def start_or_continue_tournament(self) -> True:
         try:
             # filter tournaments to find those to be start or continue
-            concerned_tournament = [
+            concerned_tournaments = [
                 tournament
                 for tournament in self.data.tournaments
                 if tournament.start_date is None or tournament.end_date is None
             ]
-            sorted_alphabetically_tournament_list = sorted(
+            tournaments = sorted(
                 # use a copy to not alter original data
-                concerned_tournament,
+                concerned_tournaments,
                 key=lambda tournament: tournament.name,
             )
 
-            choice = TournamentListView.handle_tournaments_list(sorted_alphabetically_tournament_list)
+            tournament = None
+            while not tournament:
+                choice = TournamentListView.handle_tournaments_list(tournaments)
+                check_choice(choice, get_menus_keys(tournaments))
+                if not choice.isdigit() and choice.upper() == CANCELLED_INPUT or choice == "":
+                    break
+                try:
+                    tournament_index = int(choice) - 1
+                    tournament = tournaments[tournament_index]
+                except (ValueError, IndexError):
+                    continue
 
-            tournament = self.select_tournament_in_list(sorted_alphabetically_tournament_list, choice)
+            if tournament:
 
-            TournamentDetailsView.display_tournament_details(tournament, False)
+                TournamentDetailsView.display_tournament_details(tournament, False)
 
-            if tournament.rounds_count == 0:
-                tournament.start()
-            else:
-                tournament.continue_tournament()
+                if tournament.rounds_count == 0:
+                    tournament.start()
+                else:
+                    tournament.continue_tournament()
 
-            are_all_rounds_finished = False
-            while not are_all_rounds_finished:
-                is_current_round_finished = False
-                while not is_current_round_finished:
-                    is_current_round_finished = self.solve_matches(tournament)
-                tournament.continue_tournament()
-                are_all_rounds_finished = all(round.is_round_finished for round in tournament.rounds)
+                are_all_rounds_finished = False
+                while not are_all_rounds_finished:
+                    is_current_round_finished = False
+                    while not is_current_round_finished:
+                        is_current_round_finished = self.solve_matches(tournament)
+                    tournament.continue_tournament()
+                    are_all_rounds_finished = all(round.is_round_finished for round in tournament.rounds)
 
-            tournament.end()
-            print_end_of_tournament(tournament)
+                tournament.end()
+                print_end_of_tournament(tournament)
             # return True to stay in this menu
             return True
         except (TypeError, IndexError) as error:
