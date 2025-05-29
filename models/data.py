@@ -32,19 +32,30 @@ class Data:
         os.makedirs(self.data_folder, exist_ok=True)
 
     def save(self, file_name: DataFilesNames, instance_to_save: Player | Tournament) -> None:
-        selected_file = os.path.join(self.data_folder, file_name)
+        try:
+            self.validate_directory()
+            selected_file = os.path.join(self.data_folder, file_name)
 
-        with open(selected_file, "w") as file:
-            json.dump(instance_to_save.to_dict(), file)
+            all_data = []
+            if os.path.exists(selected_file) and os.path.getsize(selected_file) > 0:
+                with open(selected_file, "r", encoding="utf-8") as file:
+                    all_data = json.load(file)
 
-        return None
+            # with the id we could find in all_data
+            # the instance with the same id as instance_to_save
+            # and just update it
 
-    # TODO: when saving the list of players for a tournament, only save the player's ID
-    #  create to_dict and from_dict methods for each model
-    #  open a JSON file with the 'with' keyword
-    #  write each model instance using the to_dict method
-    #  close the JSON file
-    #  we can have one file per data model
+            all_data.append(instance_to_save.to_dict())
+
+            with open(selected_file, "w", encoding="utf-8") as file:
+                json.dump(all_data, file, indent=4)
+
+            return None
+
+        except (json.JSONDecodeError, TypeError) as error:
+            raise Exception(f"Error saving in {file_name.value}: {error}")
+        except Exception as error:
+            raise Exception(f"Error saving in {file_name.value}: {error}")
 
     def load(self):
         pass

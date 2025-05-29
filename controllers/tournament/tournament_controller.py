@@ -4,6 +4,7 @@ if TYPE_CHECKING:
     from models import Data
 
 from utils import (
+    DataFilesNames,
     countdown,
     GenericMessages,
     CANCELLED_INPUT,
@@ -106,6 +107,7 @@ class TournamentController:
                 )
 
                 self.data.tournaments.append(new_tournament)
+                self.data.save(DataFilesNames.TOURNAMENTS_FILE, new_tournament)
 
                 print_creation_success(new_tournament)
 

@@ -1,10 +1,11 @@
 import datetime
 import random
 
+from models.data import Data
 from models.match import Match
 from models.player import Player
 from models.round import Round
-from utils import MAX_NUMBER_OF_ROUNDS, create_id
+from utils import DataFilesNames, MAX_NUMBER_OF_ROUNDS, create_id
 
 
 class Tournament:
@@ -107,6 +108,8 @@ class Tournament:
                 match = Match(current_player, possible_opponent)
                 matches.append(match)
                 self.past_players_paires.add((current_player, possible_opponent))
+                # TODO: circular import with DATA and need an instance of Data to use save methode
+                Data.save(DataFilesNames.MATCHES_FILE, match)
 
         return matches
 
@@ -121,6 +124,8 @@ class Tournament:
         )
         new_round.start()
         self.rounds.append(new_round)
+        # TODO: circular import with DATA and need an instance of Data to use save methode
+        Data.save(DataFilesNames.ROUNDS_FILE, new_round)
         return None
 
     def start(self):

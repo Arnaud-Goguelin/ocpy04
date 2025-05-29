@@ -35,24 +35,29 @@ class MainController:
                 print_invalid_option([key for key in self.menu_actions.keys()])
 
     def handle_player_menu(self) -> True:
+        # player_controller = PlayerController(self.data)
+        # player_controller.handle_player_main_menu()
         try:
             player_controller = PlayerController(self.data)
             player_controller.handle_player_main_menu()
             return True
-        except Exception:
+        except Exception as error:
+            print(error)
             # no error handling here as it is done in handle_main_menu
             # in order to handle errors coming from other controllers too
-            pass
+            return True
 
     def handle_tournament_menu(self) -> True:
-        try:
-            tournament_controller = TournamentController(self.data)
-            tournament_controller.handle_tournament_main_menu()
-            return True
-        except Exception:
-            # no error handling here as it is done in handle_main_menu
-            # in order to handle errors coming from other controllers too
-            pass
+        tournament_controller = TournamentController(self.data)
+        tournament_controller.handle_tournament_main_menu()
+        # try:
+        #     tournament_controller = TournamentController(self.data)
+        #     tournament_controller.handle_tournament_main_menu()
+        #     return True
+        # except Exception:
+        #     # no error handling here as it is done in handle_main_menu
+        #     # in order to handle errors coming from other controllers too
+        #     pass
 
     def exit_app(self) -> None:
         print(GenericMessages.EXIT_MESSAGE.value)
