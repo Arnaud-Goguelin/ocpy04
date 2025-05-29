@@ -1,7 +1,9 @@
+import json
 import os
 
 from models.player import Player
 from models.tournament import Tournament
+from utils import DataFilesNames
 
 
 class Data:
@@ -29,8 +31,13 @@ class Data:
     def validate_directory(self):
         os.makedirs(self.data_folder, exist_ok=True)
 
-    def save(self):
-        pass
+    def save(self, file_name: DataFilesNames, instance_to_save: Player | Tournament) -> None:
+        selected_file = os.path.join(self.data_folder, file_name)
+
+        with open(selected_file, "w") as file:
+            json.dump(instance_to_save.to_dict(), file)
+
+        return None
 
     # TODO: when saving the list of players for a tournament, only save the player's ID
     #  create to_dict and from_dict methods for each model

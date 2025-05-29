@@ -1,6 +1,7 @@
 from .check_choice import check_choice
 from .constant import (
     CANCELLED_INPUT,
+    DataFilesNames,
     GenericMessages,
     INVALIDATION_INPUT,
     MAX_NUMBER_OF_ROUNDS,

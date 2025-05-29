@@ -47,3 +47,12 @@ class Player:
             return birthdate
         except ValueError:
             raise ValueError("Birth date must be in DD-MM-YYYY format with only digits.")
+
+    def to_dict(self):
+        player_dict = {}
+
+        for key, value in self.__dict__.items():
+            if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
+                player_dict[key] = value
+
+        return player_dict
