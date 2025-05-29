@@ -104,13 +104,8 @@ class TournamentController:
         finally:
             return True
 
-    def display_tournament_details(self) -> True:
-        tournaments = sorted(
-            # use a copy to not alter original data
-            self.data.tournaments.copy(),
-            key=lambda tournament: tournament.name,
-        )
-
+    @staticmethod
+    def select_tournament(tournaments: list[Tournament]) -> Tournament | None:
         tournament = None
         while not tournament:
             choice = TournamentListView.handle_tournaments_list(tournaments)
@@ -122,6 +117,17 @@ class TournamentController:
                 tournament = tournaments[tournament_index]
             except (ValueError, IndexError):
                 continue
+        return tournament
+
+    def display_tournament_details(self) -> True:
+        # sort tournaments by name
+        tournaments = sorted(
+            # use a copy to not alter original data
+            self.data.tournaments.copy(),
+            key=lambda tournament: tournament.name,
+        )
+
+        tournament = self.select_tournament(tournaments)
 
         if tournament:
             TournamentDetailsView.display_tournament_details(tournament, True)
@@ -168,17 +174,7 @@ class TournamentController:
                 key=lambda tournament: tournament.name,
             )
 
-            tournament = None
-            while not tournament:
-                choice = TournamentListView.handle_tournaments_list(tournaments)
-                check_choice(choice, get_menus_keys(tournaments))
-                if not choice.isdigit() and choice.upper() == CANCELLED_INPUT or choice == "":
-                    break
-                try:
-                    tournament_index = int(choice) - 1
-                    tournament = tournaments[tournament_index]
-                except (ValueError, IndexError):
-                    continue
+            tournament = self.select_tournament(tournaments)
 
             if tournament:
 
