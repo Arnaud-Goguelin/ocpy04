@@ -21,11 +21,14 @@ def print_creation_success(object: Player | Tournament) -> None:
         f"{Fore.GREEN}\n{start_symbols} "
         f"New {object_type} {object_name} created with success ! "
         f"{end_symbols} .{Fore.RESET}"
-        )
+    )
     return None
 
 
 def print_end_of_tournament(tournament: Tournament) -> None:
+
     print(
-        f"{Fore.GREEN} Tournament with {len(tournament.players)} players, ends after {tournament.rounds_count} rounds and {sum(round.match_count for round in tournament.rounds)} matches."
-        )
+        f"{Fore.GREEN} Tournament with {len(tournament.players)} players, "
+        f"ends after {tournament.rounds_count} rounds "
+        f"and {sum(round.match_count for round in tournament.rounds)} matches."
+    )

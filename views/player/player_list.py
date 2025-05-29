@@ -53,13 +53,17 @@ class PlayerListView:
             return None
 
         print(
-            f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} To create a new tournament, you need to select players. {Fore.LIGHTYELLOW_EX}---{Fore.RESET}"
+            f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} "
+            f"To create a new tournament, you need to select players. "
+            f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET}"
         )
         print()
 
         if last_selected_player:
             print(
-                f"{Fore.GREEN}--- Added: {last_selected_player.last_name} {last_selected_player.first_name} --- {Fore.RESET}"
+                f"{Fore.GREEN}--- Added: "
+                f"{last_selected_player.last_name} {last_selected_player.first_name} "
+                f"--- {Fore.RESET}"
             )
             print("\nRemaining players:")
 

@@ -18,7 +18,8 @@ class MatchDetailsView:
         print(
             "=" * 10,
             "nb of match to solve: ",
-            unsolved_matches, " / ",
+            unsolved_matches,
+            " / ",
             last_round.match_count,
             "=" * 10,
         )
@@ -26,7 +27,8 @@ class MatchDetailsView:
         print()
         print(f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} {last_round.name} {Fore.LIGHTYELLOW_EX}---{Fore.RESET}")
         print(
-            f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} {match.player1.last_name} vs {match.player2.last_name} {Fore.LIGHTYELLOW_EX}---{Fore.RESET}"
+            f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} {match.player1.last_name} vs "
+            f"{match.player2.last_name} {Fore.LIGHTYELLOW_EX}---{Fore.RESET}"
         )
         print("Who wins this match?")
         print(f"{Fore.LIGHTYELLOW_EX}1.{Fore.RESET} {match.player1.last_name}")

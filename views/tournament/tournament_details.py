@@ -22,7 +22,8 @@ class TournamentDetailsView:
                 print(f" {Fore.GREEN}{match.player2.last_name}{Fore.RESET} vs {match.player1.last_name}")
             if match.score_player1 == match.score_player2:
                 print(
-                    f" {Fore.YELLOW}{match.player1.last_name}{Fore.RESET} vs {Fore.YELLOW}{match.player2.last_name}{Fore.RESET}"
+                    f" {Fore.YELLOW}{match.player1.last_name}{Fore.RESET} vs "
+                    f"{Fore.YELLOW}{match.player2.last_name}{Fore.RESET}"
                 )
 
     @classmethod
@@ -52,7 +53,8 @@ class TournamentDetailsView:
         if tournament.start_date:
             print("Rounds:")
             print(
-                f"Reminder: winner are in {Fore.GREEN}green{Fore.RESET}, looser in white, {Fore.YELLOW}draw{Fore.RESET} in yellow"
+                f"Reminder: winner are in {Fore.GREEN}green{Fore.RESET}, "
+                f"looser in white, {Fore.YELLOW}draw{Fore.RESET} in yellow"
             )
             for tournament_round in tournament.rounds:
                 cls.display_round_details(tournament_round)

@@ -1,9 +1,8 @@
-
 from .constant import CANCELLED_INPUT
 from .print_error import get_menus_keys, print_invalid_option
 
 
-def check_choice(choice: str, menus: list | dict ) -> bool:
+def check_choice(choice: str, menus: list | dict) -> bool:
 
     if not choice.isdigit() and choice.upper() != CANCELLED_INPUT:
         print_invalid_option(menus_keys=get_menus_keys(menus), optional_choices=True)

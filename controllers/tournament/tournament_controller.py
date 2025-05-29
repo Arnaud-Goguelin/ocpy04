@@ -3,7 +3,17 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from main import Data
 
-from utils import countdown, GenericMessages, CANCELLED_INPUT, print_error, print_invalid_option, print_creation_success, get_menus_keys, print_end_of_tournament, check_choice
+from utils import (
+    countdown,
+    GenericMessages,
+    CANCELLED_INPUT,
+    print_error,
+    print_invalid_option,
+    print_creation_success,
+    get_menus_keys,
+    print_end_of_tournament,
+    check_choice,
+)
 from models import Tournament
 from views import (
     TournamentMenuView,
@@ -76,7 +86,9 @@ class TournamentController:
 
             # display a message once there is no more players to select
             if not players:
-                PlayerListView.handle_players_list(players=players, used_for_selecting_players=True, last_selected_player=selected_player)
+                PlayerListView.handle_players_list(
+                    players=players, used_for_selecting_players=True, last_selected_player=selected_player
+                )
 
             # validate players here before display next form to avoid too many inputs
             # and then raise an error concerning the first input
