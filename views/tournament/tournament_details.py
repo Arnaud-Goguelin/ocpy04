@@ -11,7 +11,6 @@ if TYPE_CHECKING:
 
 class TournamentDetailsView:
 
-    # TODO: we have a match details view, with not a round details?
     @staticmethod
     def display_round_details(tournament_round: "Round"):
         print(f"{tournament_round.name}:")

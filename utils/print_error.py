@@ -12,6 +12,12 @@ def print_error(
     print(f"{Fore.RED}{error}{Fore.RESET}")
     countdown(generic_messages.value)
 
+def get_menus_keys(menus: list | dict) -> list[str]:
+    if isinstance(menus, dict):
+        return list(menus.keys())
+    if isinstance(menus, list):
+        return [str(i + 1) for i in range(len(menus))]
+
 
 def print_invalid_option(menus_keys: list[str], optional_choices: bool = False):
     print(

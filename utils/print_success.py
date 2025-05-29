@@ -3,8 +3,6 @@ from colorama import Fore
 from models import Player, Tournament
 
 
-# "Player" | "Tournament" with | character is not usable between 2 strings
-# it is not compatible with type checking on this case
 def print_creation_success(object: Player | Tournament) -> None:
 
     if isinstance(object, Tournament):
@@ -25,3 +23,9 @@ def print_creation_success(object: Player | Tournament) -> None:
         f"{end_symbols} .{Fore.RESET}"
         )
     return None
+
+
+def print_end_of_tournament(tournament: Tournament) -> None:
+    print(
+        f"{Fore.GREEN} Tournament with {len(tournament.players)} players, ends after {tournament.rounds_count} rounds and {sum(round.match_count for round in tournament.rounds)} matches."
+        )

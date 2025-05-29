@@ -40,6 +40,18 @@ class PlayerListView:
             return None
 
         # --- List used to select players for a new tournament ---
+
+        if not players and not last_selected_player:
+            # if there is no last_selected_player and not players, this is an error
+            raise ValueError("No players to display.")
+
+        if not players and last_selected_player:
+            # in this case, do not raise error
+            # if there is no player but there is a last_selected_player,
+            # that means user has already selected all players for a new tournament
+            print("\nNo more player to add, continue new tournament creation.")
+            return None
+
         print(
             f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} To create a new tournament, you need to select players. {Fore.LIGHTYELLOW_EX}---{Fore.RESET}"
         )
@@ -50,10 +62,6 @@ class PlayerListView:
                 f"{Fore.GREEN}--- Added: {last_selected_player.last_name} {last_selected_player.first_name} --- {Fore.RESET}"
             )
             print("\nRemaining players:")
-
-        if not players:
-            print("\nNo more player to add, continue new tournament creation.")
-            return None
 
         cls.display_players_list(players)
 

@@ -13,6 +13,16 @@ class MatchDetailsView:
 
     @staticmethod
     def display_match_details(last_round: "Round", match: "Match"):
+
+        unsolved_matches = sum(1 for match in last_round.matches if not match.is_match_finished)
+        print(
+            "=" * 10,
+            "nb of match to solve: ",
+            unsolved_matches, " / ",
+            last_round.match_count,
+            "=" * 10,
+        )
+
         print()
         print(f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} {last_round.name} {Fore.LIGHTYELLOW_EX}---{Fore.RESET}")
         print(
@@ -24,7 +34,7 @@ class MatchDetailsView:
         print(f"{Fore.LIGHTYELLOW_EX}3.{Fore.RESET} Draw")
         print()
         print(
-            f"\nSelect a player: {Fore.LIGHTYELLOW_EX}copy index{Fore.RESET} / "
+            f"\nSolve match: {Fore.LIGHTYELLOW_EX}copy index{Fore.RESET} / "
             f"Go back to Tournament Menu without saving, press '{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RESET}':"
         )
 
