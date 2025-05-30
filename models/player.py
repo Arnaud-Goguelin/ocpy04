@@ -3,20 +3,30 @@ from datetime import datetime
 
 class Player:
 
-    def __init__(self, first_name: str, last_name: str, birthdate: str, chess_id: str) -> None:
+    def __init__(
+        self,
+        first_name: str,
+        last_name: str,
+        birthdate: str,
+        chess_id: str,
+        chess_ids_from_data: list[str] = None,
+    ) -> None:
         self.first_name = first_name
         self.last_name = last_name.upper()
-        self.birthdate = self.valide_birth_date(birthdate)
-        self.chess_id = self.validate_chess_is(chess_id)
+        self.birthdate = self.validate_birth_date(birthdate)
+        self.chess_id = self.validate_chess_is(chess_id, chess_ids_from_data)
 
     @staticmethod
-    def validate_chess_is(chess_id: str) -> str:
+    def validate_chess_is(chess_id: str, chess_ids_from_data: list[str] = None) -> str:
         """
         Validates and formats a chess ID.
         Ensure it has 7 characters long, begins with 2 capital letters, and ends with 5 digits.
         Raise ValueError if not.
         """
         characters = [*chess_id]
+
+        if chess_ids_from_data and chess_id in chess_ids_from_data:
+            raise ValueError("Chess ID already used.")
 
         if len(characters) != 7:
             raise ValueError("Chess ID must be 7 characters long: 2 letters + 5 digits.")
@@ -37,7 +47,7 @@ class Player:
         return valide_chess_id
 
     @staticmethod
-    def valide_birth_date(birthdate: str) -> str:
+    def validate_birth_date(birthdate: str) -> str:
         """
         Validates birthdate to respect format: DD-MM-YYYY.
         Raises ValueError if not.
@@ -47,3 +57,12 @@ class Player:
             return birthdate
         except ValueError:
             raise ValueError("Birth date must be in DD-MM-YYYY format with only digits.")
+
+    def to_dict(self):
+        player_dict = {}
+
+        for key, value in self.__dict__.items():
+            if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
+                player_dict[key] = value
+
+        return player_dict

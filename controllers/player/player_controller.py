@@ -1,9 +1,16 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main import Data
+    from models import Data
 
-from utils import GenericMessages, CANCELLED_INPUT, print_error, print_invalid_option, print_creation_success
+from utils import (
+    GenericMessages,
+    CANCELLED_INPUT,
+    print_error,
+    print_invalid_option,
+    print_creation_success,
+    DataFilesNames,
+)
 from models import Player
 from views import PlayerMenuView, CreatePlayerView, PlayerListView
 
@@ -39,18 +46,20 @@ class PlayerController:
                 last_name=last_name,
                 birthdate=birthdate,
                 chess_id=chess_id,
+                chess_ids_from_data=[player.chess_id for player in self.data.players],
             )
 
             self.data.players.append(new_player)
-
+            self.data.save(DataFilesNames.PLAYERS_FILE)
             print_creation_success(new_player)
 
         except ValueError as error:
             print_error(error, GenericMessages.PLAYER_MENU_RETURN)
 
+        # TODO: finallu bloc here avoid to raise error, in Data.save
         # always return True to stay in this menu
-        finally:
-            return True
+        # finally:
+        #     return True
 
     def display_players_list(self) -> True:
         try:

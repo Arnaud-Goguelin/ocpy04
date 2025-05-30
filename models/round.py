@@ -24,3 +24,17 @@ class Round:
     @property
     def is_round_finished(self) -> bool:
         return all(match.is_match_finished for match in self.matches)
+
+    def to_dict(self):
+        round_dict = {}
+
+        for key, value in self.__dict__.items():
+            if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
+                if key == "matches":
+                    round_dict[key] = [match.to_dict() for match in value]
+                elif key == "start_date":
+                    round_dict[key] = value.isoformat() if value else None
+                else:
+                    round_dict[key] = value
+
+        return round_dict

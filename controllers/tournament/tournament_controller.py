@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main import Data
+    from models import Data
 
 from utils import (
+    DataFilesNames,
     countdown,
     GenericMessages,
     CANCELLED_INPUT,
@@ -106,6 +107,8 @@ class TournamentController:
                 )
 
                 self.data.tournaments.append(new_tournament)
+                # just save tournament here, as round and match didnt start yet
+                self.data.save(DataFilesNames.TOURNAMENTS_FILE)
 
                 print_creation_success(new_tournament)
 
@@ -147,8 +150,7 @@ class TournamentController:
         # always return True to stay in this menu
         return True
 
-    @staticmethod
-    def solve_matches(tournament: Tournament) -> None:
+    def solve_matches(self, tournament: Tournament) -> None:
         last_round = tournament.rounds[-1]
         for match in last_round.matches:
             choice = MatchDetailsView.display_match_details(last_round, match)
@@ -206,6 +208,7 @@ class TournamentController:
                     are_all_rounds_finished = all(round.is_round_finished for round in tournament.rounds)
 
                 tournament.end()
+                self.data.save(DataFilesNames.TOURNAMENTS_FILE)
                 print_end_of_tournament(tournament)
             # return True to stay in this menu
             return True

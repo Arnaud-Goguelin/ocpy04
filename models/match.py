@@ -30,3 +30,17 @@ class Match:
     @property
     def participating_players(self) -> list[Player]:
         return [self.player1, self.player2]
+
+    def to_dict(self):
+        match_dict = {}
+
+        for key, value in self.__dict__.items():
+            if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
+                # Players instances are already stored in another file and can exist without tournaments
+                # So it is not relevant to store them again with tournaments
+                if key == "player1" or key == "player2":
+                    match_dict[key] = value.chess_id
+                else:
+                    match_dict[key] = value
+
+        return match_dict
