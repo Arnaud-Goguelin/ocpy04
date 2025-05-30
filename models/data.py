@@ -30,6 +30,7 @@ class Data:
         ]
         self.data_folder = "data"
 
+    # TODO be sure data folder exist on remote repository and be sure file are created if they do not exist
     def validate_directory(self):
         os.makedirs(self.data_folder, exist_ok=True)
 
