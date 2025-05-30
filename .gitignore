@@ -4,7 +4,10 @@ TODO
 .idea/
 spec.pdf
 
-data/
+# Ignore data folder and its contents
+/data/
+/data/*.json
+
 
 # Ignore Python cache files
 __pycache__/
