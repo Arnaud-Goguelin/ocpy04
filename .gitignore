@@ -4,9 +4,10 @@ TODO
 .idea/
 spec.pdf
 
-# Ignore data folder and its contents
-/data/
-/data/*.json
+# Keep data folder but ignore its contents
+data/*
+!data/.gitkeep
+
 
 
 # Ignore Python cache files
