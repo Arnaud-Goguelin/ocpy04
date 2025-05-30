@@ -5,7 +5,7 @@ TODO
 spec.pdf
 
 # Keep data folder but ignore its contents
-data/*
+/data/*
 !data/.gitkeep
 
 
