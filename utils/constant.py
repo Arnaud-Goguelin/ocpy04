@@ -9,8 +9,6 @@ INVALIDATION_INPUT = "N"
 class DataFilesNames(str, Enum):
     PLAYERS_FILE = "players.json"
     TOURNAMENTS_FILE = "tournaments.json"
-    ROUNDS_FILE = "rounds.json"
-    MATCHES_FILE = "matches.json"
 
 
 class GenericMessages(str, Enum):

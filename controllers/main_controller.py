@@ -17,6 +17,7 @@ class MainController:
         self.menu_actions = {
             "1": self.handle_player_menu,
             "2": self.handle_tournament_menu,
+            "3": self.data.erase,
             CANCELLED_INPUT: self.exit_app,
         }
 

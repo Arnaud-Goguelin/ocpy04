@@ -46,10 +46,11 @@ class PlayerController:
                 last_name=last_name,
                 birthdate=birthdate,
                 chess_id=chess_id,
+                chess_ids_from_data=[player.chess_id for player in self.data.players],
             )
 
             self.data.players.append(new_player)
-            self.data.save(DataFilesNames.PLAYERS_FILE, new_player)
+            self.data.save(DataFilesNames.PLAYERS_FILE)
             print_creation_success(new_player)
 
         except ValueError as error:

@@ -1,10 +1,8 @@
 from models.player import Player
-from utils import create_id
 
 
 class Match:
     def __init__(self, player1: Player, player2: Player, score_player1: float = 0, score_player2: float = 0):
-        self.id = create_id()
         self.player1 = player1
         self.player2 = player2
         self.score_player1 = score_player1
@@ -38,6 +36,8 @@ class Match:
 
         for key, value in self.__dict__.items():
             if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
+                # Players instances are already stored in another file and can exist without tournaments
+                # So it is not relevant to store them again with tournaments
                 if key == "player1" or key == "player2":
                     match_dict[key] = value.chess_id
                 else:

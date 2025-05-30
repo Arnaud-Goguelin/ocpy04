@@ -2,7 +2,6 @@ import datetime
 from typing import TYPE_CHECKING
 
 from models.match import Match
-from utils import create_id
 
 if TYPE_CHECKING:
     pass
@@ -11,7 +10,6 @@ if TYPE_CHECKING:
 class Round:
 
     def __init__(self, name: str, matches: list[Match]):
-        self.id = create_id()
         self.name = name
         self.matches = matches
         self.start_date = None
@@ -33,6 +31,10 @@ class Round:
         for key, value in self.__dict__.items():
             if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
                 if key == "matches":
-                    round_dict[key] = [match.id for match in value]
+                    round_dict[key] = [match.to_dict() for match in value]
+                elif key == "start_date":
+                    round_dict[key] = value.isoformat() if value else None
+                else:
+                    round_dict[key] = value
 
         return round_dict

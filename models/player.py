@@ -3,20 +3,30 @@ from datetime import datetime
 
 class Player:
 
-    def __init__(self, first_name: str, last_name: str, birthdate: str, chess_id: str) -> None:
+    def __init__(
+        self,
+        first_name: str,
+        last_name: str,
+        birthdate: str,
+        chess_id: str,
+        chess_ids_from_data: list[str] = None,
+    ) -> None:
         self.first_name = first_name
         self.last_name = last_name.upper()
         self.birthdate = self.validate_birth_date(birthdate)
-        self.chess_id = self.validate_chess_is(chess_id)
+        self.chess_id = self.validate_chess_is(chess_id, chess_ids_from_data)
 
     @staticmethod
-    def validate_chess_is(chess_id: str) -> str:
+    def validate_chess_is(chess_id: str, chess_ids_from_data: list[str] = None) -> str:
         """
         Validates and formats a chess ID.
         Ensure it has 7 characters long, begins with 2 capital letters, and ends with 5 digits.
         Raise ValueError if not.
         """
         characters = [*chess_id]
+
+        if chess_ids_from_data and chess_id in chess_ids_from_data:
+            raise ValueError("Chess ID already used.")
 
         if len(characters) != 7:
             raise ValueError("Chess ID must be 7 characters long: 2 letters + 5 digits.")

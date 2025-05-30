@@ -1,6 +1,8 @@
 import json
 import os
 
+from colorama import Fore
+
 from models.player import Player
 from models.tournament import Tournament
 from utils import DataFilesNames
@@ -31,33 +33,41 @@ class Data:
     def validate_directory(self):
         os.makedirs(self.data_folder, exist_ok=True)
 
-    def save(self, file_name: DataFilesNames, instance_to_save: Player | Tournament) -> None:
+    def save(self, file_name: DataFilesNames) -> None:
         try:
             self.validate_directory()
             selected_file = os.path.join(self.data_folder, file_name)
-
-            all_data = []
-            if os.path.exists(selected_file) and os.path.getsize(selected_file) > 0:
-                with open(selected_file, "r", encoding="utf-8") as file:
-                    all_data = json.load(file)
 
             # with the id we could find in all_data
             # the instance with the same id as instance_to_save
             # and just update it
 
-            all_data.append(instance_to_save.to_dict())
+            if file_name == DataFilesNames.PLAYERS_FILE:
+                data = [player.to_dict() for player in self.players]
+
+            if file_name == DataFilesNames.TOURNAMENTS_FILE:
+                data = [tournament.to_dict() for tournament in self.tournaments]
 
             with open(selected_file, "w", encoding="utf-8") as file:
-                json.dump(all_data, file, indent=4)
+                json.dump(data, file, indent=4)
 
             return None
 
         except (json.JSONDecodeError, TypeError) as error:
             raise Exception(f"Error saving in {file_name.value}: {error}")
-        except Exception as error:
-            raise Exception(f"Error saving in {file_name.value}: {error}")
 
     def load(self):
         pass
         # TODO from a JSON file complete attributes of Data class
+        # To call when app open
         # depuis le ficheir json, créer une isntance de chaque modèle pour chaque dict dans le fichier
+
+    def erase(self) -> None:
+        for file_name in DataFilesNames:
+            try:
+                selected_file = os.path.join(self.data_folder, file_name)
+                with open(selected_file, "w", encoding="utf-8") as file:
+                    file.write("")
+            except (json.JSONDecodeError, TypeError) as error:
+                raise Exception(f"Error erasing in {file_name.value}: {error}")
+        print(f"{Fore.MAGENTA}--- Data erased. ---{Fore.RESET}")

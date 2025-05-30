@@ -1,17 +1,16 @@
 import datetime
 import random
 
-from models.data import Data
 from models.match import Match
 from models.player import Player
 from models.round import Round
-from utils import DataFilesNames, MAX_NUMBER_OF_ROUNDS, create_id
+from utils import MAX_NUMBER_OF_ROUNDS, create_id
 
 
 class Tournament:
 
-    def __init__(self, name: str, location: str, description: str, players: set[Player]) -> None:
-        self.id = create_id()
+    def __init__(self, name: str, location: str, description: str, players: set[Player], id: str = None) -> None:
+        self.id = id if id else create_id()
         self.name = name
         self.location = location
         self.description = description
@@ -108,8 +107,6 @@ class Tournament:
                 match = Match(current_player, possible_opponent)
                 matches.append(match)
                 self.past_players_paires.add((current_player, possible_opponent))
-                # TODO: circular import with DATA and need an instance of Data to use save methode
-                Data.save(DataFilesNames.MATCHES_FILE, match)
 
         return matches
 
@@ -124,8 +121,6 @@ class Tournament:
         )
         new_round.start()
         self.rounds.append(new_round)
-        # TODO: circular import with DATA and need an instance of Data to use save methode
-        Data.save(DataFilesNames.ROUNDS_FILE, new_round)
         return None
 
     def start(self):
@@ -153,14 +148,31 @@ class Tournament:
         self.end_date = datetime.datetime.now()
 
     def to_dict(self):
+        try:
+            tournament_dict = {}
+            for key, value in self.__dict__.items():
 
-        tournament_dict = {}
+                if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
 
-        for key, value in self.__dict__.items():
-            if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
-                if key == "players":
-                    tournament_dict[key] = [player.chess_id for player in value]
-                else:
-                    tournament_dict[key] = value
+                    if key == "players":
+                        # Players instances are already stored in another file and can exist without tournaments
+                        # So it is not relevant to store them again with tournaments
+                        tournament_dict[key] = [player.chess_id for player in value]
 
-        return tournament_dict
+                    elif key == "rounds":
+                        # Match are also stored as dict, cf. Round model
+                        tournament_dict[key] = [round.to_dict() for round in value]
+
+                    elif key == "past_players_paires":
+                        tournament_dict[key] = [(player1.chess_id, player2.chess_id) for player1, player2 in value]
+
+                    elif key == "start_date" or key == "end_date":
+                        tournament_dict[key] = value.isoformat() if value else None
+
+                    else:
+                        tournament_dict[key] = value
+
+            return tournament_dict
+
+        except Exception as e:
+            print(e)
