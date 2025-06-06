@@ -38,3 +38,7 @@ class Round:
                     round_dict[key] = value
 
         return round_dict
+
+    @classmethod
+    def from_dict(cls, round_dict):
+        return cls(**round_dict)

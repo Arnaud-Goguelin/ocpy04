@@ -176,3 +176,7 @@ class Tournament:
 
         except Exception as e:
             print(e)
+
+    @classmethod
+    def from_dict(cls, tournament_dict):
+        tournament = cls()

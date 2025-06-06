@@ -66,3 +66,7 @@ class Player:
                 player_dict[key] = value
 
         return player_dict
+
+    @classmethod
+    def from_dict(cls, player_dict):
+        return cls(**player_dict)

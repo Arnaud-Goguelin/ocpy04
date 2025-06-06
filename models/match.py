@@ -44,3 +44,7 @@ class Match:
                     match_dict[key] = value
 
         return match_dict
+
+    @classmethod
+    def from_dict(cls, match_dict):
+        return cls(**match_dict)
