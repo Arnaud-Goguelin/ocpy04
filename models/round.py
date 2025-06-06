@@ -9,10 +9,10 @@ if TYPE_CHECKING:
 
 class Round:
 
-    def __init__(self, name: str, matches: list[Match]):
-        self.name = name
-        self.matches = matches
-        self.start_date = None
+    def __init__(self, name: str, matches: set[Match]):
+        self.name:str = name
+        self.matches: set[Match] = matches
+        self.start_date: datetime = None
 
     def start(self):
         self.start_date = datetime.datetime.now()

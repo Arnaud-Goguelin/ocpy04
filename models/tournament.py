@@ -10,15 +10,15 @@ from utils import MAX_NUMBER_OF_ROUNDS, create_id
 class Tournament:
 
     def __init__(self, name: str, location: str, description: str, players: set[Player], id: str = None) -> None:
-        self.id = id if id else create_id()
-        self.name = name
-        self.location = location
-        self.description = description
-        self.players = players
-        self.start_date = None
-        self.end_date = None
-        self.rounds = []
-        self.past_players_paires = set()
+        self.id: str = id if id else create_id()
+        self.name: str = name
+        self.location: str = location
+        self.description: str = description
+        self.players: set[Player] = players
+        self.start_date: datetime = None
+        self.end_date: datetime = None
+        self.rounds: set[Round] = set()
+        self.past_players_paires: set[tuple[Player]] = set()
         # technical specifications recommend that a tournament also has:
         # a max rounds number, a current round number.
         # YET max rounds number is a constant common to all Tournaments, thus it is stored in constants.py file
@@ -179,4 +179,5 @@ class Tournament:
 
     @classmethod
     def from_dict(cls, tournament_dict):
-        tournament = cls()
+        tournament = cls(**tournament_dict)
+        return tournament

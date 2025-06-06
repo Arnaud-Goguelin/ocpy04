@@ -11,10 +11,10 @@ class Player:
         chess_id: str,
         chess_ids_from_data: list[str] = None,
     ) -> None:
-        self.first_name = first_name
-        self.last_name = last_name.upper()
-        self.birthdate = self.validate_birth_date(birthdate)
-        self.chess_id = self.validate_chess_is(chess_id, chess_ids_from_data)
+        self.first_name: str = first_name
+        self.last_name: str = last_name.upper()
+        self.birthdate: str = self.validate_birth_date(birthdate)
+        self.chess_id: str = self.validate_chess_is(chess_id, chess_ids_from_data)
 
     @staticmethod
     def validate_chess_is(chess_id: str, chess_ids_from_data: list[str] = None) -> str:
