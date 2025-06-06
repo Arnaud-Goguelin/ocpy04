@@ -107,7 +107,6 @@ class TournamentController:
                 )
 
                 self.data.tournaments.append(new_tournament)
-                # just save tournament here, as round and match didnt start yet
                 self.data.save(DataFilesNames.TOURNAMENTS_FILE)
 
                 print_creation_success(new_tournament)
@@ -123,6 +122,7 @@ class TournamentController:
     def select_tournament(tournaments: list[Tournament]) -> Tournament | None:
         tournament = None
         while not tournament:
+            # TODO: handle where ne tournament can be display (for the moment value error is raised ans stop app)
             choice = TournamentListView.handle_tournaments_list(tournaments)
             check_choice(choice, get_menus_keys(tournaments))
             if not choice.isdigit() and choice.upper() == CANCELLED_INPUT or choice == "":
@@ -151,7 +151,7 @@ class TournamentController:
         return True
 
     def solve_matches(self, tournament: Tournament) -> None:
-        last_round = tournament.rounds[-1]
+        last_round = tournament.get_last_round
         for match in last_round.matches:
             choice = MatchDetailsView.display_match_details(last_round, match)
 

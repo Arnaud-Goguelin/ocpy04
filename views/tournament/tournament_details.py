@@ -14,8 +14,8 @@ class TournamentDetailsView:
     @staticmethod
     def display_round_details(tournament_round: "Round"):
         print(f"{tournament_round.name}:")
-        for match in tournament_round.matches:
-            print(f"Match {tournament_round.matches.index(match) + 1}:")
+        for i, match in enumerate(tournament_round.matches, 1):
+            print(f"Match {i}:")
             if match.score_player1 > match.score_player2:
                 print(f" {Fore.GREEN}{match.player1.last_name}{Fore.RESET} vs {match.player2.last_name}")
             if match.score_player1 < match.score_player2:
