@@ -47,7 +47,7 @@ class Data:
 
         # use a list to keep an order, it is necessary to load Players before Tournaments
         # as Tournaments only store Players ids, we need to get Player instance from self.players
-        #  thanks to ids in Tournaments
+        # thanks to ids in Tournaments
         file_mappings = [
             (DataFilesNames.PLAYERS_FILE, Player),
             (DataFilesNames.TOURNAMENTS_FILE, Tournament),

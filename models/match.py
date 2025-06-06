@@ -1,4 +1,9 @@
+from typing import TYPE_CHECKING
+
 from models.player import Player
+
+if TYPE_CHECKING:
+    from models.data import Data
 
 
 class Match:
@@ -46,5 +51,10 @@ class Match:
         return match_dict
 
     @classmethod
-    def from_dict(cls, match_dict):
-        return cls(**match_dict)
+    def from_dict(cls, match_dict, data: "Data"):
+        return cls(
+            player1=Player.get_player_from_id(match_dict["player1"], data),
+            player2=Player.get_player_from_id(match_dict["player2"], data),
+            score_player1=match_dict["score_player1"],
+            score_player2=match_dict["score_player2"],
+        )

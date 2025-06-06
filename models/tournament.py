@@ -195,7 +195,7 @@ class Tournament:
     @classmethod
     def from_dict(cls, tournament_dict, data: "Data"):
         players = set(Player.get_player_from_id(chess_id, data) for chess_id in tournament_dict["players"])
-        rounds = set(Round.from_dict(round_dict) for round_dict in tournament_dict["rounds"])
+        rounds = set(Round.from_dict(round_dict, data) for round_dict in tournament_dict["rounds"])
         start_date = datetime.fromisoformat(tournament_dict["start_date"]) if tournament_dict["start_date"] else None
         end_date = datetime.fromisoformat(tournament_dict["end_date"]) if tournament_dict["end_date"] else None
         past_players_paires = set(

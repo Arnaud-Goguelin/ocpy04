@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from models.match import Match
 
 if TYPE_CHECKING:
-    pass
+    from models.data import Data
 
 
 class Round:
@@ -40,9 +40,9 @@ class Round:
         return round_dict
 
     @classmethod
-    def from_dict(cls, round_dict):
+    def from_dict(cls, round_dict, data: 'Data'):
         start_date = datetime.fromisoformat(round_dict["start_date"]) if round_dict["start_date"] else None
-        matches = set(Match.from_dict(match_dict) for match_dict in round_dict["matches"])
+        matches = set(Match.from_dict(match_dict, data) for match_dict in round_dict["matches"])
         return cls(
             name=round_dict["name"],
             matches=matches,
