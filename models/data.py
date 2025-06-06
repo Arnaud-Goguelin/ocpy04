@@ -45,19 +45,22 @@ class Data:
 
         self.validate_directory()
 
-        file_mappings = {
-            DataFilesNames.PLAYERS_FILE: Player,
-            DataFilesNames.TOURNAMENTS_FILE: Tournament,
-        }
+        # use a list to keep an order, it is necessary to load Players before Tournaments
+        # as Tournaments only store Players ids, we need to get Player instance from self.players
+        #  thanks to ids in Tournaments
+        file_mappings = [
+            (DataFilesNames.PLAYERS_FILE, Player),
+            (DataFilesNames.TOURNAMENTS_FILE, Tournament),
+        ]
 
-        for file_name, model in file_mappings.items():
+        for file_name, model in file_mappings:
             try:
                 file_path = os.path.join(self.data_folder, file_name.value)
 
                 if os.path.exists(file_path):
                     with open(file_path, "r", encoding="utf-8") as file:
                         data = json.load(file)
-                        instances = [model.from_dict(item_dict) for item_dict in data]
+                        instances = [model.from_dict(item_dict, self) for item_dict in data]
                         setattr(self, f"{model.__name__.lower()}s", instances)
 
             except (json.JSONDecodeError, TypeError) as error:

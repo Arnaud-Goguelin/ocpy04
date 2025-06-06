@@ -1,4 +1,8 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.data import Data
 
 
 class Player:
@@ -68,5 +72,16 @@ class Player:
         return player_dict
 
     @classmethod
-    def from_dict(cls, player_dict):
+    # in Data.load() we call from_dict for Player and Tournament classes
+    # Tournament need data but not Player, thus we need to pass data as argument
+    # and set e default value to None to ignore it in Player.from_dict() method
+    def from_dict(cls, player_dict, data=None):
         return cls(**player_dict)
+
+    @classmethod
+    def get_player_from_id(cls, chess_id: str, data: "Data") -> "Player":
+        valide_chess_id = cls.validate_chess_is(chess_id)
+        try:
+            return next(player for player in data.players if player.chess_id == valide_chess_id)
+        except StopIteration:
+            raise ValueError(f"Player with {valide_chess_id} not found.")
