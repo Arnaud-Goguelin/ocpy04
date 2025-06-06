@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 class Round:
 
     def __init__(self, name: str, matches: set[Match]):
-        self.name:str = name
+        self.name: str = name
         self.matches: set[Match] = matches
         self.start_date: datetime = None
 
