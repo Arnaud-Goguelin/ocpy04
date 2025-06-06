@@ -31,7 +31,7 @@ class Round:
         for key, value in self.__dict__.items():
             if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
                 if key == "matches":
-                    round_dict[key] = [match.to_dict() for match in value]
+                    round_dict[key] = [match.to_dict() for match in value] if value else []
                 elif key == "start_date":
                     round_dict[key] = value.isoformat() if value else None
                 else:
@@ -40,7 +40,7 @@ class Round:
         return round_dict
 
     @classmethod
-    def from_dict(cls, round_dict, data: 'Data'):
+    def from_dict(cls, round_dict, data: "Data"):
         start_date = datetime.fromisoformat(round_dict["start_date"]) if round_dict["start_date"] else None
         matches = set(Match.from_dict(match_dict, data) for match_dict in round_dict["matches"])
         return cls(

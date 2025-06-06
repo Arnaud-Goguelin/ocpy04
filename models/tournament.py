@@ -59,6 +59,20 @@ class Tournament:
         """
         return len(self.rounds)
 
+    @property
+    def get_last_round(self):
+        """
+        Return the last round in the current tournament, according to the start_date of each round.
+        """
+        if not self.rounds:
+            return None
+
+        rounds_with_date = [r for r in self.rounds if r.start_date]
+        if not rounds_with_date:
+            return None
+
+        return max(rounds_with_date, key=lambda r: r.start_date)
+
     def get_player_scores(self):
         """
         Calculate and return the total scores for each player across all rounds and matches in the current tournament.
@@ -90,7 +104,7 @@ class Tournament:
         """
         Create matches by generating pairs of players from the list of players of the current tournament.
         """
-        matches = []
+        matches = set()
         if not self.rounds:
 
             players_list = list(self.players)
@@ -101,13 +115,12 @@ class Tournament:
 
         else:
             available_players = self.rank_players()
-
         while available_players:
             current_player = available_players.pop(0)
             for possible_opponent in available_players:
                 if not self.have_played(current_player, possible_opponent):
                     match = Match(current_player, possible_opponent)
-                    matches.append(match)
+                    matches.add(match)
                     self.past_players_paires.add((current_player, possible_opponent))
                     available_players.remove(possible_opponent)
                     break
@@ -120,12 +133,12 @@ class Tournament:
                 # which we also remove from the list thanks to pop()
                 possible_opponent = available_players.pop(0)
                 match = Match(current_player, possible_opponent)
-                matches.append(match)
+                matches.add(match)
                 self.past_players_paires.add((current_player, possible_opponent))
 
         return matches
 
-    def create_round(self, matches: list[Match]):
+    def create_round(self, matches: set[Match]):
         """
         Creates a new tournament round, initializes it, and appends it to the list of
         existing rounds in the current tournament.
@@ -135,7 +148,7 @@ class Tournament:
             matches=matches,
         )
         new_round.start()
-        self.rounds.append(new_round)
+        self.rounds.add(new_round)
         return None
 
     def start(self):
@@ -163,34 +176,33 @@ class Tournament:
         self.end_date = datetime.now()
 
     def to_dict(self):
-        try:
-            tournament_dict = {}
-            for key, value in self.__dict__.items():
+        # TODO: no error handling?
+        tournament_dict = {}
+        for key, value in self.__dict__.items():
 
-                if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
+            if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
 
-                    if key == "players":
-                        # Players instances are already stored in another file and can exist without tournaments
-                        # So it is not relevant to store them again with tournaments
-                        tournament_dict[key] = [player.chess_id for player in value]
+                if key == "players":
+                    # Players instances are already stored in another file and can exist without tournaments
+                    # So it is not relevant to store them again with tournaments
+                    tournament_dict[key] = [player.chess_id for player in value]
 
-                    elif key == "rounds":
-                        # Match are also stored as dict, cf. Round model
-                        tournament_dict[key] = [round.to_dict() for round in value]
+                elif key == "rounds":
+                    # Match are also stored as dict, cf. Round model
+                    tournament_dict[key] = [round.to_dict() for round in value] if value else []
 
-                    elif key == "past_players_paires":
-                        tournament_dict[key] = [(player1.chess_id, player2.chess_id) for player1, player2 in value]
+                elif key == "past_players_paires":
+                    tournament_dict[key] = (
+                        [(player1.chess_id, player2.chess_id) for player1, player2 in value] if value else []
+                    )
 
-                    elif key == "start_date" or key == "end_date":
-                        tournament_dict[key] = value.isoformat() if value else None
+                elif key == "start_date" or key == "end_date":
+                    tournament_dict[key] = value.isoformat() if value else None
 
-                    else:
-                        tournament_dict[key] = value
+                else:
+                    tournament_dict[key] = value if value else None
 
-            return tournament_dict
-
-        except Exception as e:
-            print(e)
+        return tournament_dict
 
     @classmethod
     def from_dict(cls, tournament_dict, data: "Data"):

@@ -10,7 +10,7 @@ def print_error(
 ):
     print(f"\n{Fore.RED}An error occurred : {Fore.RESET}")
     print(f"{Fore.RED}{error}{Fore.RESET}")
-    countdown(generic_messages.value)
+    countdown(generic_messages)
 
 
 def get_menus_keys(menus: list | dict) -> list[str]:
