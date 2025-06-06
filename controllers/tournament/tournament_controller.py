@@ -52,7 +52,7 @@ class TournamentController:
 
     def create_tournament(self) -> True:
         try:
-
+            # TODO: check if new type in constructor match with this code
             # use a copy of data.players as some players will be removed from the list,
             # we shouldn't alter original data
             players = self.data.players.copy()
@@ -175,6 +175,7 @@ class TournamentController:
         return last_round.is_round_finished
 
     def start_or_continue_tournament(self) -> True:
+        # TODO: check if new type in constructor match with this code
         try:
             # filter tournaments to find those to be start or continue
             concerned_tournaments = [

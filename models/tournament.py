@@ -1,24 +1,39 @@
-import datetime
 import random
+from datetime import datetime
+from typing import TYPE_CHECKING
 
 from models.match import Match
 from models.player import Player
 from models.round import Round
 from utils import MAX_NUMBER_OF_ROUNDS, create_id
 
+if TYPE_CHECKING:
+    from models.data import Data
+
 
 class Tournament:
 
-    def __init__(self, name: str, location: str, description: str, players: set[Player], id: str = None) -> None:
-        self.id = id if id else create_id()
-        self.name = name
-        self.location = location
-        self.description = description
-        self.players = players
-        self.start_date = None
-        self.end_date = None
-        self.rounds = []
-        self.past_players_paires = set()
+    def __init__(
+        self,
+        name: str,
+        location: str,
+        description: str,
+        players: set[Player],
+        id: str = None,
+        start_date: datetime = None,
+        end_date: datetime = None,
+        rounds: set[Round] = None,
+        past_players_paires: set[tuple[Player, Player]] = None,
+    ) -> None:
+        self.id: str = id if id else create_id()
+        self.name: str = name
+        self.location: str = location
+        self.description: str = description
+        self.players: set[Player] = players
+        self.start_date: datetime | None = start_date
+        self.end_date: datetime | None = end_date
+        self.rounds: set[Round] = rounds
+        self.past_players_paires: set[tuple[Player, Player]] = past_players_paires
         # technical specifications recommend that a tournament also has:
         # a max rounds number, a current round number.
         # YET max rounds number is a constant common to all Tournaments, thus it is stored in constants.py file
@@ -127,7 +142,7 @@ class Tournament:
         """
         Starts the process by initializing the start date, shuffling players, and creating the first round.
         """
-        self.start_date = datetime.datetime.now()
+        self.start_date = datetime.now()
         matches = self.create_matches()
         if matches:
             self.create_round(matches)
@@ -145,7 +160,7 @@ class Tournament:
         return None
 
     def end(self):
-        self.end_date = datetime.datetime.now()
+        self.end_date = datetime.now()
 
     def to_dict(self):
         try:
@@ -176,3 +191,27 @@ class Tournament:
 
         except Exception as e:
             print(e)
+
+    @classmethod
+    def from_dict(cls, tournament_dict, data: "Data"):
+        players = set(Player.get_player_from_id(chess_id, data) for chess_id in tournament_dict["players"])
+        rounds = set(Round.from_dict(round_dict, data) for round_dict in tournament_dict["rounds"])
+        start_date = datetime.fromisoformat(tournament_dict["start_date"]) if tournament_dict["start_date"] else None
+        end_date = datetime.fromisoformat(tournament_dict["end_date"]) if tournament_dict["end_date"] else None
+        past_players_paires = set(
+            (Player.get_player_from_id(player1_id, data), Player.get_player_from_id(player2_id, data))
+            for player1_id, player2_id in tournament_dict["past_players_paires"]
+        )
+        tournament = cls(
+            id=tournament_dict["id"],
+            name=tournament_dict["name"],
+            location=tournament_dict["location"],
+            description=tournament_dict["description"],
+            players=players,
+            start_date=start_date,
+            end_date=end_date,
+            rounds=rounds,
+            past_players_paires=past_players_paires,
+        )
+
+        return tournament

@@ -12,10 +12,8 @@ class Application:
 
     def run(self):
 
-        # tournament = self.data.tournaments[0]
-        # test = tournament.to_dict()
-        # print(test)
         self.data.validate_directory()
+        self.data.load()
 
         while True:
             self.controller.handle_main_menu()

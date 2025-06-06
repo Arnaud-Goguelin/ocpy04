@@ -1,21 +1,21 @@
-import datetime
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 from models.match import Match
 
 if TYPE_CHECKING:
-    pass
+    from models.data import Data
 
 
 class Round:
 
-    def __init__(self, name: str, matches: list[Match]):
-        self.name = name
-        self.matches = matches
-        self.start_date = None
+    def __init__(self, name: str, matches: set[Match], start_date: datetime | None = None):
+        self.name: str = name
+        self.matches: set[Match] = matches
+        self.start_date: datetime | None = start_date
 
     def start(self):
-        self.start_date = datetime.datetime.now()
+        self.start_date = datetime.now()
 
     @property
     def match_count(self) -> int:
@@ -38,3 +38,13 @@ class Round:
                     round_dict[key] = value
 
         return round_dict
+
+    @classmethod
+    def from_dict(cls, round_dict, data: 'Data'):
+        start_date = datetime.fromisoformat(round_dict["start_date"]) if round_dict["start_date"] else None
+        matches = set(Match.from_dict(match_dict, data) for match_dict in round_dict["matches"])
+        return cls(
+            name=round_dict["name"],
+            matches=matches,
+            start_date=start_date,
+        )

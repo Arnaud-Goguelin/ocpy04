@@ -1,12 +1,17 @@
+from typing import TYPE_CHECKING
+
 from models.player import Player
+
+if TYPE_CHECKING:
+    from models.data import Data
 
 
 class Match:
     def __init__(self, player1: Player, player2: Player, score_player1: float = 0, score_player2: float = 0):
-        self.player1 = player1
-        self.player2 = player2
-        self.score_player1 = score_player1
-        self.score_player2 = score_player2
+        self.player1: Player = player1
+        self.player2: Player = player2
+        self.score_player1: float = score_player1
+        self.score_player2: float = score_player2
 
     def player1_wins(self) -> None:
         self.score_player1 += 1
@@ -44,3 +49,12 @@ class Match:
                     match_dict[key] = value
 
         return match_dict
+
+    @classmethod
+    def from_dict(cls, match_dict, data: "Data"):
+        return cls(
+            player1=Player.get_player_from_id(match_dict["player1"], data),
+            player2=Player.get_player_from_id(match_dict["player2"], data),
+            score_player1=match_dict["score_player1"],
+            score_player2=match_dict["score_player2"],
+        )
