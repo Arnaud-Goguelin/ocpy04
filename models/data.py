@@ -93,7 +93,8 @@ class Data:
                             if model == Player:
                                 print(
                                     f"{Fore.MAGENTA}--- "
-                                    f"Tournaments needs Players data, without it, Chess App started with empty Tournaments too. "
+                                    f"Tournaments needs Players data, without it, "
+                                    f"Chess App started with empty Tournaments too. "
                                     f"---{Fore.RESET}"
                                 )
                                 return None
