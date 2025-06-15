@@ -36,7 +36,9 @@ class PlayerController:
                     return None
             else:
                 # no error raising here to stay in this menu and avoid redirection to main menu
-                print_invalid_option([key for key in self.menu_actions.keys()])
+                print_invalid_option(
+                    [key for key in self.menu_actions.keys()], False, GenericMessages.PLAYER_MENU_RETURN
+                )
 
     def create_player(self) -> True:
         try:

@@ -33,7 +33,9 @@ class MainController:
                     return None
             else:
                 # no error raising here to stay in this menu and avoid redirection to main menu
-                print_invalid_option([key for key in self.menu_actions.keys()])
+                print_invalid_option(
+                    [key for key in self.menu_actions.keys()], False, GenericMessages.MAIN_MENU_RETURN
+                )
 
     def handle_player_menu(self) -> True:
         # player_controller = PlayerController(self.data)
