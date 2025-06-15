@@ -85,7 +85,7 @@ class Data:
             try:
                 selected_file = os.path.join(self.data_folder, file_name)
                 with open(selected_file, "w", encoding="utf-8") as file:
-                    file.write("")
+                    file.write("[]")
             except (json.JSONDecodeError, TypeError) as error:
                 raise Exception(f"Error erasing in {file_name.value}: {error}")
         print(f"{Fore.MAGENTA}--- Data erased. ---{Fore.RESET}")
