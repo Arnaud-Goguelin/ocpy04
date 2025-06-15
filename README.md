@@ -112,14 +112,17 @@ This project uses several code quality tools:
    ```
 ### Generating flake8 Reports
 
-#### HTML Report:
 #### With uv:
    ```bash
+  # in html format
+  uv run flake8 .
   # in .txt format
   uv run flake8 --output-file=flake8-report.txt .
    ```
 #### With pip-tools:
    ```bash
+  # in html format
+  flake8 --format=html --htmldir=flake8-report .
   # in .txt format
   flake8 --output-file=flake8-report.txt .
    ```

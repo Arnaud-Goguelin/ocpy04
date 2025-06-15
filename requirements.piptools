@@ -6,6 +6,7 @@ decorator
 executing
 flake8
 flake8-pyproject
+flake8-html
 ipdb
 ipython
 ipython_pygments_lexers
