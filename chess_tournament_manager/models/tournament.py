@@ -58,7 +58,18 @@ class Tournament:
         # current round number can be returned with a method, no need to store it
 
     @staticmethod
-    def validate_players(players: set[Player]) -> None:
+    def __validate_str_input(string: str) -> str:
+        """Validates that a given name is a non-empty string."""
+        if not isinstance(string, str):
+            raise ValueError("Name must be a string")
+        if string.isdigit():
+            raise ValueError("Name cannot be a number alone")
+        if not string.strip():
+            raise ValueError("Name cannot be empty")
+        return string
+
+    @staticmethod
+    def __validate_players(players: set[Player]) -> None:
         """
         Validates players for participation in a tournament.
 
