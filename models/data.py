@@ -1,5 +1,6 @@
 import json
 import os
+from collections import OrderedDict
 
 from colorama import Fore
 
@@ -62,16 +63,14 @@ class Data:
 
         self.validate_directory_and_files()
 
-        # use a list to keep an order, it is necessary to load Players before Tournaments
+        # use OrderedDict as it is necessary to load Players before Tournaments
         # as Tournaments only store Players ids, we need to get Player instance from self.players
         # thanks to ids in Tournaments
-        # TODO: check order_dict
-        file_mappings = [
-            (DataFilesNames.PLAYERS_FILE, Player),
-            (DataFilesNames.TOURNAMENTS_FILE, Tournament),
-        ]
+        file_mappings = OrderedDict()
+        file_mappings[DataFilesNames.PLAYERS_FILE] = Player
+        file_mappings[DataFilesNames.TOURNAMENTS_FILE] = Tournament
 
-        for file_name, model in file_mappings:
+        for file_name, model in file_mappings.items():
             try:
                 file_path = os.path.join(self.data_folder, file_name.value)
 
@@ -91,6 +90,13 @@ class Data:
                                 f"Chess App started with empty data in {file_name.value}. "
                                 f"---{Fore.RESET}"
                             )
+                            if model == Player:
+                                print(
+                                    f"{Fore.MAGENTA}--- "
+                                    f"Tournaments needs Players data, without it, Chess App started with empty Tournaments too. "
+                                    f"---{Fore.RESET}"
+                                )
+                                return None
                         else:
                             instances = set(model.from_dict(item_dict, self) for item_dict in data)
                             setattr(self, f"{model.__name__.lower()}s", instances)
