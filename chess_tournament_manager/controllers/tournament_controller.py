@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..models import Data
+    from ..models import Data, Player
 
 from ..utils import (
     DataFilesNames,
@@ -74,6 +74,59 @@ class TournamentController:
                 # no error raising here to stay in this menu and avoid redirection to main menu
                 print_invalid_option(get_menus_keys(self.menu_actions), False, GenericMessages.TOURNAMENT_MENU_RETURN)
 
+    def select_players(self) -> set[Player] | None:
+        """
+        Select players from a provided list while avoiding duplicates.
+
+        This function facilitates the selection of players from a given list while
+        ensuring the original data remains unaltered.
+        The function updates the list until each time the user selects a player.
+
+        Returns:
+            tuple: A tuple containing:
+                - remaining players list after selections have been made.
+                - the last selected player (if any).
+                - a set of all players who were successfully selected.
+
+        Raises:
+            ValueError: Raised internally if the provided choice is not valid for player
+                selection within the bounds of the players' list or cannot be converted
+                to an integer.
+        """
+        # use a copy of data.players as some players will be removed from the list,
+        # we shouldn't alter original data
+        players = self.data.players.copy()
+        # use a set() to avoid duplicate
+        selected_players = set()
+        selected_player = None
+
+        while players:
+            choice = PlayerListView.handle_players_list(
+                players=players,
+                used_for_selecting_players=True,
+                last_selected_player=selected_player,
+                )
+
+            if choice.upper() == CANCELLED_INPUT or choice == "":
+                selected_players = set()
+                break
+
+            check_choice(choice, players)
+
+            player_index = int(choice) - 1
+            selected_player = players[player_index]
+            if selected_player:
+                selected_players.add(selected_player)
+                players.remove(selected_player)
+
+        # display a message once there is no more players to select
+        if not players:
+            PlayerListView.handle_players_list(
+                players=players, used_for_selecting_players=True, last_selected_player=selected_player
+            )
+
+        return selected_players
+
     def create_tournament(self) -> True:
         """
         Creates a tournament by selecting players and defining tournament details. The method
@@ -91,43 +144,7 @@ class TournamentController:
             TypeError: Raised when invalid data type operations occur during the flow of tournament creation.
         """
         try:
-            # use a copy of data.players as some players will be removed from the list,
-            # we shouldn't alter original data
-            players = self.data.players.copy()
-            # use a set() to avoid duplicate
-            selected_players = set()
-            selected_player = None
-
-            while players:
-                choice = PlayerListView.handle_players_list(
-                    players=players,
-                    used_for_selecting_players=True,
-                    last_selected_player=selected_player,
-                )
-
-                if choice.upper() == CANCELLED_INPUT:
-                    countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
-                    break
-
-                if choice == "":
-                    break
-
-                check_choice(choice, players)
-
-                try:
-                    player_index = int(choice) - 1
-                    selected_player = players[player_index]
-                    if selected_player:
-                        selected_players.add(selected_player)
-                        players.remove(selected_player)
-                except (ValueError, IndexError):
-                    continue
-
-            # display a message once there is no more players to select
-            if not players:
-                PlayerListView.handle_players_list(
-                    players=players, used_for_selecting_players=True, last_selected_player=selected_player
-                )
+            selected_players = self.select_players()
 
             if not selected_players:
                 countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
@@ -153,10 +170,11 @@ class TournamentController:
             print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
 
         # always return True to stay in this menu
-        finally:
-            return True
+        return True
 
-    def select_tournament(self, tournaments: list[Tournament]) -> Tournament | None:
+
+    @staticmethod
+    def select_tournament(tournaments: list[Tournament]) -> Tournament | None:
         """
         Selects a tournament from a given list of tournaments. It displays a list of tournaments,
         allows the user to select one, and validates the selection.
