@@ -87,7 +87,9 @@ class Data:
 
                         if not data:
                             print(
-                                f"{Fore.MAGENTA}--- Chess App started with empty data in {file_name.value}. ---{Fore.RESET}"
+                                f"{Fore.MAGENTA}--- "
+                                f"Chess App started with empty data in {file_name.value}. "
+                                f"---{Fore.RESET}"
                             )
                         else:
                             instances = set(model.from_dict(item_dict, self) for item_dict in data)
