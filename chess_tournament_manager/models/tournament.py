@@ -43,9 +43,9 @@ class Tournament:
         past_players_paires: set[tuple[Player, Player]] = None,
     ) -> None:
         self.id: str = id if id else create_id()
-        self.name: str = name
-        self.location: str = location
-        self.description: str = description
+        self.name: str = self.__validate_str_input(name)
+        self.location: str = self.__validate_str_input(location)
+        self.description: str = self.__validate_str_input(description)
         self.players: set[Player] = players
         self.start_date: datetime | None = start_date
         self.end_date: datetime | None = end_date
@@ -61,15 +61,15 @@ class Tournament:
     def __validate_str_input(string: str) -> str:
         """Validates that a given name is a non-empty string."""
         if not isinstance(string, str):
-            raise ValueError("Name must be a string")
+            raise ValueError("Input must be a string")
         if string.isdigit():
-            raise ValueError("Name cannot be a number alone")
+            raise ValueError("Input cannot be a number alone")
         if not string.strip():
-            raise ValueError("Name cannot be empty")
+            raise ValueError("Input cannot be empty")
         return string
 
     @staticmethod
-    def __validate_players(players: set[Player]) -> None:
+    def validate_players(players: set[Player]) -> None:
         """
         Validates players for participation in a tournament.
 
