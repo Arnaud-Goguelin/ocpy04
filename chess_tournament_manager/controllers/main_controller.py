@@ -1,13 +1,14 @@
-# need to import others controllers with an absolut path to avoid the circular import issue.
+# need to import others controllers
+# with an absolut path to avoid the circular import issue.
 from typing import TYPE_CHECKING
 
-from .player.player_controller import PlayerController
-from .tournament.tournament_controller import TournamentController
+from .player_controller import PlayerController
+from .tournament_controller import TournamentController
 
 if TYPE_CHECKING:
-    from models import Data
-from utils import GenericMessages, CANCELLED_INPUT, print_invalid_option
-from views import MainMenuView
+    from ..models import Data
+from ..utils import GenericMessages, CANCELLED_INPUT, print_invalid_option
+from ..views import MainMenuView
 
 
 class MainController:

@@ -2,13 +2,13 @@ import random
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from models.match import Match
-from models.player import Player
-from models.round import Round
-from utils import MAX_NUMBER_OF_ROUNDS, create_id
+from .match import Match
+from .player import Player
+from .round import Round
+from ..utils import MAX_NUMBER_OF_ROUNDS, create_id
 
 if TYPE_CHECKING:
-    from models.data import Data
+    from .data import Data
 
 
 class Tournament:

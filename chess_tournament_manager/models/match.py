@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING
 
-from models.player import Player
+from .player import Player
 
 if TYPE_CHECKING:
-    from models.data import Data
+    from .data import Data
 
 
 class Match:

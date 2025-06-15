@@ -5,6 +5,7 @@ colorama
 decorator
 executing
 flake8
+flake8-pyproject
 ipdb
 ipython
 ipython_pygments_lexers

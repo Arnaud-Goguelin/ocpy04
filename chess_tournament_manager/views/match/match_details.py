@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 
 from colorama import Fore
 
-from utils import CANCELLED_INPUT
+from chess_tournament_manager.utils import CANCELLED_INPUT
 
 if TYPE_CHECKING:
-    from models.match import Match
-    from models.round import Round
+    from chess_tournament_manager.models.match import Match
+    from chess_tournament_manager.models.round import Round
 
 
 class MatchDetailsView:
