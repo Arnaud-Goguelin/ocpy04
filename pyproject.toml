@@ -1,9 +1,5 @@
-[build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
-#===========================
 [project.scripts]
-chess-tournament = "chess_tournament_manager.__main__:main"
+chess = "chess_tournament_manager.__main__:main"
 #===========================
 [project]
 name = "chess_tournament_manager"
@@ -15,9 +11,14 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "black>=25.1.0",
+    "flake8>=7.2.0",
+    "flake8-pyproject>=1.2.3",
     "colorama>=0.4.6",
 ]
 readme = "README.md"
+#===========================
+[tool.uv]
+package = true
 #===========================
 [tool.black]
 line-length = 119

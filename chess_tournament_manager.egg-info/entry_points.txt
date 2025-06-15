@@ -1,0 +1,2 @@
+[console_scripts]
+chess = chess_tournament_manager.__main__:main
