@@ -8,21 +8,28 @@ description = "Gestionnaire de tournois d'échecs"
 authors = [
     {name = "Votre Nom", email = "votre.email@example.com"}
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
-    "black>=25.1.0",
-    "flake8>=7.2.0",
-    "flake8-pyproject>=1.2.3",
+    "click>=8.1.0",
     "colorama>=0.4.6",
 ]
 readme = "README.md"
+#===========================
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "flake8>=7.2.0",
+    "flake8-pyproject>=1.2.3",
+    "ipython>=9.0.0",
+    "ipdb>=0.13.0",
+]
 #===========================
 [tool.uv]
 package = true
 #===========================
 [tool.black]
 line-length = 119
-target-version = ['py312']
+target-version = ['py313']
 include = '\.pyi?$'
 exclude = '''
 /(
