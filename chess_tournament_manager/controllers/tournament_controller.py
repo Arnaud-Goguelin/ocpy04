@@ -220,7 +220,7 @@ class TournamentController:
             tournament: The Tournament object for which the matches in the last round
                 need to be solved.
         """
-        last_round = tournament.get_last_round
+        last_round = tournament.rounds[-1]
         user_cancelled = False
         for match in last_round.matches:
             if not match.is_match_finished:
