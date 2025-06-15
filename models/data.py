@@ -15,7 +15,7 @@ class Data:
         self.data_folder = "data"
 
     def validate_directory_and_files(self):
-        # create 'data' folder if it does not exist
+        # create the 'data' folder if it does not exist
         os.makedirs(self.data_folder, exist_ok=True)
 
         # create files if they do not exist
@@ -49,6 +49,16 @@ class Data:
             raise Exception(f"Error saving in {file_name.value}: {error}")
 
     def load(self) -> None:
+        """
+        Loads data from predefined files into their respective models. This method first validates
+        the directory and files, then processes `Players` and `Tournaments` data in this order.
+        The data is read from JSON files, with error handling to manage decoding issues or empty files.
+        The loaded data is converted into model instances and stored in the object.
+
+        :raises Exception: If there is an error during loading data from JSON.
+
+        :return: None
+        """
 
         self.validate_directory_and_files()
 
@@ -67,12 +77,21 @@ class Data:
 
                 if os.path.exists(file_path):
                     with open(file_path, "r", encoding="utf-8") as file:
-                        data = json.load(file)
+                        # load data here and ensure we have at least an empty list
+                        data = []
+                        try:
+                            data = json.load(file)
+                        except json.JSONDecodeError:
+                            if isinstance(data, list) and len(data) == 0:
+                                pass
+
                         if not data:
-                            print(f"{Fore.MAGENTA}--- Chess App started with empty data. ---{Fore.RESET}")
-                            return None
-                        instances = set(model.from_dict(item_dict, self) for item_dict in data)
-                        setattr(self, f"{model.__name__.lower()}s", instances)
+                            print(
+                                f"{Fore.MAGENTA}--- Chess App started with empty data in {file_name.value}. ---{Fore.RESET}"
+                            )
+                        else:
+                            instances = set(model.from_dict(item_dict, self) for item_dict in data)
+                            setattr(self, f"{model.__name__.lower()}s", instances)
 
             except (json.JSONDecodeError, TypeError) as error:
                 raise Exception(f"Error loading in {file_name.value}: {error}")
