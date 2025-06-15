@@ -4,11 +4,6 @@ TODO
 .idea/
 spec.pdf
 chess_tournament_manager.egg-info/
-# Keep data folder but ignore its contents
-chess_tournament_manager/data/*
-!data/.gitkeep
-
-
 
 # Ignore Python cache files
 __pycache__/

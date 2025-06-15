@@ -1,0 +1,18 @@
+[
+    {
+        "id": "cc7c6484",
+        "name": "NEW TEST",
+        "location": "NEW TEST LOCATION",
+        "description": "NEW TEST DESCRIPTION",
+        "players": [
+            "GH78910",
+            "EF23456",
+            "CD67891",
+            "AB12345"
+        ],
+        "start_date": null,
+        "end_date": null,
+        "rounds": [],
+        "past_players_paires": []
+    }
+]
