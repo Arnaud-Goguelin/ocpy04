@@ -32,6 +32,7 @@ class Tournament:
         self.players: set[Player] = players
         self.start_date: datetime | None = start_date
         self.end_date: datetime | None = end_date
+        # TODO: just use a list
         self.rounds: set[Round] = rounds
         self.past_players_paires: set[tuple[Player, Player]] = past_players_paires
         # technical specifications recommend that a tournament also has:
@@ -177,6 +178,7 @@ class Tournament:
 
     def to_dict(self):
         # TODO: no error handling?
+        # TODO: simplify, global logic won't works, it is easier to copy key
         tournament_dict = {}
         for key, value in self.__dict__.items():
 
@@ -195,7 +197,7 @@ class Tournament:
                     tournament_dict[key] = (
                         [(player1.chess_id, player2.chess_id) for player1, player2 in value] if value else []
                     )
-
+                # TODO: check if there is a way like in Pydantic to define a method to serialize datetime object?
                 elif key == "start_date" or key == "end_date":
                     tournament_dict[key] = value.isoformat() if value else None
 
@@ -206,6 +208,7 @@ class Tournament:
 
     @classmethod
     def from_dict(cls, tournament_dict, data: "Data"):
+
         players = set(Player.get_player_from_id(chess_id, data) for chess_id in tournament_dict["players"])
         rounds = set(Round.from_dict(round_dict, data) for round_dict in tournament_dict["rounds"])
         start_date = datetime.fromisoformat(tournament_dict["start_date"]) if tournament_dict["start_date"] else None
@@ -214,6 +217,7 @@ class Tournament:
             (Player.get_player_from_id(player1_id, data), Player.get_player_from_id(player2_id, data))
             for player1_id, player2_id in tournament_dict["past_players_paires"]
         )
+
         tournament = cls(
             id=tournament_dict["id"],
             name=tournament_dict["name"],
