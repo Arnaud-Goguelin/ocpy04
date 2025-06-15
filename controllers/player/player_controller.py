@@ -81,6 +81,7 @@ class PlayerController:
                 chess_ids_from_data=[player.chess_id for player in self.data.players],
             )
 
+            # TODO: data now use set, fix append. methods and replace by add
             self.data.players.append(new_player)
             self.data.save(DataFilesNames.PLAYERS_FILE)
             print_creation_success(new_player)

@@ -26,7 +26,8 @@ class Tournament:
         start_date (datetime | None): Start date and time of the tournament.
         end_date (datetime | None): End date and time of the tournament.
         rounds (set[Round]): Set of tournament rounds.
-        past_players_paires (set[tuple[Player, Player]]): Tracks pairs of players that have already played together in matches.
+        past_players_paires (set[tuple[Player, Player]]):
+        Tracks pairs of players that have already played together in matches.
     """
 
     def __init__(

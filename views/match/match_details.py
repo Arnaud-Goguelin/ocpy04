@@ -17,8 +17,10 @@ class MatchDetailsView:
     @staticmethod
     def display_match_details(last_round: "Round", match: "Match"):
         """
-        Displays the details of a specific match within a round, as well as the number of unresolved matches remaining in
-        the round. Offers options to resolve the match, mark it as a draw, or return to the tournament menu. This method
+        Displays the details of a specific match within a round,
+        as well as the number of unresolved matches remaining in
+        the round. Offers options to resolve the match, mark it as a draw,
+        or return to the tournament menu. This method
         is designed for interactive scenarios to navigate match outcomes.
 
         Args:
