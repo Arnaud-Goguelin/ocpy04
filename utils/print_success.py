@@ -4,6 +4,13 @@ from models import Player, Tournament
 
 
 def print_creation_success(object: Player | Tournament) -> None:
+    """
+    Prints a success message upon the creation of a Class object.
+    Args:
+        object (Player | Tournament): The instance of the object that has been created. The object should
+            be either a Player or a Tournament.
+
+    """
 
     if isinstance(object, Tournament):
         start_symbols = "\u2655 \u265b \u2655"
@@ -26,7 +33,9 @@ def print_creation_success(object: Player | Tournament) -> None:
 
 
 def print_end_of_tournament(tournament: Tournament) -> None:
-
+    """
+    Prints a summary at the end of a tournament.
+    """
     print(
         f"{Fore.GREEN} Tournament with {len(tournament.players)} players, "
         f"ends after {tournament.rounds_count} rounds "

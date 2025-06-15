@@ -12,6 +12,22 @@ if TYPE_CHECKING:
 
 
 class Tournament:
+    """
+    Represents a tournament consisting of players, rounds, and matches. Manages the logic
+    to validate players, organize matches, proceed with rounds, calculate player scores, and
+    handle tournament progression.
+
+    Attributes:
+        id (str): Unique identifier of the tournament.
+        name (str): Name of the tournament.
+        location (str): Location where the tournament is held.
+        description (str): Detailed description of the tournament.
+        players (set[Player]): Set of players participating in the tournament.
+        start_date (datetime | None): Start date and time of the tournament.
+        end_date (datetime | None): End date and time of the tournament.
+        rounds (set[Round]): Set of tournament rounds.
+        past_players_paires (set[tuple[Player, Player]]): Tracks pairs of players that have already played together in matches.
+    """
 
     def __init__(
         self,
@@ -42,6 +58,23 @@ class Tournament:
 
     @staticmethod
     def validate_players(players: set[Player]) -> None:
+        """
+        Validates players for participation in a tournament.
+
+        Ensures the players meet the requirements to participate in a tournament.
+        Checks that the number of players is even and that each participant is an
+        instance of the Player class.
+
+        Args:
+            players (set[Player]): A set of players to validate.
+
+        Raises:
+            ValueError: If the number of players is not even.
+            ValueError: If any participant is not an instance of the Player class.
+
+        Returns:
+            None
+        """
 
         if len(players) % 2 != 0:
             raise ValueError("Tournament must have an even number of players")
@@ -99,6 +132,9 @@ class Tournament:
         return sorted_players
 
     def have_played(self, player1: Player, player2: Player):
+        """
+        Checks if the two players have already played against each other.
+        """
         return (player1, player2) in self.past_players_paires or (player2, player1) in self.past_players_paires
 
     def create_matches(self):
@@ -163,6 +199,17 @@ class Tournament:
         return None
 
     def continue_tournament(self):
+        """
+        Controls the continuation of a tournament by creating rounds and matches based on the
+        current state of the tournament and predefined conditions.
+
+        Args:
+            self: Instance of the class containing the tournament data, including players,
+                rounds played, and methods for creating matches and rounds.
+
+        Returns:
+            None: This method does not return a value.
+        """
 
         max_possible_rounds = (len(self.players) * (len(self.players) - 1)) / 2
 
@@ -174,9 +221,16 @@ class Tournament:
         return None
 
     def end(self):
+        """
+        Marks the end of a process or event by setting the end_date attribute
+        to the current date and time.
+        """
         self.end_date = datetime.now()
 
     def to_dict(self):
+        """
+        Converts the instance attributes of the object to a dictionary.
+        """
         # TODO: no error handling?
         # TODO: simplify, global logic won't works, it is easier to copy key
         tournament_dict = {}
@@ -208,7 +262,21 @@ class Tournament:
 
     @classmethod
     def from_dict(cls, tournament_dict, data: "Data"):
+        """
+        Creates a new instance of the class from a dictionary representation of a
+        tournament and supplemental data.
 
+        Args:
+            tournament_dict: A dictionary containing tournament details such as ID,
+                name, location, description, players, rounds, start_date, end_date,
+                and past player pairings.
+            data (Data): Supplemental data used for resolving player and round details,
+                among other information.
+
+        Returns:
+            An instance of the class representing the tournament with all provided
+            attributes and relationships properly set.
+        """
         players = set(Player.get_player_from_id(chess_id, data) for chess_id in tournament_dict["players"])
         rounds = set(Round.from_dict(round_dict, data) for round_dict in tournament_dict["rounds"])
         start_date = datetime.fromisoformat(tournament_dict["start_date"]) if tournament_dict["start_date"] else None

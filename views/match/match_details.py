@@ -10,9 +10,27 @@ if TYPE_CHECKING:
 
 
 class MatchDetailsView:
+    """
+    Represents a view for displaying details about matches and their outcomes in a tournament context.
+    """
 
     @staticmethod
     def display_match_details(last_round: "Round", match: "Match"):
+        """
+        Displays the details of a specific match within a round, as well as the number of unresolved matches remaining in
+        the round. Offers options to resolve the match, mark it as a draw, or return to the tournament menu. This method
+        is designed for interactive scenarios to navigate match outcomes.
+
+        Args:
+            last_round (Round): The current round, containing the details of all matches
+                and the overall status of the round.
+            match (Match): The specific match to be displayed, containing the participating
+                players' information and the match state.
+
+        Returns:
+            str: User input that specifies an action to perform, such as choosing a winner,
+                marking the match as a draw, or exiting to the tournament menu.
+        """
 
         unsolved_matches = sum(1 for match in last_round.matches if not match.is_match_finished)
         print(
@@ -44,6 +62,12 @@ class MatchDetailsView:
 
     @staticmethod
     def display_winner(match: "Match"):
+        """
+        Displays the winner of a match or indicates if the match was a draw.
+        Args:
+            match (Match): An instance of the Match class containing details of
+                the match, including players and their scores.
+        """
         if match.score_player1 > match.score_player2:
             print(f"{Fore.GREEN}{match.player1.last_name} wins!{Fore.RESET}")
         if match.score_player1 < match.score_player2:

@@ -10,9 +10,21 @@ if TYPE_CHECKING:
 
 
 class TournamentDetailsView:
+    """
+    Displays tournament details and rounds.
+    """
 
     @staticmethod
     def display_round_details(tournament_round: "Round"):
+        """
+        Displays details of a tournament round including the names of players and match outcomes. The method
+        renders player names in different colors depending on the match results - green for the winner and
+        yellow for a tie.
+
+        Args:
+            tournament_round (Round): The tournament round object containing match details.
+
+        """
         print(f"{tournament_round.name}:")
         for i, match in enumerate(tournament_round.matches, 1):
             print(f"Match {i}:")
@@ -28,6 +40,18 @@ class TournamentDetailsView:
 
     @classmethod
     def display_tournament_details(cls, tournament: "Tournament", used_for_details_report: bool = False) -> None:
+        """
+        Displays detailed information about a tournament
+        in a user-interactive manner and optionally allows a pause for user confirmation when used for reports.
+
+        Args:
+            tournament (Tournament): The Tournament object containing all the tournament details to display.
+            used_for_details_report (bool): Whether the display is part of a detailed report. If True, pauses for user
+                confirmation before returning. Defaults to False.
+
+        Returns:
+            None
+        """
         print_title("\u265c Tournament Details \u2656 :")
         print()
         print(f"Name: {tournament.name}")
