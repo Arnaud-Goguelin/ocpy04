@@ -12,9 +12,22 @@ if TYPE_CHECKING:
 
 
 class PlayerListView:
+    """
+    Represents the view for displaying and interacting with a list of players in different
+    contexts such as viewing player details or selecting players for creating tournaments.
+    """
 
     @staticmethod
     def display_players_list(players: list["Player"]):
+        """
+        Displays a formatted list of players and their relevant information.
+
+        Args:
+            players (list[Player]): A list of Player objects to be displayed.
+
+        Raises:
+            ValueError: If the provided list of players is empty.
+        """
 
         if not players:
             raise ValueError("No players to display.")
@@ -30,6 +43,31 @@ class PlayerListView:
     def handle_players_list(
         cls, players: list["Player"], used_for_selecting_players: bool = False, last_selected_player: "Player" = None
     ) -> str | None:
+        """
+        Handles the display and selection of players for a list shown in a specific context,
+        either for viewing player details or for selecting them in preparation for a new
+        tournament.
+
+        Args:
+            players: List of "Player" objects to be displayed or selected from.
+            used_for_selecting_players: Flag indicating whether the list is being used to
+                select players for creating a new tournament or just for displaying player
+                details.
+            last_selected_player: The last "Player" object selected, used to inform the
+                user about previously selected players when adding more players to the
+                tournament.
+
+        Returns:
+            str | None:
+                Returns the user input as a string when operating in selection mode for
+                creating a new tournament. Returns None when used for simply displaying
+                player details, or when there are no more players to select.
+
+        Raises:
+            ValueError: If there are neither players to select nor a last selected
+                player, indicating an error scenario when attempting to display or
+                select players.
+        """
 
         print_title("\u265d  Players List \u2657 :")
 

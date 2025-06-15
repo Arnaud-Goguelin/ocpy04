@@ -4,9 +4,19 @@ from utils import CANCELLED_INPUT, print_title
 
 
 class TournamentMenuView:
+    """
+    Represents the view for the Tournament Menu in the application.
+    """
 
     @staticmethod
     def display():
+        """
+        Displays the Tournament Menu and prompts the user to select an option.
+
+        Returns:
+            str: User's input choice from the menu options. Input is converted to uppercase if it is
+            a string.
+        """
         print_title("\u265e  Tournament Menu \u2658 :")
 
         print(f"{Fore.LIGHTYELLOW_EX}1{Fore.RESET}. Create new tournament \u265b.")

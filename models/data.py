@@ -10,12 +10,26 @@ from utils import DataFilesNames
 
 
 class Data:
+    """
+    Manages data storage, validation, and retrieval for models in the application.
+
+    Attributes:
+        players (set): Contains player instances created during application usage.
+        tournaments (set): Stores tournament instances handled by the application.
+        data_folder (str): Specifies the directory where application data files are stored.
+    """
+
     def __init__(self):
         self.players = set()
         self.tournaments = set()
         self.data_folder = "data"
 
     def validate_directory_and_files(self):
+        """
+        Validates the existence of the directory (data directory)
+        and files (cf.DataFilesNames enum) required for the application.
+        :raises OSError: Raised if there is an error creating the directory or the files.
+        """
         # create the 'data' folder if it does not exist
         os.makedirs(self.data_folder, exist_ok=True)
 
@@ -27,6 +41,18 @@ class Data:
                     json.dump([], file, indent=4)
 
     def save(self, file_name: DataFilesNames) -> None:
+        """
+        Saves data to a specified JSON file based on the provided file name in DataFilesNames enum.
+        This method first validates the directory and files.
+        Then it get data to write from Data class attributes.
+
+        :param file_name: The name of the data file to save the contents to. Must be an
+            instance of DataFilesNames.
+
+        :raises Exception: If there is an error during saving data to JSON.
+
+        :return: None
+        """
         self.validate_directory_and_files()
         try:
             selected_file = os.path.join(self.data_folder, file_name)
@@ -51,8 +77,8 @@ class Data:
 
     def load(self) -> None:
         """
-        Loads data from predefined files into their respective models. This method first validates
-        the directory and files, then processes `Players` and `Tournaments` data in this order.
+        Loads data from predefined files into their respective models.
+        This method first validates the directory and files, then processes models data in order.
         The data is read from JSON files, with error handling to manage decoding issues or empty files.
         The loaded data is converted into model instances and stored in the object.
 
@@ -109,6 +135,12 @@ class Data:
 
     # TODO: delete once dev is finished
     def erase(self) -> None:
+        """
+        Erases the content of all files specified in the `DataFilesNames` enumeration by overwriting them with
+        empty JSON arrays.
+        :raises Exception: If a `json.JSONDecodeError`, `TypeError`, or other specified error occurs
+            during the erase operation for any file.
+        """
         for file_name in DataFilesNames:
             try:
                 selected_file = os.path.join(self.data_folder, file_name)

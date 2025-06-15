@@ -11,6 +11,8 @@ from views import MainMenuView
 
 
 class MainController:
+    """Main controller class to handle the main menu and its actions."""
+
     def __init__(self, data: "Data"):
         self.data = data
         self.view = MainMenuView()
@@ -22,6 +24,13 @@ class MainController:
         }
 
     def handle_main_menu(self):
+        """
+        Controls the flow of the main menu and delegates functionality based on user choice.
+
+        Returns:
+            None: Exits and returns to the main menu when the user chooses to do so or
+            a specific condition from an action is met.
+        """
         while True:
 
             choice = self.view.display()
@@ -38,30 +47,34 @@ class MainController:
                 )
 
     def handle_player_menu(self) -> True:
-        # player_controller = PlayerController(self.data)
-        # player_controller.handle_player_main_menu()
-        try:
-            player_controller = PlayerController(self.data)
-            player_controller.handle_player_main_menu()
-            return True
-        except Exception as error:
-            print(error)
-            # no error handling here as it is done in handle_main_menu
-            # in order to handle errors coming from other controllers too
-            return True
+        """
+        Display PlayerController menu screen.
+        No handle errors here, as it is done in PlayerController.
+
+        Returns:
+            bool: Always returns True. This is designed to ensure continuity of
+            program operations even in the event of an exception.
+        """
+        player_controller = PlayerController(self.data)
+        player_controller.handle_player_main_menu()
+        return True
 
     def handle_tournament_menu(self) -> True:
+        """
+        Display TournamentController menu screen.
+        No handle errors here, as it is done in TournamentController.
+
+        Returns:
+            bool: Always returns True. This is designed to ensure continuity of
+            program operations even in the event of an exception.
+        """
         tournament_controller = TournamentController(self.data)
         tournament_controller.handle_tournament_main_menu()
-        # try:
-        #     tournament_controller = TournamentController(self.data)
-        #     tournament_controller.handle_tournament_main_menu()
-        #     return True
-        # except Exception:
-        #     # no error handling here as it is done in handle_main_menu
-        #     # in order to handle errors coming from other controllers too
-        #     pass
+        return True
 
     def exit_app(self) -> None:
+        """
+        Prints an exit message and terminates the application.
+        """
         print(GenericMessages.EXIT_MESSAGE.value)
         exit(0)

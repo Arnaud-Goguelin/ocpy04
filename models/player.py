@@ -6,6 +6,16 @@ if TYPE_CHECKING:
 
 
 class Player:
+    """
+    Represents a chess player with information such as name, birthdate, and chess ID.
+
+    Attributes:
+        first_name (str): The first name of the player.
+        last_name (str): The last name of the player, stored in uppercase.
+        birthdate (str): The validated birthdate of the player in "DD-MM-YYYY" format.
+        chess_id (str): A unique and validated chess ID, following a format of two
+            uppercase letters followed by five digits.
+    """
 
     def __init__(
         self,
@@ -63,6 +73,9 @@ class Player:
             raise ValueError("Birth date must be in DD-MM-YYYY format with only digits.")
 
     def to_dict(self):
+        """
+        Converts the attributes of the object to a dictionary representation.
+        """
         player_dict = {}
 
         for key, value in self.__dict__.items():
@@ -76,10 +89,25 @@ class Player:
     # Tournament need data but not Player, thus we need to pass data as argument
     # and set e default value to None to ignore it in Player.from_dict() method
     def from_dict(cls, player_dict, data=None):
+        """
+        Constructs an instance of the class from a dictionary.
+        """
         return cls(**player_dict)
 
     @classmethod
     def get_player_from_id(cls, chess_id: str, data: "Data") -> "Player":
+        """
+        Retrieves a Player instance from the dataset based on the provided chess ID.
+        Args:
+            chess_id: The chess ID used to identify the player in the dataset.
+            data: The Data object that contains the list of Player instances.
+
+        Returns:
+            Player: The Player instance corresponding to the provided chess ID.
+
+        Raises:
+            ValueError: If no player with the provided chess ID is found in the dataset.
+        """
         valide_chess_id = cls.validate_chess_is(chess_id)
         try:
             return next(player for player in data.players if player.chess_id == valide_chess_id)

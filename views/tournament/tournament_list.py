@@ -12,8 +12,19 @@ if TYPE_CHECKING:
 
 
 class TournamentListView:
+    """
+    Represents a view for displaying and interacting with a list of tournaments.
+    """
+
     @staticmethod
     def display_tournaments_list(tournaments: list["Tournament"]):
+        """
+        Displays a list of tournaments with their details.
+
+        Args:
+            tournaments (list[Tournament]): A list containing instances of the `Tournament`
+                class, which represent tournaments to be displayed.
+        """
         for tournament in tournaments:
             print(
                 f"{Fore.LIGHTYELLOW_EX}{tournaments.index(tournament) + 1}{Fore.RESET}. "
@@ -24,6 +35,21 @@ class TournamentListView:
 
     @classmethod
     def handle_tournaments_list(cls, tournaments: list["Tournament"]):
+        """
+        Handles the display and selection process for a list of tournaments. The method prompts
+        the user to select a tournament or return to the tournament menu without saving.
+
+        Args:
+            tournaments (list[Tournament]): A list of Tournament objects to be displayed and
+                selected from.
+
+        Raises:
+            ValueError: If the input list of tournaments is empty.
+
+        Returns:
+            str: The user's choice, representing the selected tournament index or the indicator
+                to return to the tournament menu without saving.
+        """
         print_title("\u265b Tournaments List \u2655 :")
 
         if not tournaments:
