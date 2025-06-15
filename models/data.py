@@ -10,17 +10,24 @@ from utils import DataFilesNames
 
 class Data:
     def __init__(self):
-        self.players = []
-        self.tournaments = []
+        self.players = set()
+        self.tournaments = set()
         self.data_folder = "data"
 
-    # TODO be sure data folder exist on remote repository and be sure file are created if they do not exist
-    def validate_directory(self):
+    def validate_directory_and_files(self):
+        # create 'data' folder if it does not exist
         os.makedirs(self.data_folder, exist_ok=True)
 
+        # create files if they do not exist
+        for file_name in DataFilesNames:
+            file_path = os.path.join(self.data_folder, file_name.value)
+            if not os.path.exists(file_path):
+                with open(file_path, "w", encoding="utf-8") as file:
+                    json.dump([], file, indent=4)
+
     def save(self, file_name: DataFilesNames) -> None:
+        self.validate_directory_and_files()
         try:
-            self.validate_directory()
             selected_file = os.path.join(self.data_folder, file_name)
 
             # with the id we could find in all_data
@@ -43,11 +50,12 @@ class Data:
 
     def load(self) -> None:
 
-        self.validate_directory()
+        self.validate_directory_and_files()
 
         # use a list to keep an order, it is necessary to load Players before Tournaments
         # as Tournaments only store Players ids, we need to get Player instance from self.players
         # thanks to ids in Tournaments
+        # TODO: check order_dict
         file_mappings = [
             (DataFilesNames.PLAYERS_FILE, Player),
             (DataFilesNames.TOURNAMENTS_FILE, Tournament),
@@ -60,7 +68,10 @@ class Data:
                 if os.path.exists(file_path):
                     with open(file_path, "r", encoding="utf-8") as file:
                         data = json.load(file)
-                        instances = [model.from_dict(item_dict, self) for item_dict in data]
+                        if not data:
+                            print(f"{Fore.MAGENTA}--- Chess App started with empty data. ---{Fore.RESET}")
+                            return None
+                        instances = set(model.from_dict(item_dict, self) for item_dict in data)
                         setattr(self, f"{model.__name__.lower()}s", instances)
 
             except (json.JSONDecodeError, TypeError) as error:
