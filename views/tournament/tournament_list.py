@@ -5,7 +5,7 @@ from colorama import Fore
 from utils import (
     CANCELLED_INPUT,
     print_title,
-)
+    )
 
 if TYPE_CHECKING:
     from models.tournament import Tournament
@@ -26,7 +26,6 @@ class TournamentListView:
     def handle_tournaments_list(cls, tournaments: list["Tournament"]):
         print_title("\u265b Tournaments List \u2655 :")
 
-        # TODO: raise value error stop app, handle it in controller
         if not tournaments:
             raise ValueError("No tournaments to display.")
 
