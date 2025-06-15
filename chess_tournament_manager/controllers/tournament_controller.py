@@ -14,7 +14,9 @@ from ..utils import (
     get_menus_keys,
     print_end_of_tournament,
     check_choice,
-)
+SolveMatchChoices,
+print_tournament_not_saved,
+    )
 from ..models import Tournament
 from ..views import (
     TournamentMenuView,
@@ -210,7 +212,7 @@ class TournamentController:
         return True
 
     @staticmethod
-    def solve_matches(tournament: Tournament) -> None:
+    def solve_matches(tournament: Tournament) -> tuple[bool, bool]:
         """
         Handles the process of solving matches for the last round of a tournament
         by interacting with user input.
@@ -220,27 +222,29 @@ class TournamentController:
                 need to be solved.
         """
         last_round = tournament.get_last_round
+        user_cancelled = False
         for match in last_round.matches:
-            choice = MatchDetailsView.display_match_details(last_round, match)
+            if not match.is_match_finished:
+                choice = MatchDetailsView.display_match_details(last_round, match)
 
-            # exceptionally, as the menu is in a view, we have to copy it here
-            check_choice(choice, ["1", "2", "3"])
+                check_choice(choice, [*SolveMatchChoices])
 
-            if isinstance(choice, str) and choice.upper() == CANCELLED_INPUT:
-                countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
-                break
+                if isinstance(choice, str) and choice.upper() == CANCELLED_INPUT:
+                    countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
+                    user_cancelled = True
+                    break
 
-            match_result = {
-                "1": match.player1_wins,
-                "2": match.player2_wins,
-                "3": match.draw,
-            }
+                match_result = {
+                    SolveMatchChoices.PLAYER_1.value: match.player1_wins,
+                    SolveMatchChoices.PLAYER_2.value: match.player2_wins,
+                    SolveMatchChoices.DRAW.value: match.draw,
+                }
 
-            match_action = match_result.get(choice, lambda: print_invalid_option(get_menus_keys(match_result)))
-            match_action()
-            MatchDetailsView.display_winner(match)
+                match_action = match_result.get(choice, lambda: print_invalid_option(get_menus_keys(match_result)))
+                match_action()
+                MatchDetailsView.display_winner(match)
 
-        return last_round.is_round_finished
+        return last_round.is_round_finished, user_cancelled
 
     def start_or_continue_tournament(self) -> True:
         """
@@ -290,16 +294,25 @@ class TournamentController:
                     tournament.continue_tournament()
                 # TODO: check if it is possible to save progress and stop tournament solving
                 are_all_rounds_finished = False
-                while not are_all_rounds_finished:
+                user_cancelled = False
+
+                while not are_all_rounds_finished and not user_cancelled:
                     is_current_round_finished = False
                     while not is_current_round_finished:
-                        is_current_round_finished = self.solve_matches(tournament)
+                        is_current_round_finished, user_cancelled = self.solve_matches(tournament)
+                        if user_cancelled:
+                            print_tournament_not_saved()
+                            tournament.reset()
+                            break
                     tournament.continue_tournament()
-                    are_all_rounds_finished = all(round.is_round_finished for round in tournament.rounds)
+                    are_all_rounds_finished = all(tournament_round.is_round_finished for tournament_round in tournament.rounds)
 
-                tournament.end()
-                self.data.save(DataFilesNames.TOURNAMENTS_FILE)
-                print_end_of_tournament(tournament)
+                if user_cancelled:
+                    return True
+                else:
+                    tournament.end()
+                    self.data.save(DataFilesNames.TOURNAMENTS_FILE)
+                    print_end_of_tournament(tournament)
             # return True to stay in this menu
             return True
         except (ValueError, TypeError, IndexError) as error:

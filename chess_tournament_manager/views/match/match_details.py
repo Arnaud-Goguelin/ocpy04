@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from colorama import Fore
 
-from chess_tournament_manager.utils import CANCELLED_INPUT
+from chess_tournament_manager.utils import CANCELLED_INPUT, SolveMatchChoices
 
 if TYPE_CHECKING:
     from chess_tournament_manager.models.match import Match
@@ -51,9 +51,9 @@ class MatchDetailsView:
             f"{match.player2.last_name} {Fore.LIGHTYELLOW_EX}---{Fore.RESET}"
         )
         print("Who wins this match?")
-        print(f"{Fore.LIGHTYELLOW_EX}1.{Fore.RESET} {match.player1.last_name}")
-        print(f"{Fore.LIGHTYELLOW_EX}2.{Fore.RESET} {match.player2.last_name}")
-        print(f"{Fore.LIGHTYELLOW_EX}3.{Fore.RESET} Draw")
+        print(f"{Fore.LIGHTYELLOW_EX}{SolveMatchChoices.PLAYER_1.value}.{Fore.RESET} {match.player1.last_name}")
+        print(f"{Fore.LIGHTYELLOW_EX}{SolveMatchChoices.PLAYER_2.value}.{Fore.RESET} {match.player2.last_name}")
+        print(f"{Fore.LIGHTYELLOW_EX}{SolveMatchChoices.DRAW.value}.{Fore.RESET} Draw")
         print()
         print(
             f"\nSolve match: {Fore.LIGHTYELLOW_EX}copy index{Fore.RESET} / "
@@ -70,10 +70,12 @@ class MatchDetailsView:
             match (Match): An instance of the Match class containing details of
                 the match, including players and their scores.
         """
+        print()
         if match.score_player1 > match.score_player2:
             print(f"{Fore.GREEN}{match.player1.last_name} wins!{Fore.RESET}")
         if match.score_player1 < match.score_player2:
             print(f"{Fore.GREEN}{match.player1.last_name} wins!{Fore.RESET}")
         if (match.score_player1 == match.score_player2) and (match.score_player1 > 0 and match.score_player2 > 0):
             print(f"{Fore.YELLOW}{match.player1.last_name} It's a draw{Fore.RESET}")
+        print()
         return None

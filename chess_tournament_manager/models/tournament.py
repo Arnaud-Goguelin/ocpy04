@@ -232,6 +232,15 @@ class Tournament:
 
         return None
 
+    def reset(self):
+        """
+        Resets the attributes of the object to their initial state.
+        """
+        self.start_date = None
+        self.end_date = None
+        self.rounds = set()
+        self.past_players_paires = set()
+
     def end(self):
         """
         Marks the end of a process or event by setting the end_date attribute
