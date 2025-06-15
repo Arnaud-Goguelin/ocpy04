@@ -174,14 +174,13 @@ class TournamentController:
         try:
             while not tournament:
                 choice = TournamentListView.handle_tournaments_list(tournaments)
-                check_choice(choice, get_menus_keys(tournaments))
                 if not choice or (not choice.isdigit() and choice.upper() == CANCELLED_INPUT):
                     break
                 tournament_index = int(choice) - 1
                 tournament = tournaments[tournament_index]
             return tournament
-        except (ValueError, IndexError) as error:
-            print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
+        except (ValueError, IndexError):
+            print_invalid_option(menus_keys=get_menus_keys(tournaments), optional_choices=True)
 
     def display_tournament_details(self) -> True:
         """
@@ -292,7 +291,6 @@ class TournamentController:
                     tournament.start()
                 else:
                     tournament.continue_tournament()
-                # TODO: check if it is possible to save progress and stop tournament solving
                 are_all_rounds_finished = False
                 user_cancelled = False
 
