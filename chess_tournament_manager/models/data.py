@@ -20,8 +20,8 @@ class Data:
     """
 
     def __init__(self):
-        self.players = set()
-        self.tournaments = set()
+        self.players = []
+        self.tournaments = []
         self.data_folder = "chess_tournament_manager/data"
 
     def validate_directory_and_files(self):
@@ -125,7 +125,7 @@ class Data:
                                 )
                                 return None
                         else:
-                            instances = set(model.from_dict(item_dict, self) for item_dict in data)
+                            instances = [model.from_dict(item_dict, self) for item_dict in data]
                             setattr(self, f"{model.__name__.lower()}s", instances)
 
             except (json.JSONDecodeError, TypeError) as error:
