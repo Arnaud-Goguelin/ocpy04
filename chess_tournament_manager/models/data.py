@@ -4,9 +4,9 @@ from collections import OrderedDict
 
 from colorama import Fore
 
-from models.player import Player
-from models.tournament import Tournament
-from utils import DataFilesNames
+from .player import Player
+from .tournament import Tournament
+from ..utils import DataFilesNames
 
 
 class Data:
@@ -22,7 +22,7 @@ class Data:
     def __init__(self):
         self.players = set()
         self.tournaments = set()
-        self.data_folder = "data"
+        self.data_folder = "chess_tournament_manager/data"
 
     def validate_directory_and_files(self):
         """

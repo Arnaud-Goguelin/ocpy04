@@ -1,4 +1,4 @@
-from utils import print_title
+from chess_tournament_manager.utils import print_title
 
 
 class CreatePlayerView:

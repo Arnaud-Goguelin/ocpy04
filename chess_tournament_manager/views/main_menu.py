@@ -1,6 +1,6 @@
 from colorama import Fore
 
-from utils import CANCELLED_INPUT, print_title
+from ..utils import CANCELLED_INPUT, print_title
 
 
 class MainMenuView:

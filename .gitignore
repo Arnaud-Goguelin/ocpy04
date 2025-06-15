@@ -5,7 +5,7 @@ TODO
 spec.pdf
 
 # Keep data folder but ignore its contents
-/data/*
+chess_tournament_manager/data/*
 !data/.gitkeep
 
 

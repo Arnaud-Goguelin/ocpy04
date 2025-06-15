@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from models import Data
+    from ..models import Data
 
-from utils import (
+from ..utils import (
     GenericMessages,
     CANCELLED_INPUT,
     print_error,
@@ -11,8 +11,8 @@ from utils import (
     print_creation_success,
     DataFilesNames,
 )
-from models import Player
-from views import PlayerMenuView, CreatePlayerView, PlayerListView
+from ..models import Player
+from ..views import PlayerMenuView, CreatePlayerView, PlayerListView
 
 
 class PlayerController:

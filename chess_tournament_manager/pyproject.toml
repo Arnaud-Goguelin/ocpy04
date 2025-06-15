@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+#===========================
+[project.scripts]
+chess-tournament = "chess_tournament_manager.__main__:main"
+#===========================
+[project]
+name = "chess_tournament_manager"
+version = "0.1.0"
+description = "Gestionnaire de tournois d'échecs"
+authors = [
+    {name = "Votre Nom", email = "votre.email@example.com"}
+]
+requires-python = ">=3.12"
+dependencies = [
+    "black>=25.1.0",
+    "colorama>=0.4.6",
+]
+readme = "README.md"
+#===========================
+[tool.black]
+line-length = 119
+target-version = ['py312']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+#===========================
+[tool.flake8]
+max-line-length = 119
+extend-ignore = ["E203", "W503"]
+exclude = [".venv", ".git",
+    "__pycache__",
+    "old",
+    "build",
+    "dist",
+    "__init__.py",
+    "**/__init__.py",
+    "*.pyc",]

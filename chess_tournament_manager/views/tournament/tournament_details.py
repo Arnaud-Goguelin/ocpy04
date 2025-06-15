@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 
 from colorama import Fore
 
-from utils import print_title
+from chess_tournament_manager.utils import print_title
 
 if TYPE_CHECKING:
-    from models.tournament import Tournament
-    from models.round import Round
+    from chess_tournament_manager.models.tournament import Tournament
+    from chess_tournament_manager.models.round import Round
 
 
 class TournamentDetailsView:

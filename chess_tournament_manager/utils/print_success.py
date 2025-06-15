@@ -1,6 +1,6 @@
 from colorama import Fore
 
-from models import Player, Tournament
+from chess_tournament_manager.models import Player, Tournament
 
 
 def print_creation_success(object: Player | Tournament) -> None:

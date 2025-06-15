@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from models import Data
+    from ..models import Data
 
-from utils import (
+from ..utils import (
     DataFilesNames,
     countdown,
     GenericMessages,
@@ -15,8 +15,8 @@ from utils import (
     print_end_of_tournament,
     check_choice,
 )
-from models import Tournament
-from views import (
+from ..models import Tournament
+from ..views import (
     TournamentMenuView,
     CreateTournamentView,
     TournamentListView,

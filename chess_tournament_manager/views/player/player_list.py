@@ -2,13 +2,13 @@ from typing import TYPE_CHECKING
 
 from colorama import Fore
 
-from utils import (
+from chess_tournament_manager.utils import (
     CANCELLED_INPUT,
     print_title,
     )
 
 if TYPE_CHECKING:
-    from models.player import Player
+    from chess_tournament_manager.models.player import Player
 
 
 class PlayerListView:
