@@ -48,11 +48,10 @@ class TournamentController:
                     return None
             else:
                 # no error raising here to stay in this menu and avoid redirection to main menu
-                print_invalid_option(get_menus_keys(self.menu_actions))
+                print_invalid_option(get_menus_keys(self.menu_actions), False, GenericMessages.TOURNAMENT_MENU_RETURN)
 
     def create_tournament(self) -> True:
         try:
-            # TODO: check if new type in constructor match with this code
             # use a copy of data.players as some players will be removed from the list,
             # we shouldn't alter original data
             players = self.data.players.copy()
@@ -118,21 +117,19 @@ class TournamentController:
         finally:
             return True
 
-    @staticmethod
-    def select_tournament(tournaments: list[Tournament]) -> Tournament | None:
+    def select_tournament(self, tournaments: list[Tournament]) -> Tournament | None:
         tournament = None
-        while not tournament:
-            # TODO: handle where ne tournament can be display (for the moment value error is raised ans stop app)
-            choice = TournamentListView.handle_tournaments_list(tournaments)
-            check_choice(choice, get_menus_keys(tournaments))
-            if not choice.isdigit() and choice.upper() == CANCELLED_INPUT or choice == "":
-                break
-            try:
+        try:
+            while not tournament:
+                choice = TournamentListView.handle_tournaments_list(tournaments)
+                check_choice(choice, get_menus_keys(tournaments))
+                if not choice or (not choice.isdigit() and choice.upper() == CANCELLED_INPUT):
+                    break
                 tournament_index = int(choice) - 1
                 tournament = tournaments[tournament_index]
-            except (ValueError, IndexError):
-                continue
-        return tournament
+            return tournament
+        except (ValueError, IndexError) as error:
+            print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
 
     def display_tournament_details(self) -> True:
         # sort tournaments by name
@@ -150,7 +147,8 @@ class TournamentController:
         # always return True to stay in this menu
         return True
 
-    def solve_matches(self, tournament: Tournament) -> None:
+    @staticmethod
+    def solve_matches(tournament: Tournament) -> None:
         last_round = tournament.get_last_round
         for match in last_round.matches:
             choice = MatchDetailsView.display_match_details(last_round, match)
@@ -175,7 +173,6 @@ class TournamentController:
         return last_round.is_round_finished
 
     def start_or_continue_tournament(self) -> True:
-        # TODO: check if new type in constructor match with this code
         try:
             # filter tournaments to find those to be start or continue
             concerned_tournaments = [
@@ -188,6 +185,9 @@ class TournamentController:
                 concerned_tournaments,
                 key=lambda tournament: tournament.name,
             )
+
+            if not tournaments:
+                raise ValueError("No tournament to start or continue.")
 
             tournament = self.select_tournament(tournaments)
 
@@ -213,9 +213,8 @@ class TournamentController:
                 print_end_of_tournament(tournament)
             # return True to stay in this menu
             return True
-        except (TypeError, IndexError) as error:
+        except (ValueError, TypeError, IndexError) as error:
             print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
-            self.view.display()
 
     def exit_tournament_controller(self) -> False:
         # go back to the main menu and main controller

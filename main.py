@@ -7,13 +7,11 @@ class Application:
     def __init__(self):
 
         self.data = Data()
-        self.data.load()
         self.controller = MainController(self.data)
 
-    def run(self):
-
-        self.data.validate_directory()
         self.data.load()
+
+    def run(self):
 
         while True:
             self.controller.handle_main_menu()

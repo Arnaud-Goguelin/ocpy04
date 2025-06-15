@@ -13,17 +13,23 @@ def print_error(
     countdown(generic_messages)
 
 
-def get_menus_keys(menus: list | dict) -> list[str]:
+def get_menus_keys(menus: list | dict) -> list[str] | None:
     if isinstance(menus, dict):
         return list(menus.keys())
     if isinstance(menus, list):
         return [str(i + 1) for i in range(len(menus))]
+    return None
 
 
-def print_invalid_option(menus_keys: list[str], optional_choices: bool = False):
+def print_invalid_option(
+    menus_keys: list[str],
+    optional_choices: bool = False,
+    generic_messages: GenericMessages = GenericMessages.PREVIOUS_MENU_RETURN,
+):
     print(
         f"{Fore.RED}Invalid option, please choose between: "
         f"{Fore.LIGHTYELLOW_EX}{", ".join(menus_keys)}{Fore.RED}"
         f"{f", or press '{Fore.LIGHTYELLOW_EX}Enter{Fore.RED}' or '"
            f"{Fore.LIGHTYELLOW_EX}{CANCELLED_INPUT}{Fore.RED}' to exit" if optional_choices else ""}.{Fore.RESET}"
     )
+    countdown(generic_messages)
