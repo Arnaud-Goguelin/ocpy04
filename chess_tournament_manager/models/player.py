@@ -25,13 +25,13 @@ class Player:
         chess_id: str,
         chess_ids_from_data: list[str] = None,
     ) -> None:
-        self.first_name: str = first_name
-        self.last_name: str = last_name.upper()
-        self.birthdate: str = self.validate_birth_date(birthdate)
-        self.chess_id: str = self.validate_chess_is(chess_id, chess_ids_from_data)
+        self.first_name: str = self.__validate_name(first_name)
+        self.last_name: str = self.__validate_name(last_name.upper())
+        self.birthdate: str = self.__validate_birth_date(birthdate)
+        self.chess_id: str = self.__validate_chess_is(chess_id, chess_ids_from_data)
 
     @staticmethod
-    def validate_chess_is(chess_id: str, chess_ids_from_data: list[str] = None) -> str:
+    def __validate_chess_is(chess_id: str, chess_ids_from_data: list[str] = None) -> str:
         """
         Validates and formats a chess ID.
         Ensure it has 7 characters long, begins with 2 capital letters, and ends with 5 digits.
@@ -61,16 +61,32 @@ class Player:
         return valide_chess_id
 
     @staticmethod
-    def validate_birth_date(birthdate: str) -> str:
+    def __validate_birth_date(birthdate: str) -> str:
         """
         Validates birthdate to respect format: DD-MM-YYYY.
         Raises ValueError if not.
         """
         try:
-            datetime.strptime(birthdate, "%d-%m-%Y")
-            return birthdate
+            parsed_date = datetime.strptime(birthdate, "%d-%m-%Y")
         except ValueError:
             raise ValueError("Birth date must be in DD-MM-YYYY format with only digits.")
+
+        if parsed_date.year < datetime(year=1900, month=1, day=1).year:
+            raise ValueError("Player birth date must be after 1900.")
+        if parsed_date > datetime.now():
+            raise ValueError("Player birth date must be before today.")
+        return birthdate
+
+    @staticmethod
+    def __validate_name(name: str) -> str:
+        """Validates that a given name is a non-empty string."""
+        if not isinstance(name, str):
+            raise ValueError("Name must be a string")
+        if name.isdigit():
+            raise ValueError("Name cannot be a number")
+        if not name.strip():
+            raise ValueError("Name cannot be empty")
+        return name
 
     def to_dict(self):
         """
@@ -108,7 +124,7 @@ class Player:
         Raises:
             ValueError: If no player with the provided chess ID is found in the dataset.
         """
-        valide_chess_id = cls.validate_chess_is(chess_id)
+        valide_chess_id = cls.__validate_chess_is(chess_id)
         try:
             return next(player for player in data.players if player.chess_id == valide_chess_id)
         except StopIteration:

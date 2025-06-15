@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..models import Data
+    from ..models import Data, Player
 
 from ..utils import (
     DataFilesNames,
@@ -14,6 +14,8 @@ from ..utils import (
     get_menus_keys,
     print_end_of_tournament,
     check_choice,
+    SolveMatchChoices,
+    print_tournament_not_saved,
 )
 from ..models import Tournament
 from ..views import (
@@ -72,6 +74,59 @@ class TournamentController:
                 # no error raising here to stay in this menu and avoid redirection to main menu
                 print_invalid_option(get_menus_keys(self.menu_actions), False, GenericMessages.TOURNAMENT_MENU_RETURN)
 
+    def select_players(self) -> set[Player] | None:
+        """
+        Select players from a provided list while avoiding duplicates.
+
+        This function facilitates the selection of players from a given list while
+        ensuring the original data remains unaltered.
+        The function updates the list until each time the user selects a player.
+
+        Returns:
+            tuple: A tuple containing:
+                - remaining players list after selections have been made.
+                - the last selected player (if any).
+                - a set of all players who were successfully selected.
+
+        Raises:
+            ValueError: Raised internally if the provided choice is not valid for player
+                selection within the bounds of the players' list or cannot be converted
+                to an integer.
+        """
+        # use a copy of data.players as some players will be removed from the list,
+        # we shouldn't alter original data
+        players = self.data.players.copy()
+        # use a set() to avoid duplicate
+        selected_players = set()
+        selected_player = None
+
+        while players:
+            choice = PlayerListView.handle_players_list(
+                players=players,
+                used_for_selecting_players=True,
+                last_selected_player=selected_player,
+                )
+
+            if choice.upper() == CANCELLED_INPUT or choice == "":
+                selected_players = set()
+                break
+
+            check_choice(choice, players)
+
+            player_index = int(choice) - 1
+            selected_player = players[player_index]
+            if selected_player:
+                selected_players.add(selected_player)
+                players.remove(selected_player)
+
+        # display a message once there is no more players to select
+        if not players:
+            PlayerListView.handle_players_list(
+                players=players, used_for_selecting_players=True, last_selected_player=selected_player
+            )
+
+        return selected_players
+
     def create_tournament(self) -> True:
         """
         Creates a tournament by selecting players and defining tournament details. The method
@@ -89,49 +144,13 @@ class TournamentController:
             TypeError: Raised when invalid data type operations occur during the flow of tournament creation.
         """
         try:
-            # use a copy of data.players as some players will be removed from the list,
-            # we shouldn't alter original data
-            players = self.data.players.copy()
-            # use a set() to avoid duplicate
-            selected_players = set()
-            selected_player = None
+            selected_players = self.select_players()
 
-            while players:
-                choice = PlayerListView.handle_players_list(
-                    players=players,
-                    used_for_selecting_players=True,
-                    last_selected_player=selected_player,
-                )
-
-                if choice.upper() == CANCELLED_INPUT:
-                    countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
-                    break
-
-                if choice == "":
-                    break
-
-                check_choice(choice, players)
-
-                try:
-                    player_index = int(choice) - 1
-                    selected_player = players[player_index]
-                    if selected_player:
-                        selected_players.add(selected_player)
-                        players.remove(selected_player)
-                except (ValueError, IndexError):
-                    continue
-
-            # display a message once there is no more players to select
-            if not players:
-                PlayerListView.handle_players_list(
-                    players=players, used_for_selecting_players=True, last_selected_player=selected_player
-                )
-
-            # validate players here before display next form to avoid too many inputs
-            # and then raise an error concerning the first input
             if not selected_players:
                 countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
             else:
+                # validate players here before display next form to avoid too many inputs
+                # and then raise an error concerning the first input
                 Tournament.validate_players(selected_players)
                 name, location, description = CreateTournamentView.display_add_tournament_form()
 
@@ -151,10 +170,10 @@ class TournamentController:
             print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
 
         # always return True to stay in this menu
-        finally:
-            return True
+        return True
 
-    def select_tournament(self, tournaments: list[Tournament]) -> Tournament | None:
+    @staticmethod
+    def select_tournament(tournaments: list[Tournament]) -> Tournament | None:
         """
         Selects a tournament from a given list of tournaments. It displays a list of tournaments,
         allows the user to select one, and validates the selection.
@@ -171,14 +190,13 @@ class TournamentController:
         try:
             while not tournament:
                 choice = TournamentListView.handle_tournaments_list(tournaments)
-                check_choice(choice, get_menus_keys(tournaments))
                 if not choice or (not choice.isdigit() and choice.upper() == CANCELLED_INPUT):
                     break
                 tournament_index = int(choice) - 1
                 tournament = tournaments[tournament_index]
             return tournament
-        except (ValueError, IndexError) as error:
-            print_error(error, GenericMessages.TOURNAMENT_MENU_RETURN)
+        except (ValueError, IndexError):
+            print_invalid_option(menus_keys=get_menus_keys(tournaments), optional_choices=True)
 
     def display_tournament_details(self) -> True:
         """
@@ -209,7 +227,7 @@ class TournamentController:
         return True
 
     @staticmethod
-    def solve_matches(tournament: Tournament) -> None:
+    def solve_matches(tournament: Tournament) -> tuple[bool, bool]:
         """
         Handles the process of solving matches for the last round of a tournament
         by interacting with user input.
@@ -218,28 +236,30 @@ class TournamentController:
             tournament: The Tournament object for which the matches in the last round
                 need to be solved.
         """
-        last_round = tournament.get_last_round
+        last_round = tournament.rounds[-1]
+        user_cancelled = False
         for match in last_round.matches:
-            choice = MatchDetailsView.display_match_details(last_round, match)
+            if not match.is_match_finished:
+                choice = MatchDetailsView.display_match_details(last_round, match)
 
-            # exceptionally, as the menu is in a view, we have to copy it here
-            check_choice(choice, ["1", "2", "3"])
+                check_choice(choice, [*SolveMatchChoices])
 
-            if isinstance(choice, str) and choice.upper() == CANCELLED_INPUT:
-                countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
-                break
+                if isinstance(choice, str) and choice.upper() == CANCELLED_INPUT:
+                    countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
+                    user_cancelled = True
+                    break
 
-            match_result = {
-                "1": match.player1_wins,
-                "2": match.player2_wins,
-                "3": match.draw,
-            }
+                match_result = {
+                    SolveMatchChoices.PLAYER_1.value: match.player1_wins,
+                    SolveMatchChoices.PLAYER_2.value: match.player2_wins,
+                    SolveMatchChoices.DRAW.value: match.draw,
+                }
 
-            match_action = match_result.get(choice, lambda: print_invalid_option(get_menus_keys(match_result)))
-            match_action()
-            MatchDetailsView.display_winner(match)
+                match_action = match_result.get(choice, lambda: print_invalid_option(get_menus_keys(match_result)))
+                match_action()
+                MatchDetailsView.display_winner(match)
 
-        return last_round.is_round_finished
+        return last_round.is_round_finished, user_cancelled
 
     def start_or_continue_tournament(self) -> True:
         """
@@ -287,18 +307,28 @@ class TournamentController:
                     tournament.start()
                 else:
                     tournament.continue_tournament()
-                # TODO: check if it is possible to save progress and stop tournament solving
                 are_all_rounds_finished = False
-                while not are_all_rounds_finished:
+                user_cancelled = False
+
+                while not are_all_rounds_finished and not user_cancelled:
                     is_current_round_finished = False
                     while not is_current_round_finished:
-                        is_current_round_finished = self.solve_matches(tournament)
+                        is_current_round_finished, user_cancelled = self.solve_matches(tournament)
+                        if user_cancelled:
+                            print_tournament_not_saved()
+                            tournament.reset()
+                            break
                     tournament.continue_tournament()
-                    are_all_rounds_finished = all(round.is_round_finished for round in tournament.rounds)
+                    are_all_rounds_finished = all(
+                        tournament_round.is_round_finished for tournament_round in tournament.rounds
+                    )
 
-                tournament.end()
-                self.data.save(DataFilesNames.TOURNAMENTS_FILE)
-                print_end_of_tournament(tournament)
+                if user_cancelled:
+                    return True
+                else:
+                    tournament.end()
+                    self.data.save(DataFilesNames.TOURNAMENTS_FILE)
+                    print_end_of_tournament(tournament)
             # return True to stay in this menu
             return True
         except (ValueError, TypeError, IndexError) as error:

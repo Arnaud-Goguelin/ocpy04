@@ -63,9 +63,12 @@ class TournamentDetailsView:
         print()
         print("Players:")
 
-        players = tournament.rank_players()
+        players = sorted(
+            # use a copy to alter original data
+            tournament.players,
+            key=lambda player: player.last_name,
+        )
         player_scores = tournament.get_player_scores()
-        players.reverse()
         for player in players:
             print(
                 f"{Fore.LIGHTYELLOW_EX}{players.index(player) + 1}{Fore.RESET}. "

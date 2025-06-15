@@ -5,7 +5,7 @@ from colorama import Fore
 from chess_tournament_manager.utils import (
     CANCELLED_INPUT,
     print_title,
-    )
+)
 
 if TYPE_CHECKING:
     from chess_tournament_manager.models.player import Player
@@ -28,7 +28,6 @@ class PlayerListView:
         Raises:
             ValueError: If the provided list of players is empty.
         """
-
         if not players:
             raise ValueError("No players to display.")
 
@@ -41,7 +40,10 @@ class PlayerListView:
 
     @classmethod
     def handle_players_list(
-        cls, players: list["Player"], used_for_selecting_players: bool = False, last_selected_player: "Player" = None
+        cls,
+        players: list["Player"],
+        used_for_selecting_players: bool = False,
+        last_selected_player: "Player" = None,
     ) -> str | None:
         """
         Handles the display and selection of players for a list shown in a specific context,
@@ -78,17 +80,16 @@ class PlayerListView:
             return None
 
         # --- List used to select players for a new tournament ---
-
-        if not players and not last_selected_player:
-            # if there is no last_selected_player and not players, this is an error
-            raise ValueError("No players to display.")
-
-        if not players and last_selected_player:
-            # in this case, do not raise error
-            # if there is no player but there is a last_selected_player,
-            # that means user has already selected all players for a new tournament
-            print("\nNo more player to add, continue new tournament creation.")
-            return None
+        if not players:
+            if not last_selected_player:
+                # if there is no last_selected_player and not players, this is an error
+                raise ValueError("No players to display.")
+            else:
+                # in this case, do not raise error
+                # if there is no player but there is a last_selected_player,
+                # that means user has already selected all players for a new tournament
+                print("\nNo more player to add, continue new tournament creation.")
+                return None
 
         print(
             f"{Fore.LIGHTYELLOW_EX}---{Fore.RESET} "

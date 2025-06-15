@@ -11,6 +11,12 @@ class DataFilesNames(str, Enum):
     TOURNAMENTS_FILE = "tournaments.json"
 
 
+class SolveMatchChoices(str, Enum):
+    PLAYER_1 = "1"
+    PLAYER_2 = "2"
+    DRAW = "3"
+
+
 class GenericMessages(str, Enum):
     PLAYER_MENU_RETURN = "Go back to Player menu in ... "
     TOURNAMENT_MENU_RETURN = "Go back to Tournament menu in ... "

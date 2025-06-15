@@ -39,23 +39,33 @@ class Tournament:
         id: str = None,
         start_date: datetime = None,
         end_date: datetime = None,
-        rounds: set[Round] = None,
+        rounds: list[Round] = None,
         past_players_paires: set[tuple[Player, Player]] = None,
     ) -> None:
         self.id: str = id if id else create_id()
-        self.name: str = name
-        self.location: str = location
-        self.description: str = description
+        self.name: str = self.__validate_str_input(name)
+        self.location: str = self.__validate_str_input(location)
+        self.description: str = self.__validate_str_input(description)
         self.players: set[Player] = players
         self.start_date: datetime | None = start_date
         self.end_date: datetime | None = end_date
-        # TODO: just use a list
-        self.rounds: set[Round] = rounds
+        self.rounds: list[Round] = rounds
         self.past_players_paires: set[tuple[Player, Player]] = past_players_paires
         # technical specifications recommend that a tournament also has:
         # a max rounds number, a current round number.
         # YET max rounds number is a constant common to all Tournaments, thus it is stored in constants.py file
         # current round number can be returned with a method, no need to store it
+
+    @staticmethod
+    def __validate_str_input(string: str) -> str:
+        """Validates that a given name is a non-empty string."""
+        if not isinstance(string, str):
+            raise ValueError("Input must be a string")
+        if string.isdigit():
+            raise ValueError("Input cannot be a number alone")
+        if not string.strip():
+            raise ValueError("Input cannot be empty")
+        return string
 
     @staticmethod
     def validate_players(players: set[Player]) -> None:
@@ -92,21 +102,9 @@ class Tournament:
         """
         Return rounds attribute length, thus the current round number in the current tournament.
         """
-        return len(self.rounds)
-
-    @property
-    def get_last_round(self):
-        """
-        Return the last round in the current tournament, according to the start_date of each round.
-        """
         if not self.rounds:
-            return None
-
-        rounds_with_date = [r for r in self.rounds if r.start_date]
-        if not rounds_with_date:
-            return None
-
-        return max(rounds_with_date, key=lambda r: r.start_date)
+            return 0
+        return len(self.rounds)
 
     def get_player_scores(self):
         """
@@ -186,7 +184,7 @@ class Tournament:
             matches=matches,
         )
         new_round.start()
-        self.rounds.add(new_round)
+        self.rounds.append(new_round)
         return None
 
     def start(self):
@@ -221,6 +219,15 @@ class Tournament:
 
         return None
 
+    def reset(self):
+        """
+        Resets the attributes of the object to their initial state.
+        """
+        self.start_date = None
+        self.end_date = None
+        self.rounds = set()
+        self.past_players_paires = set()
+
     def end(self):
         """
         Marks the end of a process or event by setting the end_date attribute
@@ -232,34 +239,22 @@ class Tournament:
         """
         Converts the instance attributes of the object to a dictionary.
         """
-        # TODO: no error handling?
-        # TODO: simplify, global logic won't works, it is easier to copy key
-        tournament_dict = {}
-        for key, value in self.__dict__.items():
-
-            if not callable(value) and not isinstance(value, (classmethod, staticmethod, property)):
-
-                if key == "players":
-                    # Players instances are already stored in another file and can exist without tournaments
-                    # So it is not relevant to store them again with tournaments
-                    tournament_dict[key] = [player.chess_id for player in value]
-
-                elif key == "rounds":
-                    # Match are also stored as dict, cf. Round model
-                    tournament_dict[key] = [round.to_dict() for round in value] if value else []
-
-                elif key == "past_players_paires":
-                    tournament_dict[key] = (
-                        [(player1.chess_id, player2.chess_id) for player1, player2 in value] if value else []
-                    )
-                # TODO: check if there is a way like in Pydantic to define a method to serialize datetime object?
-                elif key == "start_date" or key == "end_date":
-                    tournament_dict[key] = value.isoformat() if value else None
-
-                else:
-                    tournament_dict[key] = value if value else None
-
-        return tournament_dict
+        try:
+            return {
+                "id": self.id,
+                "name": self.name,
+                "location": self.location,
+                "description": self.description,
+                "players": [player.chess_id for player in self.players],
+                "rounds": [round_obj.to_dict() for round_obj in self.rounds if self.rounds],
+                "past_players_paires": [
+                    (player1.chess_id, player2.chess_id) for player1, player2 in self.past_players_paires
+                ],
+                "start_date": self.start_date.isoformat() if self.start_date else None,
+                "end_date": self.end_date.isoformat() if self.end_date else None,
+            }
+        except (AttributeError, TypeError) as error:
+            raise TypeError(f"Failed to serialize tournament to dictionary : {error}")
 
     @classmethod
     def from_dict(cls, tournament_dict, data: "Data"):
@@ -279,7 +274,7 @@ class Tournament:
             attributes and relationships properly set.
         """
         players = set(Player.get_player_from_id(chess_id, data) for chess_id in tournament_dict["players"])
-        rounds = set(Round.from_dict(round_dict, data) for round_dict in tournament_dict["rounds"])
+        rounds = [Round.from_dict(round_dict, data) for round_dict in tournament_dict["rounds"]]
         start_date = datetime.fromisoformat(tournament_dict["start_date"]) if tournament_dict["start_date"] else None
         end_date = datetime.fromisoformat(tournament_dict["end_date"]) if tournament_dict["end_date"] else None
         past_players_paires = set(

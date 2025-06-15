@@ -20,8 +20,8 @@ class Data:
     """
 
     def __init__(self):
-        self.players = set()
-        self.tournaments = set()
+        self.players = []
+        self.tournaments = []
         self.data_folder = "chess_tournament_manager/data"
 
     def validate_directory_and_files(self):
@@ -125,27 +125,10 @@ class Data:
                                 )
                                 return None
                         else:
-                            instances = set(model.from_dict(item_dict, self) for item_dict in data)
+                            instances = [model.from_dict(item_dict, self) for item_dict in data]
                             setattr(self, f"{model.__name__.lower()}s", instances)
 
             except (json.JSONDecodeError, TypeError) as error:
                 raise Exception(f"Error loading in {file_name.value}: {error}")
 
         return None
-
-    # TODO: delete once dev is finished
-    def erase(self) -> None:
-        """
-        Erases the content of all files specified in the `DataFilesNames` enumeration by overwriting them with
-        empty JSON arrays.
-        :raises Exception: If a `json.JSONDecodeError`, `TypeError`, or other specified error occurs
-            during the erase operation for any file.
-        """
-        for file_name in DataFilesNames:
-            try:
-                selected_file = os.path.join(self.data_folder, file_name)
-                with open(selected_file, "w", encoding="utf-8") as file:
-                    file.write("[]")
-            except (json.JSONDecodeError, TypeError) as error:
-                raise Exception(f"Error erasing in {file_name.value}: {error}")
-        print(f"{Fore.MAGENTA}--- Data erased. ---{Fore.RESET}")

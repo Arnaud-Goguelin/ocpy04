@@ -41,3 +41,8 @@ def print_end_of_tournament(tournament: Tournament) -> None:
         f"ends after {tournament.rounds_count} rounds "
         f"and {sum(round.match_count for round in tournament.rounds)} matches."
     )
+
+
+def print_tournament_not_saved() -> None:
+    """Prints info message when tournament is not saved."""
+    print(f"{Fore.MAGENTA}Leaving without saving Tournament's progress. ")
