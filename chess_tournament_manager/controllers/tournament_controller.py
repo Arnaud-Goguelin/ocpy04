@@ -127,11 +127,12 @@ class TournamentController:
                     players=players, used_for_selecting_players=True, last_selected_player=selected_player
                 )
 
-            # validate players here before display next form to avoid too many inputs
-            # and then raise an error concerning the first input
+
             if not selected_players:
                 countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
             else:
+                # validate players here before display next form to avoid too many inputs
+                # and then raise an error concerning the first input
                 Tournament.validate_players(selected_players)
                 name, location, description = CreateTournamentView.display_add_tournament_form()
 
