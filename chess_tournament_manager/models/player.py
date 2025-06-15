@@ -68,9 +68,9 @@ class Player:
         """
         try:
             parsed_date = datetime.strptime(birthdate, "%d-%m-%Y")
-
         except ValueError:
             raise ValueError("Birth date must be in DD-MM-YYYY format with only digits.")
+
         if parsed_date.year < datetime(year=1900, month=1, day=1).year:
             raise ValueError("Player birth date must be after 1900.")
         if parsed_date > datetime.now():
