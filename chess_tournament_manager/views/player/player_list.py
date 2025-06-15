@@ -5,7 +5,7 @@ from colorama import Fore
 from chess_tournament_manager.utils import (
     CANCELLED_INPUT,
     print_title,
-    )
+)
 
 if TYPE_CHECKING:
     from chess_tournament_manager.models.player import Player
