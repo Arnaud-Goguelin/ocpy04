@@ -14,9 +14,9 @@ from ..utils import (
     get_menus_keys,
     print_end_of_tournament,
     check_choice,
-SolveMatchChoices,
-print_tournament_not_saved,
-    )
+    SolveMatchChoices,
+    print_tournament_not_saved,
+)
 from ..models import Tournament
 from ..views import (
     TournamentMenuView,
@@ -128,7 +128,6 @@ class TournamentController:
                 PlayerListView.handle_players_list(
                     players=players, used_for_selecting_players=True, last_selected_player=selected_player
                 )
-
 
             if not selected_players:
                 countdown(GenericMessages.TOURNAMENT_MENU_RETURN)
@@ -303,7 +302,9 @@ class TournamentController:
                             tournament.reset()
                             break
                     tournament.continue_tournament()
-                    are_all_rounds_finished = all(tournament_round.is_round_finished for tournament_round in tournament.rounds)
+                    are_all_rounds_finished = all(
+                        tournament_round.is_round_finished for tournament_round in tournament.rounds
+                    )
 
                 if user_cancelled:
                     return True

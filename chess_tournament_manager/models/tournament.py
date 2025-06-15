@@ -247,10 +247,12 @@ class Tournament:
                 "description": self.description,
                 "players": [player.chess_id for player in self.players],
                 "rounds": [round_obj.to_dict() for round_obj in self.rounds if self.rounds],
-                "past_players_paires": [(player1.chess_id, player2.chess_id) for player1, player2 in self.past_players_paires],
+                "past_players_paires": [
+                    (player1.chess_id, player2.chess_id) for player1, player2 in self.past_players_paires
+                ],
                 "start_date": self.start_date.isoformat() if self.start_date else None,
                 "end_date": self.end_date.isoformat() if self.end_date else None,
-                }
+            }
         except (AttributeError, TypeError) as error:
             raise TypeError(f"Failed to serialize tournament to dictionary : {error}")
 

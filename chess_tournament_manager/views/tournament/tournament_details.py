@@ -64,10 +64,10 @@ class TournamentDetailsView:
         print("Players:")
 
         players = sorted(
-                # use a copy to alter original data
-                tournament.players,
-                key=lambda player: player.last_name,
-            )
+            # use a copy to alter original data
+            tournament.players,
+            key=lambda player: player.last_name,
+        )
         player_scores = tournament.get_player_scores()
         for player in players:
             print(
