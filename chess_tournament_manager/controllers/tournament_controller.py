@@ -172,7 +172,6 @@ class TournamentController:
         # always return True to stay in this menu
         return True
 
-
     @staticmethod
     def select_tournament(tournaments: list[Tournament]) -> Tournament | None:
         """
