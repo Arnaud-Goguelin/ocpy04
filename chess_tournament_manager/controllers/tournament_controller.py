@@ -135,8 +135,6 @@ class TournamentController:
 
         return selected_players
 
-
-
     def create_tournament(self) -> True:
         """
         Creates a tournament by selecting players and defining tournament details. The method
