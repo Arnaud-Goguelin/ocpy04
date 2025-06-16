@@ -74,7 +74,7 @@ class TournamentController:
                 # no error raising here to stay in this menu and avoid redirection to main menu
                 print_invalid_option(get_menus_keys(self.menu_actions), False, GenericMessages.TOURNAMENT_MENU_RETURN)
 
-    def select_players(self) -> set[Player] | None:
+    def select_players(self) -> set["Player"] | None:
         """
         Select players from a provided list while avoiding duplicates.
 
@@ -101,23 +101,31 @@ class TournamentController:
         selected_player = None
 
         while players:
-            choice = PlayerListView.handle_players_list(
-                players=players,
-                used_for_selecting_players=True,
-                last_selected_player=selected_player,
-                )
+            try:
+                choice = PlayerListView.handle_players_list(
+                    players=players,
+                    used_for_selecting_players=True,
+                    last_selected_player=selected_player,
+                    )
 
-            if choice.upper() == CANCELLED_INPUT or choice == "":
-                selected_players = set()
-                break
+                if choice.upper() == CANCELLED_INPUT:
+                    # do not save choices
+                    selected_players = set()
+                    break
 
-            check_choice(choice, players)
+                if choice == "":
+                    break
 
-            player_index = int(choice) - 1
-            selected_player = players[player_index]
-            if selected_player:
-                selected_players.add(selected_player)
-                players.remove(selected_player)
+                check_choice(choice, players)
+
+                player_index = int(choice) - 1
+                selected_player = players[player_index]
+                if selected_player:
+                    selected_players.add(selected_player)
+                    players.remove(selected_player)
+
+            except (ValueError, IndexError):
+                continue
 
         # display a message once there is no more players to select
         if not players:
@@ -159,6 +167,8 @@ class TournamentController:
                     location=location,
                     description=description,
                     players=selected_players,
+                    rounds=[],
+                    past_players_paires=set()
                 )
 
                 self.data.tournaments.append(new_tournament)

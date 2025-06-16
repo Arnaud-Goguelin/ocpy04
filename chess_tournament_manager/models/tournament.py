@@ -36,11 +36,11 @@ class Tournament:
         location: str,
         description: str,
         players: set[Player],
+        rounds: list[Round],
+        past_players_paires: set[tuple[Player, Player]],
         id: str = None,
         start_date: datetime = None,
         end_date: datetime = None,
-        rounds: list[Round] = None,
-        past_players_paires: set[tuple[Player, Player]] = None,
     ) -> None:
         self.id: str = id if id else create_id()
         self.name: str = self.__validate_str_input(name)
@@ -246,10 +246,10 @@ class Tournament:
                 "location": self.location,
                 "description": self.description,
                 "players": [player.chess_id for player in self.players],
-                "rounds": [round_obj.to_dict() for round_obj in self.rounds if self.rounds],
+                "rounds": [round_obj.to_dict() for round_obj in self.rounds] if self.rounds else [],
                 "past_players_paires": [
                     (player1.chess_id, player2.chess_id) for player1, player2 in self.past_players_paires
-                ],
+                ] if self.past_players_paires else [],
                 "start_date": self.start_date.isoformat() if self.start_date else None,
                 "end_date": self.end_date.isoformat() if self.end_date else None,
             }

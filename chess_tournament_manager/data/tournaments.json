@@ -6,13 +6,13 @@
         "description": "NEW TEST DESCRIPTION",
         "players": [
             "GH78910",
+            "AB12345",
             "EF23456",
-            "CD67891",
-            "AB12345"
+            "CD67891"
         ],
-        "start_date": null,
-        "end_date": null,
         "rounds": [],
-        "past_players_paires": []
+        "past_players_paires": [],
+        "start_date": null,
+        "end_date": null
     }
 ]
