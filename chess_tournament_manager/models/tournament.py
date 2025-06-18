@@ -225,7 +225,7 @@ class Tournament:
         """
         self.start_date = None
         self.end_date = None
-        self.rounds = set()
+        self.rounds = []
         self.past_players_paires = set()
 
     def end(self):
